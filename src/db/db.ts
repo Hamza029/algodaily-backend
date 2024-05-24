@@ -8,6 +8,6 @@ dotenv.config({ path: envPath });
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-const db: Knex.Config = knex(knexFile[NODE_ENV]);
+const db = knex(knexFile[NODE_ENV]);
 
 export default db;
