@@ -15,7 +15,7 @@ const envs: Record<DbEnvironments, Knex.Config> = {
             database: process.env.DATA_API_DB_NAME || 'TestDB',
             host: process.env.DATA_API_DB_SERVICE_HOST || 'localhost',
             // port: parseInt(process.env.DATA_API_DB_SERVICE_PORT),
-            port: 3306,
+            port: Number(process.env.DATA_API_DB_PORT) || 3306,
             user: process.env.DATA_API_DB_USER || 'root',
             password: process.env.DATA_API_DB_PASSWORD || 'mypass',
         },
