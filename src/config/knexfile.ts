@@ -26,6 +26,6 @@ const envs: Record<string, Knex.Config> = {
 };
 
 // console.dir(envPath);
-console.log(envs['development']);
+// console.log(envs['development']);
 
 export default envs;
