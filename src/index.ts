@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import express, { Express, Request, Response } from 'express';
 import db from './db/db';
-import IUser from './interfaces/user';
-import IAuth from './interfaces/auth';
+import UserType from './interfaces/user';
+import AuthType from './interfaces/auth';
 import path from 'path';
 
 const envPath = path.join(__dirname + '/../../.env');
@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 
 const getUserWithId1 = async () => {
     try {
-        const val = await db<IUser>('User').where('id', 1).first();
+        const val = await db<UserType>('User').where('id', 1).first();
         if (val) {
             console.log(val.Username, val.Email);
         } else {
