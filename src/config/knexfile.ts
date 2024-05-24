@@ -5,10 +5,7 @@ import path from 'path';
 const envPath = path.join(__dirname + '/../../.env');
 dotenv.config({ path: envPath });
 
-// type DbEnvironments = 'dev' | 'test' | 'stg' | 'prod';
-type DbEnvironments = 'development';
-
-const envs: Record<DbEnvironments, Knex.Config> = {
+const envs: Record<string, Knex.Config> = {
     development: {
         client: 'mysql2',
         connection: {
@@ -29,5 +26,6 @@ const envs: Record<DbEnvironments, Knex.Config> = {
 };
 
 // console.dir(envPath);
+console.log(envs['development']);
 
 export default envs;
