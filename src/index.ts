@@ -1,8 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Express, Request, Response } from 'express';
 import db from './db/db';
-import UserType from './interfaces/user';
-import AuthType from './interfaces/auth';
+import { UserType, AuthType } from './interfaces';
 import path from 'path';
 
 const envPath = path.join(__dirname + '/../../.env');
