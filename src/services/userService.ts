@@ -21,8 +21,8 @@ const createUser = async (user: UserInputType): Promise<UserType> => {
     return newUser;
 };
 
-const deleteUserById = async (id: number) => {
-    const deletedId = userRepository.deleteUserById(id);
+const deleteUserById = async (id: number): Promise<number> => {
+    const deletedId = await userRepository.deleteUserById(id);
 
     if (!deletedId) {
         throw new Error("Couldn't delete user");
@@ -31,8 +31,19 @@ const deleteUserById = async (id: number) => {
     return deletedId;
 };
 
+const getUserById = async (id: number): Promise<UserType> => {
+    const user = await userRepository.getUserById(id);
+
+    if (!user) {
+        throw new Error("User doesn't exist!");
+    }
+
+    return user;
+};
+
 export default {
     getAllUsers,
     createUser,
     deleteUserById,
+    getUserById,
 };

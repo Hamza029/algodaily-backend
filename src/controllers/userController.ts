@@ -51,7 +51,23 @@ const deleteUserById = async (
         const deletedId = await userService.deleteUserById(id);
         res.status(200).json({
             status: 'success',
-            message: `User with id ${deletedId} has been removed.`,
+            message: `User with id ${id} has been removed.`,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const getUserById = async (req: Request, res: Response, next: NextFunction) => {
+    const id: number = Number(req.params.id);
+
+    try {
+        const user = await userService.getUserById(id);
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user,
+            },
         });
     } catch (err) {
         next(err);
@@ -62,4 +78,5 @@ export default {
     createUser,
     getAllUsers,
     deleteUserById,
+    getUserById,
 };

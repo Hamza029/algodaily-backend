@@ -9,6 +9,9 @@ router
     .get(userController.getAllUsers)
     .post(userController.createUser);
 
-router.route('/:id').delete(userController.deleteUserById);
+router
+    .route('/:id')
+    .delete(userController.deleteUserById)
+    .get(userController.getUserById);
 
 export default router;
