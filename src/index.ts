@@ -4,7 +4,7 @@ import db from './db/db';
 import { UserType, AuthType } from './interfaces';
 import path from 'path';
 
-const envPath = path.join(__dirname + '/../../.env');
+const envPath = path.join(__dirname + '/../.env');
 dotenv.config({ path: envPath });
 
 const app: Express = express();
