@@ -1,81 +1,52 @@
-import { UserType, UserInputType } from './../interfaces/index';
-import db from '../db/db';
+import { AuthType, UserType } from './../interfaces';
+import db from '../database/db';
+import { Knex } from 'knex';
 
 const getAllUsers = async (): Promise<UserType[]> => {
-    try {
-        const users: UserType[] = await db<UserType>('user').select('*');
-        return users;
-    } catch (err) {
-        let errString = "Couldn't fetch users.";
-
-        if (err instanceof Error) {
-            errString += ` Error: ${err.message}`;
-        }
-
-        throw new Error(errString);
-    }
-};
-
-const createUser = async (user: UserInputType): Promise<UserType> => {
-    try {
-        const [Id] = await db<UserType>('user').insert({
-            Username: user.Username,
-            Email: user.Email,
-            Password: user.Password,
-        });
-        const newUser = { Id, ...user };
-        return newUser;
-    } catch (err) {
-        let errString = "Couldn't insert user.";
-
-        if (err instanceof Error) {
-            errString += ` Error: ${err.message}`;
-        }
-
-        throw new Error(errString);
-    }
+    const users: UserType[] = await db<UserType>('user').select('*');
+    return users;
 };
 
 const deleteUserById = async (id: number): Promise<number> => {
-    try {
-        const deletedId = await db<UserType>('user').where('id', id).del();
-        // console.log(deletedId);
-        return deletedId;
-    } catch (err) {
-        let errString = `Couldn't delete user with Id ${id}`;
+    const trx: Knex.Transaction = await db.transaction();
 
-        if (err instanceof Error) {
-            errString += ` Error: ${err.message}`;
+    try {
+        const targetUser = await trx<UserType>('User')
+            .select('Username')
+            .where({ Id: id })
+            .first();
+
+        if (!targetUser) {
+            throw new Error("User doesn't exist");
         }
 
-        throw new Error(errString);
+        const userDeleted: number = await trx<UserType>('User')
+            .where({ Id: id })
+            .del();
+        const authDeleted: number = await trx<AuthType>('Auth')
+            .where({ Username: targetUser.Username })
+            .del();
+
+        if (userDeleted === 0 || authDeleted === 0) {
+            throw new Error("Couldn't delete user");
+        }
+
+        await trx.commit();
+
+        return 1;
+    } catch (err) {
+        await trx.rollback();
+        throw err;
     }
 };
 
-const getUserById = async (id: number): Promise<UserType> => {
-    try {
-        const user = await db<UserType>('user')
-            .where('Id', id)
-            .select('*')
-            .first();
-        if (!user) {
-            throw new Error("User doesn't exist!");
-        }
-        return user;
-    } catch (err) {
-        let errString = `Couldn't find user with Id ${id}.`;
-
-        if (err instanceof Error) {
-            errString += ` Error: ${err.message}`;
-        }
-
-        throw new Error(errString);
-    }
+const getUserById = async (id: number): Promise<UserType | void> => {
+    const user = await db<UserType>('user').where('Id', id).select('*').first();
+    return user;
 };
 
 export default {
     getAllUsers,
-    createUser,
     deleteUserById,
     getUserById,
 };

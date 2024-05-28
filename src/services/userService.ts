@@ -1,4 +1,4 @@
-import { UserType, UserInputType } from './../interfaces/index';
+import { UserType } from './../interfaces/index';
 import userRepository from './../repository/userRepository';
 
 const getAllUsers = async (): Promise<UserType[]> => {
@@ -11,20 +11,10 @@ const getAllUsers = async (): Promise<UserType[]> => {
     return users;
 };
 
-const createUser = async (user: UserInputType): Promise<UserType> => {
-    const newUser = await userRepository.createUser(user);
-
-    if (!newUser) {
-        throw new Error("Couldn't insert user");
-    }
-
-    return newUser;
-};
-
 const deleteUserById = async (id: number): Promise<number> => {
-    const deletedId = await userRepository.deleteUserById(id);
+    const deletedId: number = await userRepository.deleteUserById(id);
 
-    if (!deletedId) {
+    if (deletedId === 0) {
         throw new Error("Couldn't delete user");
     }
 
@@ -43,7 +33,6 @@ const getUserById = async (id: number): Promise<UserType> => {
 
 export default {
     getAllUsers,
-    createUser,
     deleteUserById,
     getUserById,
 };

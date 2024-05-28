@@ -2,32 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import { UserType, UserInputType } from './../interfaces';
 import userService from './../services/userService';
 
-export const createUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): Promise<void> => {
-    try {
-        const user: UserInputType = { ...req.body };
-        const newUser: UserType = await userService.createUser(user);
-        res.status(201).json({
-            status: 'success',
-            data: {
-                user: newUser,
-            },
-        });
-    } catch (err) {
-        next(err);
-    }
-};
-
 export const getAllUsers = async (
     req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const users = await userService.getAllUsers();
+        const users: UserType[] = await userService.getAllUsers();
         res.status(200).json({
             status: 'success',
             results: users.length,
@@ -44,7 +25,7 @@ const deleteUserById = async (
     req: Request,
     res: Response,
     next: NextFunction
-) => {
+): Promise<void> => {
     const id: number = Number(req.params.id);
 
     try {
@@ -58,7 +39,11 @@ const deleteUserById = async (
     }
 };
 
-const getUserById = async (req: Request, res: Response, next: NextFunction) => {
+const getUserById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
     const id: number = Number(req.params.id);
 
     try {
@@ -75,7 +60,6 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default {
-    createUser,
     getAllUsers,
     deleteUserById,
     getUserById,
