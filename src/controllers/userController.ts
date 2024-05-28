@@ -29,7 +29,7 @@ const deleteUserById = async (
     const id: number = Number(req.params.id);
 
     try {
-        const deletedId = await userService.deleteUserById(id);
+        const deletedId: number = await userService.deleteUserById(id);
         res.status(200).json({
             status: 'success',
             message: `User with id ${id} has been removed.`,
@@ -47,7 +47,7 @@ const getUserById = async (
     const id: number = Number(req.params.id);
 
     try {
-        const user = await userService.getUserById(id);
+        const user: UserType = await userService.getUserById(id);
         res.status(200).json({
             status: 'success',
             data: {

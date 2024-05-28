@@ -5,11 +5,11 @@ import path from 'path';
 import userRoute from './routes/userRoute';
 import authRoute from './routes/authRoute';
 
-const envPath = path.join(__dirname + '/../.env');
+const envPath: string = path.join(__dirname + '/../.env');
 dotenv.config({ path: envPath });
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
+const port: number = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
 

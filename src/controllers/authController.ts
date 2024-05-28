@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
-import { UserInputType } from '../interfaces';
+import { UserInputType, UserType } from '../interfaces';
 
 const signup = async (
     req: Request,
@@ -15,7 +15,7 @@ const signup = async (
             Name: req.body.Name,
         };
 
-        const newUser = await authService.signup(userInput);
+        const newUser: UserType = await authService.signup(userInput);
 
         res.status(201).json({
             status: 'success',

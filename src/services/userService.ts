@@ -2,7 +2,7 @@ import { UserType } from './../interfaces/index';
 import userRepository from './../repository/userRepository';
 
 const getAllUsers = async (): Promise<UserType[]> => {
-    const users = await userRepository.getAllUsers();
+    const users: UserType[] = await userRepository.getAllUsers();
 
     if (!users || users.length === 0) {
         throw new Error('No users found');
@@ -22,7 +22,7 @@ const deleteUserById = async (id: number): Promise<number> => {
 };
 
 const getUserById = async (id: number): Promise<UserType> => {
-    const user = await userRepository.getUserById(id);
+    const user: UserType | undefined = await userRepository.getUserById(id);
 
     if (!user) {
         throw new Error("User doesn't exist!");

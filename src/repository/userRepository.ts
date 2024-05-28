@@ -11,8 +11,8 @@ const deleteUserById = async (id: number): Promise<number> => {
     const trx: Knex.Transaction = await db.transaction();
 
     try {
-        const targetUser = await trx<UserType>('User')
-            .select('Username')
+        const targetUser: UserType | undefined = await trx<UserType>('User')
+            .select('*')
             .where({ Id: id })
             .first();
 
@@ -40,8 +40,11 @@ const deleteUserById = async (id: number): Promise<number> => {
     }
 };
 
-const getUserById = async (id: number): Promise<UserType | void> => {
-    const user = await db<UserType>('user').where('Id', id).select('*').first();
+const getUserById = async (id: number): Promise<UserType | undefined> => {
+    const user: UserType | undefined = await db<UserType>('user')
+        .where('Id', id)
+        .select('*')
+        .first();
     return user;
 };
 

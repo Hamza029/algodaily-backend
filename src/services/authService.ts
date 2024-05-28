@@ -20,7 +20,10 @@ const signup = async (userInput: UserInputType): Promise<UserType> => {
         Password: userInput.Password,
     };
 
-    const newUser = await authRepository.signup(userDbInput, authDbInput);
+    const newUser: UserType = await authRepository.signup(
+        userDbInput,
+        authDbInput
+    );
 
     if (!newUser) {
         throw new Error("Couldn't register user");

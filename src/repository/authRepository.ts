@@ -20,7 +20,7 @@ const signup = async (
 
         await trx.commit();
 
-        const newUser = {
+        const newUser: UserType = {
             Id: newUserId,
             ...userDbInput,
         };
