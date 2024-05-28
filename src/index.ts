@@ -3,6 +3,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import path from 'path';
 
 import userRoute from './routes/userRoute';
+import authRoute from './routes/authRoute';
 
 const envPath = path.join(__dirname + '/../.env');
 dotenv.config({ path: envPath });
@@ -13,6 +14,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use('/api/users', userRoute);
+
+app.use('/api/auth', authRoute);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.status(404).json({
