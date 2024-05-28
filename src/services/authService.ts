@@ -1,9 +1,11 @@
 import {
     AuthDbInputType,
+    AuthInputType,
+    AuthType,
     UserDbInputType,
     UserInputType,
     UserType,
-} from '../interfaces';
+} from './../interfaces';
 import authRepository from '../repository/authRepository';
 
 const signup = async (userInput: UserInputType): Promise<UserType> => {
@@ -32,6 +34,17 @@ const signup = async (userInput: UserInputType): Promise<UserType> => {
     return newUser;
 };
 
+const login = async (authInput: AuthInputType): Promise<string> => {
+    const auth: AuthType | undefined = await authRepository.login(authInput);
+
+    if (!auth) {
+        return 'Not logged in';
+    }
+
+    return 'Logged in';
+};
+
 export default {
     signup,
+    login,
 };

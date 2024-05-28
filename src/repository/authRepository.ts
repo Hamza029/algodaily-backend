@@ -4,6 +4,7 @@ import {
     UserType,
     UserDbInputType,
     AuthType,
+    AuthInputType,
     AuthDbInputType,
 } from '../interfaces';
 import db from './../database/db';
@@ -32,6 +33,19 @@ const signup = async (
     }
 };
 
+const login = async (
+    authInput: AuthInputType
+): Promise<AuthType | undefined> => {
+    const auth: AuthType | undefined = await db<AuthType>('Auth')
+        .select('*')
+        .where('Username', '=', authInput.Username)
+        .where('Password', '=', authInput.Password)
+        .first();
+
+    return auth;
+};
+
 export default {
     signup,
+    login,
 };
