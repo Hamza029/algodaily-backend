@@ -48,8 +48,17 @@ const getUserById = async (id: number): Promise<UserType | undefined> => {
     return user;
 };
 
+const updateNameById = async (id: number, name: string): Promise<boolean> => {
+    const userUpdated = await db<UserType>('User')
+        .where('Id', '=', id)
+        .update({ Name: name });
+
+    return userUpdated === 1;
+};
+
 export default {
     getAllUsers,
     deleteUserById,
     getUserById,
+    updateNameById,
 };

@@ -9,6 +9,7 @@ router.route('/').get(userController.getAllUsers);
 router
     .route('/:id')
     .delete(userController.deleteUserById)
-    .get(userController.getUserById);
+    .get(userController.getUserById)
+    .patch(userController.updateNameById);
 
 export default router;

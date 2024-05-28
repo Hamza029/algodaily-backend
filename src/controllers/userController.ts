@@ -59,8 +59,37 @@ const getUserById = async (
     }
 };
 
+const updateNameById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    const id: number = Number(req.params.id);
+
+    try {
+        const name: string | undefined = req.body.Name;
+
+        if (!name) {
+            throw new Error("Could't find name in request body");
+        }
+
+        const user: UserType = await userService.updateNameById(id, name);
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Updated name of user',
+            data: {
+                user,
+            },
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
 export default {
     getAllUsers,
     deleteUserById,
     getUserById,
+    updateNameById,
 };
