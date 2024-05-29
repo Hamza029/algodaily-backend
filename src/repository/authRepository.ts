@@ -39,7 +39,6 @@ const login = async (
     const auth: AuthType | undefined = await db<AuthType>('Auth')
         .select('*')
         .where('Username', '=', authInput.Username)
-        .where('Password', '=', authInput.Password)
         .first();
 
     return auth;

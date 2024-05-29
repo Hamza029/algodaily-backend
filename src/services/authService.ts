@@ -7,6 +7,7 @@ import {
     UserType,
 } from './../interfaces';
 import authRepository from '../repository/authRepository';
+import passwordUtil from '../utils/passwordUtil';
 
 const signup = async (userInput: UserInputType): Promise<UserType> => {
     const userDbInput: UserDbInputType = {
@@ -19,7 +20,7 @@ const signup = async (userInput: UserInputType): Promise<UserType> => {
 
     const authDbInput: AuthDbInputType = {
         Username: userInput.Username,
-        Password: userInput.Password,
+        Password: await passwordUtil.hash(userInput.Password),
     };
 
     const newUser: UserType = await authRepository.signup(
@@ -37,7 +38,10 @@ const signup = async (userInput: UserInputType): Promise<UserType> => {
 const login = async (authInput: AuthInputType): Promise<string> => {
     const auth: AuthType | undefined = await authRepository.login(authInput);
 
-    if (!auth) {
+    if (
+        !auth ||
+        !(await passwordUtil.compare(authInput.Password, auth.Password))
+    ) {
         throw new Error('wrong username or password');
     }
 
