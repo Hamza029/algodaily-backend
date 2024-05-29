@@ -9,14 +9,14 @@ type ResponseType =
     | {
           status: string;
           message: string;
-          data: any;
+          data?: any;
       }
     | string;
 
 const createResponseObject = (
     status: string,
     message: string,
-    data: Response,
+    data: any,
     contentType: string
 ): JSON | string => {
     const responseObject: ResponseType = {
@@ -25,11 +25,13 @@ const createResponseObject = (
         data,
     };
 
+    if (!data) {
+        delete responseObject.data;
+    }
+
     const json = JSON.stringify(responseObject);
 
-    if (contentType === 'application/json') {
-        return json;
-    } else if (contentType === 'application/xml') {
+    if (contentType === 'application/xml') {
         return json2xml(json, {
             compact: true,
             ignoreComment: true,
@@ -37,7 +39,7 @@ const createResponseObject = (
         });
     } else if (contentType === 'text/html') {
         return json2html.render(responseObject);
-    } else {
+    } else if (contentType === 'text/plain') {
         const options: Options = {
             color: false,
             spacing: true,
@@ -47,6 +49,8 @@ const createResponseObject = (
             doubleQuotesForValues: false,
         };
         return jsonToPlainText(responseObject, options);
+    } else {
+        return json;
     }
 };
 
@@ -56,9 +60,10 @@ const sendResponse = (
     statusCode: number,
     status: string,
     message: string,
-    data: any
+    data?: any
 ) => {
-    const contentType: string = req.headers.accept || 'application/json';
+    let contentType: string = req.headers.accept || 'application/json';
+    contentType = contentType === '*/*' ? 'application/json' : contentType;
 
     res.set('content-type', contentType);
 
