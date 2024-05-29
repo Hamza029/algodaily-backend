@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserType, UserInputType } from './../interfaces';
 import userService from './../services/userService';
+import { parseIdParam } from '../utils/parseParam';
 
 export const getAllUsers = async (
     req: Request,
@@ -26,9 +27,9 @@ const deleteUserById = async (
     res: Response,
     next: NextFunction
 ): Promise<void> => {
-    const id: number = Number(req.params.id);
-
     try {
+        const id = parseIdParam(req);
+
         const deletedId: number = await userService.deleteUserById(id);
         res.status(200).json({
             status: 'success',
@@ -44,9 +45,9 @@ const getUserById = async (
     res: Response,
     next: NextFunction
 ): Promise<void> => {
-    const id: number = Number(req.params.id);
-
     try {
+        const id = parseIdParam(req);
+
         const user: UserType = await userService.getUserById(id);
         res.status(200).json({
             status: 'success',
@@ -64,9 +65,9 @@ const updateNameById = async (
     res: Response,
     next: NextFunction
 ): Promise<void> => {
-    const id: number = Number(req.params.id);
-
     try {
+        const id = parseIdParam(req);
+
         const name: string | undefined = req.body.Name;
 
         if (!name) {
