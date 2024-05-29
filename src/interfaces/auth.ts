@@ -1,10 +1,11 @@
-interface Auth {
+export interface Auth {
     Id: Number;
     Username: string;
-    Name: string;
-    Email: string;
-    JoinDate: Date;
-    Role: number;
+    Password: string;
 }
+
+export interface AuthInput extends Omit<Auth, 'Id'> {}
+
+export interface AuthDbInput extends Omit<Auth, 'Id'> {}
 
 export default Auth;
