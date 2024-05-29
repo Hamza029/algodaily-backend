@@ -38,7 +38,7 @@ const login = async (authInput: AuthInputType): Promise<string> => {
     const auth: AuthType | undefined = await authRepository.login(authInput);
 
     if (!auth) {
-        return 'Not logged in';
+        throw new Error('wrong username or password');
     }
 
     return 'Logged in';

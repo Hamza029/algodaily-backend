@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
 import { AuthInputType, UserInputType, UserType } from '../interfaces';
+import sendResponse from '../utils/sendResponse';
 
 const signup = async (
     req: Request,
@@ -17,12 +18,14 @@ const signup = async (
 
         const newUser: UserType = await authService.signup(userInput);
 
-        res.status(201).json({
-            status: 'success',
-            data: {
-                user: newUser,
-            },
-        });
+        sendResponse(
+            req,
+            res,
+            201,
+            'created',
+            'successfully signed up',
+            newUser
+        );
     } catch (err) {
         next(err);
     }
@@ -41,10 +44,7 @@ const login = async (
 
         const loginResponse: string = await authService.login(authInput);
 
-        res.status(200).json({
-            status: 'success',
-            message: loginResponse,
-        });
+        sendResponse(req, res, 200, 'success', loginResponse);
     } catch (err) {
         next(err);
     }

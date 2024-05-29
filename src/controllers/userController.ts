@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UserType, UserInputType } from './../interfaces';
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
+import sendResponse from '../utils/sendResponse';
 
 export const getAllUsers = async (
     req: Request,
@@ -10,13 +11,7 @@ export const getAllUsers = async (
 ): Promise<void> => {
     try {
         const users: UserType[] = await userService.getAllUsers();
-        res.status(200).json({
-            status: 'success',
-            results: users.length,
-            data: {
-                users,
-            },
-        });
+        sendResponse(req, res, 200, 'success', 'fetched all users', users);
     } catch (err) {
         next(err);
     }
@@ -30,11 +25,9 @@ const deleteUserById = async (
     try {
         const id = parseIdParam(req);
 
-        const deletedId: number = await userService.deleteUserById(id);
-        res.status(200).json({
-            status: 'success',
-            message: `User with id ${id} has been removed.`,
-        });
+        const isDeleted: number = await userService.deleteUserById(id);
+
+        sendResponse(req, res, 200, 'deleted', `deleted user with id ${id}.`);
     } catch (err) {
         next(err);
     }
@@ -49,12 +42,15 @@ const getUserById = async (
         const id = parseIdParam(req);
 
         const user: UserType = await userService.getUserById(id);
-        res.status(200).json({
-            status: 'success',
-            data: {
-                user,
-            },
-        });
+
+        sendResponse(
+            req,
+            res,
+            200,
+            'success',
+            `fetched user with id ${id}`,
+            user
+        );
     } catch (err) {
         next(err);
     }
@@ -76,13 +72,14 @@ const updateNameById = async (
 
         const user: UserType = await userService.updateNameById(id, name);
 
-        res.status(200).json({
-            status: 'success',
-            message: 'Updated name of user',
-            data: {
-                user,
-            },
-        });
+        sendResponse(
+            req,
+            res,
+            200,
+            'updated',
+            `updated name of user with id ${id}`,
+            user
+        );
     } catch (err) {
         next(err);
     }
