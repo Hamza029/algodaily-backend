@@ -20,7 +20,7 @@ const deleteUserById = async (id: number): Promise<boolean> => {
 
     const isDeleted: boolean = await userRepository.deleteUserById(id, user.Username);
 
-    if (isDeleted) {
+    if (!isDeleted) {
         throw new Error("Couldn't delete user");
     }
 
