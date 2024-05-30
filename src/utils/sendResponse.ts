@@ -29,26 +29,33 @@ const createResponseObject = (
 
     const json = JSON.stringify(responseObject);
 
-    if (contentType === 'application/xml') {
-        return json2xml(json, {
-            compact: true,
-            ignoreComment: true,
-            spaces: 2,
-        });
-    } else if (contentType === 'text/html') {
-        return json2html.render(responseObject);
-    } else if (contentType === 'text/plain') {
-        const options: Options = {
-            color: false,
-            spacing: true,
-            seperator: ':',
-            squareBracketsForArray: true,
-            doubleQuotesForKeys: false,
-            doubleQuotesForValues: false,
-        };
-        return jsonToPlainText(responseObject, options);
-    } else {
-        return json;
+    switch (contentType) {
+        case 'application/xml':
+            return json2xml(json, {
+                compact: true,
+                ignoreComment: true,
+                spaces: 2,
+            });
+
+        case 'text/html':
+            return json2html.render(responseObject);
+
+        case 'text/plain':
+            const options: Options = {
+                color: false,
+                spacing: true,
+                seperator: ':',
+                squareBracketsForArray: true,
+                doubleQuotesForKeys: false,
+                doubleQuotesForValues: false,
+            };
+            return jsonToPlainText(responseObject, options);
+
+        case 'application/json':
+            return json;
+
+        default:
+            return json;
     }
 };
 
