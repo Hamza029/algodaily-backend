@@ -1,9 +1,10 @@
-import { AuthType, UserType } from './../interfaces';
+import { IAuth } from './../interfaces/auth';
+import { IUser } from '../interfaces/user';
 import db from '../database/db';
 import { Knex } from 'knex';
 
-const getAllUsers = async (): Promise<UserType[]> => {
-    const users: UserType[] = await db<UserType>('user').select('*');
+const getAllUsers = async (): Promise<IUser[]> => {
+    const users: IUser[] = await db<IUser>('User').select('*');
     return users;
 };
 
@@ -11,7 +12,7 @@ const deleteUserById = async (id: number): Promise<number> => {
     const trx: Knex.Transaction = await db.transaction();
 
     try {
-        const targetUser: UserType | undefined = await trx<UserType>('User')
+        const targetUser: IUser | undefined = await trx<IUser>('User')
             .select('*')
             .where({ Id: id })
             .first();
@@ -20,10 +21,10 @@ const deleteUserById = async (id: number): Promise<number> => {
             throw new Error("User doesn't exist");
         }
 
-        const userDeleted: number = await trx<UserType>('User')
+        const userDeleted: number = await trx<IUser>('User')
             .where({ Id: id })
             .del();
-        const authDeleted: number = await trx<AuthType>('Auth')
+        const authDeleted: number = await trx<IAuth>('Auth')
             .where({ Username: targetUser.Username })
             .del();
 
@@ -40,8 +41,8 @@ const deleteUserById = async (id: number): Promise<number> => {
     }
 };
 
-const getUserById = async (id: number): Promise<UserType | undefined> => {
-    const user: UserType | undefined = await db<UserType>('user')
+const getUserById = async (id: number): Promise<IUser | undefined> => {
+    const user: IUser | undefined = await db<IUser>('user')
         .where('Id', id)
         .select('*')
         .first();
@@ -49,7 +50,7 @@ const getUserById = async (id: number): Promise<UserType | undefined> => {
 };
 
 const updateNameById = async (id: number, name: string): Promise<boolean> => {
-    const userUpdated = await db<UserType>('User')
+    const userUpdated = await db<IUser>('User')
         .where('Id', '=', id)
         .update({ Name: name });
 

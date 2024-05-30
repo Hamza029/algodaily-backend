@@ -1,8 +1,8 @@
-import { UserType } from './../interfaces/index';
+import { IUser } from '../interfaces/user';
 import userRepository from './../repository/userRepository';
 
-const getAllUsers = async (): Promise<UserType[]> => {
-    const users: UserType[] = await userRepository.getAllUsers();
+const getAllUsers = async (): Promise<IUser[]> => {
+    const users: IUser[] = await userRepository.getAllUsers();
 
     if (!users || users.length === 0) {
         throw new Error('No users found');
@@ -21,8 +21,8 @@ const deleteUserById = async (id: number): Promise<number> => {
     return deletedId;
 };
 
-const getUserById = async (id: number): Promise<UserType> => {
-    const user: UserType | undefined = await userRepository.getUserById(id);
+const getUserById = async (id: number): Promise<IUser> => {
+    const user: IUser | undefined = await userRepository.getUserById(id);
 
     if (!user) {
         throw new Error("User doesn't exist!");
@@ -31,8 +31,8 @@ const getUserById = async (id: number): Promise<UserType> => {
     return user;
 };
 
-const updateNameById = async (id: number, name: string): Promise<UserType> => {
-    const user: UserType | undefined = await userRepository.getUserById(id);
+const updateNameById = async (id: number, name: string): Promise<IUser> => {
+    const user: IUser | undefined = await userRepository.getUserById(id);
 
     if (!user) {
         throw new Error("User doesn't exist");

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserType, UserInputType } from './../interfaces';
+import { IUser } from './../interfaces/user';
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
 import sendResponse from '../utils/sendResponse';
@@ -10,7 +10,7 @@ export const getAllUsers = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const users: UserType[] = await userService.getAllUsers();
+        const users: IUser[] = await userService.getAllUsers();
         sendResponse(req, res, 200, 'success', 'fetched all users', users);
     } catch (err) {
         next(err);
@@ -41,7 +41,7 @@ const getUserById = async (
     try {
         const id = parseIdParam(req);
 
-        const user: UserType = await userService.getUserById(id);
+        const user: IUser = await userService.getUserById(id);
 
         sendResponse(
             req,
@@ -70,7 +70,7 @@ const updateNameById = async (
             throw new Error("Could't find name in request body");
         }
 
-        const user: UserType = await userService.updateNameById(id, name);
+        const user: IUser = await userService.updateNameById(id, name);
 
         sendResponse(
             req,

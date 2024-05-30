@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
-import { AuthInputType, UserInputType, UserType } from '../interfaces';
+import { IAuthInput } from '../interfaces/auth';
+import { IUserInput, IUser } from '../interfaces/user';
 import sendResponse from '../utils/sendResponse';
 
 const signup = async (
@@ -9,14 +10,14 @@ const signup = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const userInput: UserInputType = {
+        const userInput: IUserInput = {
             Username: req.body.Username,
             Email: req.body.Email,
             Password: req.body.Password,
             Name: req.body.Name,
         };
 
-        const newUser: UserType = await authService.signup(userInput);
+        const newUser: IUser = await authService.signup(userInput);
 
         sendResponse(
             req,
@@ -37,7 +38,7 @@ const login = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const authInput: AuthInputType = {
+        const authInput: IAuthInput = {
             Username: req.body.Username,
             Password: req.body.Password,
         };

@@ -1,27 +1,22 @@
 import { Knex } from 'knex';
 
-import {
-    UserType,
-    UserDbInputType,
-    AuthType,
-    AuthInputType,
-    AuthDbInputType,
-} from '../interfaces';
+import { IUserDbInput, IUser } from '../interfaces/user';
+import { IAuthDbInput, IAuthInput, IAuth } from '../interfaces/auth';
 import db from './../database/db';
 
 const signup = async (
-    userDbInput: UserDbInputType,
-    authDbInput: AuthDbInputType
-): Promise<UserType> => {
+    userDbInput: IUserDbInput,
+    authDbInput: IAuthDbInput
+): Promise<IUser> => {
     const trx: Knex.Transaction = await db.transaction();
 
     try {
-        await trx<AuthType>('Auth').insert(authDbInput);
-        const [newUserId] = await trx<UserType>('User').insert(userDbInput);
+        await trx<IAuth>('Auth').insert(authDbInput);
+        const [newUserId] = await trx<IUser>('User').insert(userDbInput);
 
         await trx.commit();
 
-        const newUser: UserType = {
+        const newUser: IUser = {
             Id: newUserId,
             ...userDbInput,
         };
@@ -34,9 +29,9 @@ const signup = async (
 };
 
 const login = async (
-    authInput: AuthInputType
-): Promise<AuthType | undefined> => {
-    const auth: AuthType | undefined = await db<AuthType>('Auth')
+    authInput: IAuthDbInput
+): Promise<IAuth | undefined> => {
+    const auth: IAuth | undefined = await db<IAuth>('Auth')
         .select('*')
         .where('Username', '=', authInput.Username)
         .first();

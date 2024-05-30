@@ -11,7 +11,7 @@ dotenv.config({ path: envPath });
 const app: Express = express();
 const port: number = Number(process.env.PORT) || 3000;
 
-app.use(express.json());
+app.use(express.json({ limit: '50kb' }));
 
 app.use('/api/users', userRoute);
 

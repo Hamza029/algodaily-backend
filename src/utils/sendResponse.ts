@@ -1,9 +1,7 @@
-import { Request, response, Response } from 'express';
+import { Request, Response } from 'express';
 import { json2xml } from 'xml-js';
 const json2html = require('json2html');
 import { jsonToPlainText, Options } from 'json-to-plain-text';
-
-import { AuthType, UserType } from '../interfaces';
 
 type ResponseType =
     | {

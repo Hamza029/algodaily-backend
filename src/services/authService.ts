@@ -1,16 +1,10 @@
-import {
-    AuthDbInputType,
-    AuthInputType,
-    AuthType,
-    UserDbInputType,
-    UserInputType,
-    UserType,
-} from './../interfaces';
+import { IAuth, IAuthInput, IAuthDbInput } from '../interfaces/auth';
+import { IUser, IUserInput, IUserDbInput } from './../interfaces/user';
 import authRepository from '../repository/authRepository';
 import passwordUtil from '../utils/passwordUtil';
 
-const signup = async (userInput: UserInputType): Promise<UserType> => {
-    const userDbInput: UserDbInputType = {
+const signup = async (userInput: IUserInput): Promise<IUser> => {
+    const userDbInput: IUserDbInput = {
         Name: userInput.Name,
         Username: userInput.Username,
         Email: userInput.Email,
@@ -18,12 +12,12 @@ const signup = async (userInput: UserInputType): Promise<UserType> => {
         Role: 0,
     };
 
-    const authDbInput: AuthDbInputType = {
+    const authDbInput: IAuthDbInput = {
         Username: userInput.Username,
         Password: await passwordUtil.hash(userInput.Password),
     };
 
-    const newUser: UserType = await authRepository.signup(
+    const newUser: IUser = await authRepository.signup(
         userDbInput,
         authDbInput
     );
@@ -35,8 +29,8 @@ const signup = async (userInput: UserInputType): Promise<UserType> => {
     return newUser;
 };
 
-const login = async (authInput: AuthInputType): Promise<string> => {
-    const auth: AuthType | undefined = await authRepository.login(authInput);
+const login = async (authInput: IAuthInput): Promise<string> => {
+    const auth: IAuth | undefined = await authRepository.login(authInput);
 
     if (
         !auth ||
