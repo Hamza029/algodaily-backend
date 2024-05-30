@@ -1,7 +1,7 @@
 export interface Auth {
-    Id: Number;
-    Username: string;
-    Password: string;
+  Id: number;
+  Username: string;
+  Password: string;
 }
 
 export interface AuthInput extends Omit<Auth, 'Id'> {}

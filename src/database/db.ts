@@ -1,4 +1,4 @@
-import knex, { Knex } from 'knex';
+import knex from 'knex';
 import knexFile from './../config/knexfile';
 import dotenv from 'dotenv';
 import path from 'path';
