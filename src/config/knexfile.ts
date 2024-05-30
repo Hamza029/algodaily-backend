@@ -1,19 +1,15 @@
 import { Knex } from 'knex';
-import dotenv from 'dotenv';
-import path from 'path';
-
-const envPath = path.join(__dirname + '/../../.env');
-dotenv.config({ path: envPath });
+import { conf } from './conf';
 
 const envs: Record<string, Knex.Config> = {
     development: {
-        client: 'mysql2',
+        client: conf.DATA_API_DB_CLIENT || 'mysql2',
         connection: {
-            database: process.env.DATA_API_DB_NAME || 'TestDB',
-            host: process.env.DATA_API_DB_SERVICE_HOST || 'localhost',
-            port: Number(process.env.DATA_API_DB_PORT) || 3306,
-            user: process.env.DATA_API_DB_USER || 'root',
-            password: process.env.DATA_API_DB_PASSWORD || 'mypass',
+            database: conf.DATA_API_DB_NAME || 'TestDB',
+            host: conf.DATA_API_DB_SERVICE_HOST || 'localhost',
+            port: Number(conf.DATA_API_DB_PORT) || 3306,
+            user: conf.DATA_API_DB_USER || 'root',
+            password: conf.DATA_API_DB_PASSWORD || 'mypass',
         },
         migrations: {
             tableName: 'knex_migrations',

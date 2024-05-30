@@ -1,15 +1,11 @@
-import dotenv from 'dotenv';
 import express, { Express, Request, Response, NextFunction } from 'express';
-import path from 'path';
 
 import userRoute from './routes/userRoute';
 import authRoute from './routes/authRoute';
-
-const envPath: string = path.join(__dirname + '/../.env');
-dotenv.config({ path: envPath });
+import { conf } from './config/conf';
 
 const app: Express = express();
-const port: number = Number(process.env.PORT) || 3000;
+const port: number = Number(conf.PORT) || 3500;
 
 app.use(express.json({ limit: '50kb' }));
 
