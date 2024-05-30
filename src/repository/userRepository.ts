@@ -8,33 +8,20 @@ const getAllUsers = async (): Promise<IUser[]> => {
     return users;
 };
 
-const deleteUserById = async (id: number): Promise<number> => {
+const deleteUserById = async (id: number, username: string): Promise<boolean> => {
     const trx: Knex.Transaction = await db.transaction();
 
     try {
-        const targetUser: IUser | undefined = await trx<IUser>('User')
-            .select('*')
-            .where({ Id: id })
-            .first();
-
-        if (!targetUser) {
-            throw new Error("User doesn't exist");
-        }
-
-        const userDeleted: number = await trx<IUser>('User')
+        await trx<IUser>('User')
             .where({ Id: id })
             .del();
-        const authDeleted: number = await trx<IAuth>('Auth')
-            .where({ Username: targetUser.Username })
+        await trx<IAuth>('Auth')
+            .where({ Username: username })
             .del();
-
-        if (userDeleted === 0 || authDeleted === 0) {
-            throw new Error("Couldn't delete user");
-        }
 
         await trx.commit();
 
-        return 1;
+        return true;
     } catch (err) {
         await trx.rollback();
         throw err;

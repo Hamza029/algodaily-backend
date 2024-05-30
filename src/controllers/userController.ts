@@ -25,7 +25,7 @@ const deleteUserById = async (
     try {
         const id = parseIdParam(req);
 
-        const isDeleted: number = await userService.deleteUserById(id);
+        await userService.deleteUserById(id);
 
         sendResponse(req, res, 200, 'deleted', `deleted user with id ${id}.`);
     } catch (err) {

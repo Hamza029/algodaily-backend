@@ -11,14 +11,20 @@ const getAllUsers = async (): Promise<IUser[]> => {
     return users;
 };
 
-const deleteUserById = async (id: number): Promise<number> => {
-    const deletedId: number = await userRepository.deleteUserById(id);
+const deleteUserById = async (id: number): Promise<boolean> => {
+    const user: IUser | undefined = await userRepository.getUserById(id);
 
-    if (deletedId === 0) {
+    if(!user) {
+        throw new Error("User doesn't exist");
+    }
+
+    const isDeleted: boolean = await userRepository.deleteUserById(id, user.Username);
+
+    if (isDeleted) {
         throw new Error("Couldn't delete user");
     }
 
-    return deletedId;
+    return isDeleted;
 };
 
 const getUserById = async (id: number): Promise<IUser> => {
