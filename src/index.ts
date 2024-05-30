@@ -17,6 +17,7 @@ app.use('/api/users', userRoute);
 
 app.use('/api/auth', authRoute);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
     status: 'fail',
