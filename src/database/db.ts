@@ -1,12 +1,9 @@
 import knex from 'knex';
+
 import knexFile from './../config/knexfile';
-import dotenv from 'dotenv';
-import path from 'path';
+import { conf } from '../config/conf';
 
-const envPath = path.join(__dirname + '/../../.env');
-dotenv.config({ path: envPath });
-
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const NODE_ENV = conf.NODE_ENV || 'development';
 
 const db = knex(knexFile[NODE_ENV]);
 
