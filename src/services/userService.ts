@@ -1,4 +1,5 @@
 import { IUser } from '../interfaces';
+import jwtUtil from '../utils/jwtUtil';
 import userRepository from './../repository/userRepository';
 
 const getAllUsers = async (): Promise<IUser[]> => {
@@ -11,12 +12,17 @@ const getAllUsers = async (): Promise<IUser[]> => {
   return users;
 };
 
-const deleteUserById = async (id: number): Promise<boolean> => {
+const deleteUserById = async (
+  id: number,
+  token: string | undefined,
+): Promise<boolean> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
     throw new Error("User doesn't exist");
   }
+
+  await jwtUtil.authorize(token, user.Username);
 
   const isDeleted: boolean = await userRepository.deleteUserById(
     id,
@@ -40,12 +46,18 @@ const getUserById = async (id: number): Promise<IUser> => {
   return user;
 };
 
-const updateNameById = async (id: number, name: string): Promise<IUser> => {
+const updateNameById = async (
+  id: number,
+  name: string,
+  token: string | undefined,
+): Promise<IUser> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
     throw new Error("User doesn't exist");
   }
+
+  await jwtUtil.authorize(token, user.Username);
 
   const userUpdated: boolean = await userRepository.updateNameById(id, name);
 

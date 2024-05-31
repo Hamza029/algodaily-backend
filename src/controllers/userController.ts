@@ -25,7 +25,7 @@ const deleteUserById = async (
   try {
     const id = parseIdParam(req);
 
-    await userService.deleteUserById(id);
+    await userService.deleteUserById(id, req.header('Authorization'));
 
     sendResponse(req, res, 200, 'deleted', `deleted user with id ${id}.`);
   } catch (err) {
@@ -70,7 +70,11 @@ const updateNameById = async (
       throw new Error("Could't find name in request body");
     }
 
-    const user: IUser = await userService.updateNameById(id, name);
+    const user: IUser = await userService.updateNameById(
+      id,
+      name,
+      req.header('Authorization'),
+    );
 
     sendResponse<IUser>(
       req,
