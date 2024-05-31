@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { json2xml } from 'xml-js';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const json2html = require('json2html');
 import { jsonToPlainText } from 'json-to-plain-text';
 
