@@ -1,47 +1,35 @@
-import { AuthType, UserType } from './../interfaces';
+import { IAuth } from './../interfaces/auth';
+import { IUser } from '../interfaces/user';
 import db from '../database/db';
 import { Knex } from 'knex';
 
-const getAllUsers = async (): Promise<UserType[]> => {
-    const users: UserType[] = await db<UserType>('user').select('*');
+const getAllUsers = async (): Promise<IUser[]> => {
+    const users: IUser[] = await db<IUser>('User').select('*');
     return users;
 };
 
-const deleteUserById = async (id: number): Promise<number> => {
+const deleteUserById = async (id: number, username: string): Promise<boolean> => {
     const trx: Knex.Transaction = await db.transaction();
 
     try {
-        const targetUser: UserType | undefined = await trx<UserType>('User')
-            .select('*')
-            .where({ Id: id })
-            .first();
-
-        if (!targetUser) {
-            throw new Error("User doesn't exist");
-        }
-
-        const userDeleted: number = await trx<UserType>('User')
+        await trx<IUser>('User')
             .where({ Id: id })
             .del();
-        const authDeleted: number = await trx<AuthType>('Auth')
-            .where({ Username: targetUser.Username })
+        await trx<IAuth>('Auth')
+            .where({ Username: username })
             .del();
-
-        if (userDeleted === 0 || authDeleted === 0) {
-            throw new Error("Couldn't delete user");
-        }
 
         await trx.commit();
 
-        return 1;
+        return true;
     } catch (err) {
         await trx.rollback();
         throw err;
     }
 };
 
-const getUserById = async (id: number): Promise<UserType | undefined> => {
-    const user: UserType | undefined = await db<UserType>('user')
+const getUserById = async (id: number): Promise<IUser | undefined> => {
+    const user: IUser | undefined = await db<IUser>('user')
         .where('Id', id)
         .select('*')
         .first();
@@ -49,7 +37,7 @@ const getUserById = async (id: number): Promise<UserType | undefined> => {
 };
 
 const updateNameById = async (id: number, name: string): Promise<boolean> => {
-    const userUpdated = await db<UserType>('User')
+    const userUpdated = await db<IUser>('User')
         .where('Id', '=', id)
         .update({ Name: name });
 
