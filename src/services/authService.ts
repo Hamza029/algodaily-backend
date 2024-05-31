@@ -11,7 +11,7 @@ import {
 import authRepository from '../repository/authRepository';
 import userRepository from '../repository/userRepository';
 import passwordUtil from '../utils/passwordUtil';
-import jwtUtils from '../utils/jwtUtils';
+import jwtUtil from '../utils/jwtUtil';
 
 const signup = async (userInput: IUserInput): Promise<IUser> => {
   const userDbInput: IUserDbInput = {
@@ -60,7 +60,7 @@ const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
     Role: user.Role,
   };
 
-  const token: string = jwtUtils.getToken(jwtPayload);
+  const token: string = jwtUtil.getToken(jwtPayload);
 
   const loginResponse: IAuthLoginResponse = {
     ...jwtPayload,
