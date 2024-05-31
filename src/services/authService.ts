@@ -1,31 +1,26 @@
-import {
-  AuthDbInputType,
-  AuthInputType,
-  AuthType,
-  UserDbInputType,
-  UserInputType,
-  UserType,
-} from './../interfaces';
+import { IAuth, IAuthInput, IAuthDbInput } from '../interfaces/auth';
+import { IUser, IUserInput, IUserDbInput } from './../interfaces/user';
 import authRepository from '../repository/authRepository';
+import passwordUtil from '../utils/passwordUtil';
 
-const signup = async (userInput: UserInputType): Promise<UserType> => {
-  const userDbInput: UserDbInputType = {
-    Name: userInput.Name,
-    Username: userInput.Username,
-    Email: userInput.Email,
-    JoinDate: new Date(),
-    Role: 0,
-  };
+const signup = async (userInput: IUserInput): Promise<IUser> => {
+    const userDbInput: IUserDbInput = {
+        Name: userInput.Name,
+        Username: userInput.Username,
+        Email: userInput.Email,
+        JoinDate: new Date(),
+        Role: 0,
+    };
 
-  const authDbInput: AuthDbInputType = {
-    Username: userInput.Username,
-    Password: userInput.Password,
-  };
+    const authDbInput: IAuthDbInput = {
+        Username: userInput.Username,
+        Password: await passwordUtil.hash(userInput.Password),
+    };
 
-  const newUser: UserType = await authRepository.signup(
-    userDbInput,
-    authDbInput,
-  );
+    const newUser: IUser = await authRepository.signup(
+        userDbInput,
+        authDbInput
+    );
 
   if (!newUser) {
     throw new Error("Couldn't register user");
@@ -34,12 +29,15 @@ const signup = async (userInput: UserInputType): Promise<UserType> => {
   return newUser;
 };
 
-const login = async (authInput: AuthInputType): Promise<string> => {
-  const auth: AuthType | undefined = await authRepository.login(authInput);
+const login = async (authInput: IAuthInput): Promise<string> => {
+    const auth: IAuth | undefined = await authRepository.login(authInput);
 
-  if (!auth) {
-    return 'Not logged in';
-  }
+    if (
+        !auth ||
+        !(await passwordUtil.compare(authInput.Password, auth.Password))
+    ) {
+        throw new Error('wrong username or password');
+    }
 
   return 'Logged in';
 };

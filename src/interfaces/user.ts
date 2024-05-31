@@ -1,16 +1,15 @@
-export interface User {
-  Id: number;
-  Username: string;
-  Email: string;
-  Name: string;
-  JoinDate: Date;
-  Role: number;
+interface IUserAttributes {
+    Id: number;
+    Username: string;
+    Email: string;
+    Name: string;
+    JoinDate: Date;
+    Role: number;
+    Password: string;
 }
 
-export interface UserInput extends Omit<User, 'Id' | 'JoinDate' | 'Role'> {
-  Password: string;
-}
+export interface IUser extends Omit<IUserAttributes, 'Password'> {}
 
-export interface UserDbInput extends Omit<User, 'Id'> {}
+export interface IUserInput extends Omit<IUserAttributes, 'Id' | 'JoinDate' | 'Role'> {}
 
-export default User;
+export interface IUserDbInput extends Omit<IUserAttributes, 'Id' | 'Password'> {}

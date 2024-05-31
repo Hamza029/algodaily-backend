@@ -1,11 +1,11 @@
-export interface Auth {
-  Id: number;
-  Username: string;
-  Password: string;
+interface IAuthAttributes {
+    Id: number;
+    Username: string;
+    Password: string;
 }
 
-export interface AuthInput extends Omit<Auth, 'Id'> {}
+export interface IAuth extends IAuthAttributes {}
 
-export interface AuthDbInput extends Omit<Auth, 'Id'> {}
+export interface IAuthInput extends Omit<IAuthAttributes, 'Id'> {}
 
-export default Auth;
+export interface IAuthDbInput extends Omit<IAuthAttributes, 'Id'> {}

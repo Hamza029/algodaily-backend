@@ -1,25 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserType } from './../interfaces';
+import { IUser } from './../interfaces/user';
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
+import sendResponse from '../utils/sendResponse';
 
 export const getAllUsers = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  try {
-    const users: UserType[] = await userService.getAllUsers();
-    res.status(200).json({
-      status: 'success',
-      results: users.length,
-      data: {
-        users,
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
+    try {
+        const users: IUser[] = await userService.getAllUsers();
+        sendResponse(req, res, 200, 'success', 'fetched all users', users);
+    } catch (err) {
+        next(err);
+    }
 };
 
 const deleteUserById = async (
@@ -30,14 +25,12 @@ const deleteUserById = async (
   try {
     const id = parseIdParam(req);
 
-    await userService.deleteUserById(id);
-    res.status(200).json({
-      status: 'success',
-      message: `User with id ${id} has been removed.`,
-    });
-  } catch (err) {
-    next(err);
-  }
+        await userService.deleteUserById(id);
+
+        sendResponse(req, res, 200, 'deleted', `deleted user with id ${id}.`);
+    } catch (err) {
+        next(err);
+    }
 };
 
 const getUserById = async (
@@ -48,16 +41,19 @@ const getUserById = async (
   try {
     const id = parseIdParam(req);
 
-    const user: UserType = await userService.getUserById(id);
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user,
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
+        const user: IUser = await userService.getUserById(id);
+
+        sendResponse(
+            req,
+            res,
+            200,
+            'success',
+            `fetched user with id ${id}`,
+            user
+        );
+    } catch (err) {
+        next(err);
+    }
 };
 
 const updateNameById = async (
@@ -70,22 +66,23 @@ const updateNameById = async (
 
     const name: string | undefined = req.body.Name;
 
-    if (!name) {
-      throw new Error("Could't find name in request body");
+        if (!name) {
+            throw new Error("Could't find name in request body");
+        }
+
+        const user: IUser = await userService.updateNameById(id, name);
+
+        sendResponse(
+            req,
+            res,
+            200,
+            'updated',
+            `updated name of user with id ${id}`,
+            user
+        );
+    } catch (err) {
+        next(err);
     }
-
-    const user: UserType = await userService.updateNameById(id, name);
-
-    res.status(200).json({
-      status: 'success',
-      message: 'Updated name of user',
-      data: {
-        user,
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
 };
 
 export default {

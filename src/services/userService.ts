@@ -1,8 +1,8 @@
-import { UserType } from './../interfaces/index';
+import { IUser } from '../interfaces/user';
 import userRepository from './../repository/userRepository';
 
-const getAllUsers = async (): Promise<UserType[]> => {
-  const users: UserType[] = await userRepository.getAllUsers();
+const getAllUsers = async (): Promise<IUser[]> => {
+    const users: IUser[] = await userRepository.getAllUsers();
 
   if (!users || users.length === 0) {
     throw new Error('No users found');
@@ -11,18 +11,24 @@ const getAllUsers = async (): Promise<UserType[]> => {
   return users;
 };
 
-const deleteUserById = async (id: number): Promise<number> => {
-  const deletedId: number = await userRepository.deleteUserById(id);
+const deleteUserById = async (id: number): Promise<boolean> => {
+    const user: IUser | undefined = await userRepository.getUserById(id);
 
-  if (deletedId === 0) {
-    throw new Error("Couldn't delete user");
-  }
+    if(!user) {
+        throw new Error("User doesn't exist");
+    }
 
-  return deletedId;
+    const isDeleted: boolean = await userRepository.deleteUserById(id, user.Username);
+
+    if (!isDeleted) {
+        throw new Error("Couldn't delete user");
+    }
+
+    return isDeleted;
 };
 
-const getUserById = async (id: number): Promise<UserType> => {
-  const user: UserType | undefined = await userRepository.getUserById(id);
+const getUserById = async (id: number): Promise<IUser> => {
+    const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
     throw new Error("User doesn't exist!");
@@ -31,8 +37,8 @@ const getUserById = async (id: number): Promise<UserType> => {
   return user;
 };
 
-const updateNameById = async (id: number, name: string): Promise<UserType> => {
-  const user: UserType | undefined = await userRepository.getUserById(id);
+const updateNameById = async (id: number, name: string): Promise<IUser> => {
+    const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
     throw new Error("User doesn't exist");
