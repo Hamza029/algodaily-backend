@@ -13,4 +13,5 @@ export const conf = {
   DATA_API_DB_PASSWORD: process.env.DATA_API_DB_PASSWORD,
   DATA_API_DB_CLIENT: process.env.DATA_API_DB_CLIENT,
   NODE_ENV: process.env.NODE_ENV,
+  JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET,
 };
