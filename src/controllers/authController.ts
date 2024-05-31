@@ -19,7 +19,14 @@ const signup = async (
 
     const newUser: IUser = await authService.signup(userInput);
 
-    sendResponse(req, res, 201, 'created', 'successfully signed up', newUser);
+    sendResponse<IUser>(
+      req,
+      res,
+      201,
+      'created',
+      'successfully signed up',
+      newUser,
+    );
   } catch (err) {
     next(err);
   }
@@ -37,7 +44,7 @@ const login = async (
     };
 
     const loginResponse: string = await authService.login(authInput);
-    sendResponse(req, res, 200, 'success', loginResponse);
+    sendResponse<string>(req, res, 200, 'success', loginResponse);
   } catch (err) {
     next(err);
   }

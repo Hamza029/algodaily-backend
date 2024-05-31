@@ -1,23 +1,21 @@
 import { Request, Response } from 'express';
 import { json2xml } from 'xml-js';
 const json2html = require('json2html');
-import { jsonToPlainText, Options } from 'json-to-plain-text';
+import { jsonToPlainText } from 'json-to-plain-text';
 
-type ResponseType =
-  | {
-      status: string;
-      message: string;
-      data?: any;
-    }
-  | string;
+type ResponseType<DataType> = {
+  status: string;
+  message: string;
+  data?: DataType;
+};
 
-const createResponseObject = (
+const createResponseObject = <DataType>(
   status: string,
   message: string,
-  data: any,
+  data: DataType,
   contentType: string,
 ): JSON | string => {
-  const responseObject: ResponseType = {
+  const responseObject: ResponseType<DataType> = {
     status,
     message,
     data,
@@ -41,15 +39,14 @@ const createResponseObject = (
       return json2html.render(responseObject);
 
     case 'text/plain':
-      const options: Options = {
+      return jsonToPlainText(responseObject, {
         color: false,
         spacing: true,
         seperator: ':',
         squareBracketsForArray: true,
         doubleQuotesForKeys: false,
         doubleQuotesForValues: false,
-      };
-      return jsonToPlainText(responseObject, options);
+      });
 
     case 'application/json':
       return json;
@@ -59,13 +56,13 @@ const createResponseObject = (
   }
 };
 
-const sendResponse = (
+const sendResponse = <DataType>(
   req: Request,
   res: Response,
   statusCode: number,
   status: string,
   message: string,
-  data?: any,
+  data?: DataType,
 ) => {
   let contentType: string = req.headers.accept || 'application/json';
   contentType = contentType === '*/*' ? 'application/json' : contentType;

@@ -11,7 +11,7 @@ export const getAllUsers = async (
 ): Promise<void> => {
   try {
     const users: IUser[] = await userService.getAllUsers();
-    sendResponse(req, res, 200, 'success', 'fetched all users', users);
+    sendResponse<IUser[]>(req, res, 200, 'success', 'fetched all users', users);
   } catch (err) {
     next(err);
   }
@@ -43,7 +43,14 @@ const getUserById = async (
 
     const user: IUser = await userService.getUserById(id);
 
-    sendResponse(req, res, 200, 'success', `fetched user with id ${id}`, user);
+    sendResponse<IUser>(
+      req,
+      res,
+      200,
+      'success',
+      `fetched user with id ${id}`,
+      user,
+    );
   } catch (err) {
     next(err);
   }
@@ -65,7 +72,7 @@ const updateNameById = async (
 
     const user: IUser = await userService.updateNameById(id, name);
 
-    sendResponse(
+    sendResponse<IUser>(
       req,
       res,
       200,
