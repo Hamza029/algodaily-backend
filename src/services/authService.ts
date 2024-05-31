@@ -1,3 +1,4 @@
+import { IAuthJWTPayload } from './../interfaces/auth';
 import {
   IAuth,
   IAuthInput,
@@ -5,9 +6,12 @@ import {
   IUser,
   IUserInput,
   IUserDbInput,
+  IAuthLoginResponse,
 } from '../interfaces';
 import authRepository from '../repository/authRepository';
+import userRepository from '../repository/userRepository';
 import passwordUtil from '../utils/passwordUtil';
+import jwtUtils from '../utils/jwtUtils';
 
 const signup = async (userInput: IUserInput): Promise<IUser> => {
   const userDbInput: IUserDbInput = {
@@ -32,7 +36,7 @@ const signup = async (userInput: IUserInput): Promise<IUser> => {
   return newUser;
 };
 
-const login = async (authInput: IAuthInput): Promise<string> => {
+const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
   const auth: IAuth | undefined = await authRepository.login(authInput);
 
   if (
@@ -42,7 +46,28 @@ const login = async (authInput: IAuthInput): Promise<string> => {
     throw new Error('wrong username or password');
   }
 
-  return 'Logged in';
+  const user: IUser | undefined = await userRepository.getUserByUsername(
+    auth.Username,
+  );
+
+  if (!user) {
+    throw new Error('wrong username or password');
+  }
+
+  const jwtPayload: IAuthJWTPayload = {
+    Username: user.Username,
+    Name: user.Name,
+    Role: user.Role,
+  };
+
+  const token: string = jwtUtils.getToken(jwtPayload);
+
+  const loginResponse: IAuthLoginResponse = {
+    ...jwtPayload,
+    Token: token,
+  };
+
+  return loginResponse;
 };
 
 export default {

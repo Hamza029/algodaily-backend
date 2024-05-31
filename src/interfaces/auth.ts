@@ -4,6 +4,7 @@ interface IAuthAttributes {
   Name: string;
   Role: number;
   Password: string;
+  Token: string;
 }
 
 export interface IAuth extends Omit<IAuthAttributes, 'Name' | 'Role'> {}
@@ -16,3 +17,6 @@ export interface IAuthDbInput
 
 export interface IAuthJWTPayload
   extends Pick<IAuthAttributes, 'Username' | 'Name' | 'Role'> {}
+
+export interface IAuthLoginResponse
+  extends Pick<IAuthAttributes, 'Username' | 'Name' | 'Role' | 'Token'> {}

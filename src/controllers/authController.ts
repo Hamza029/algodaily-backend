@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
-import { IAuthInput, IUserInput, IUser } from '../interfaces';
+import {
+  IAuthInput,
+  IUserInput,
+  IUser,
+  IAuthLoginResponse,
+} from '../interfaces';
 import sendResponse from '../utils/sendResponse';
 
 const signup = async (
@@ -42,8 +47,16 @@ const login = async (
       Password: req.body.Password,
     };
 
-    const loginResponse: string = await authService.login(authInput);
-    sendResponse<string>(req, res, 200, 'success', loginResponse);
+    const loginResponse: IAuthLoginResponse =
+      await authService.login(authInput);
+    sendResponse<IAuthLoginResponse>(
+      req,
+      res,
+      200,
+      'success',
+      'logged in',
+      loginResponse,
+    );
   } catch (err) {
     next(err);
   }
