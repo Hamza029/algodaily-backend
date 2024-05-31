@@ -4,45 +4,42 @@ import authRepository from '../repository/authRepository';
 import passwordUtil from '../utils/passwordUtil';
 
 const signup = async (userInput: IUserInput): Promise<IUser> => {
-    const userDbInput: IUserDbInput = {
-        Name: userInput.Name,
-        Username: userInput.Username,
-        Email: userInput.Email,
-        JoinDate: new Date(),
-        Role: 0,
-    };
+  const userDbInput: IUserDbInput = {
+    Name: userInput.Name,
+    Username: userInput.Username,
+    Email: userInput.Email,
+    JoinDate: new Date(),
+    Role: 0,
+  };
 
-    const authDbInput: IAuthDbInput = {
-        Username: userInput.Username,
-        Password: await passwordUtil.hash(userInput.Password),
-    };
+  const authDbInput: IAuthDbInput = {
+    Username: userInput.Username,
+    Password: await passwordUtil.hash(userInput.Password),
+  };
 
-    const newUser: IUser = await authRepository.signup(
-        userDbInput,
-        authDbInput
-    );
+  const newUser: IUser = await authRepository.signup(userDbInput, authDbInput);
 
-    if (!newUser) {
-        throw new Error("Couldn't register user");
-    }
+  if (!newUser) {
+    throw new Error("Couldn't register user");
+  }
 
-    return newUser;
+  return newUser;
 };
 
 const login = async (authInput: IAuthInput): Promise<string> => {
-    const auth: IAuth | undefined = await authRepository.login(authInput);
+  const auth: IAuth | undefined = await authRepository.login(authInput);
 
-    if (
-        !auth ||
-        !(await passwordUtil.compare(authInput.Password, auth.Password))
-    ) {
-        throw new Error('wrong username or password');
-    }
+  if (
+    !auth ||
+    !(await passwordUtil.compare(authInput.Password, auth.Password))
+  ) {
+    throw new Error('wrong username or password');
+  }
 
-    return 'Logged in';
+  return 'Logged in';
 };
 
 export default {
-    signup,
-    login,
+  signup,
+  login,
 };

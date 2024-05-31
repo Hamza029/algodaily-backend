@@ -1,7 +1,7 @@
 interface IAuthAttributes {
-    Id: number;
-    Username: string;
-    Password: string;
+  Id: number;
+  Username: string;
+  Password: string;
 }
 
 export interface IAuth extends IAuthAttributes {}

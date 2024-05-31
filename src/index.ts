@@ -13,13 +13,14 @@ app.use('/api/users', userRoute);
 
 app.use('/api/auth', authRoute);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(404).json({
-        status: 'fail',
-        message: err.message,
-    });
+  res.status(404).json({
+    status: 'fail',
+    message: err.message,
+  });
 });
 
 app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
