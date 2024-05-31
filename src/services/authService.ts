@@ -1,5 +1,11 @@
-import { IAuth, IAuthInput, IAuthDbInput } from '../interfaces/auth';
-import { IUser, IUserInput, IUserDbInput } from './../interfaces/user';
+import {
+  IAuth,
+  IAuthInput,
+  IAuthDbInput,
+  IUser,
+  IUserInput,
+  IUserDbInput,
+} from '../interfaces';
 import authRepository from '../repository/authRepository';
 import passwordUtil from '../utils/passwordUtil';
 

@@ -1,7 +1,6 @@
-import { IUser } from '../interfaces/user';
+import { IUser, IAuth } from '../interfaces';
 import db from '../database/db';
 import { Knex } from 'knex';
-import { IAuth } from '../interfaces';
 
 const getAllUsers = async (): Promise<IUser[]> => {
   const users: IUser[] = await db<IUser>('User').select('*');

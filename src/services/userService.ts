@@ -1,4 +1,4 @@
-import { IUser } from '../interfaces/user';
+import { IUser } from '../interfaces';
 import userRepository from './../repository/userRepository';
 
 const getAllUsers = async (): Promise<IUser[]> => {

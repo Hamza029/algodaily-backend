@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
-import { IAuthInput } from '../interfaces/auth';
-import { IUserInput, IUser } from '../interfaces/user';
+import { IAuthInput, IUserInput, IUser } from '../interfaces';
 import sendResponse from '../utils/sendResponse';
 
 const signup = async (

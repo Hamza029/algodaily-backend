@@ -1,7 +1,6 @@
 import { Knex } from 'knex';
 
-import { IUserDbInput, IUser } from '../interfaces/user';
-import { IAuthDbInput, IAuth } from '../interfaces/auth';
+import { IUserDbInput, IUser, IAuthDbInput, IAuth } from '../interfaces';
 import db from './../database/db';
 
 const signup = async (
