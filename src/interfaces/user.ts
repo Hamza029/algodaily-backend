@@ -15,3 +15,5 @@ export interface IUserInput
 
 export interface IUserDbInput
   extends Omit<IUserAttributes, 'Id' | 'Password'> {}
+
+export interface IUserUpdateInput extends Pick<IUserAttributes, 'Name'> {};

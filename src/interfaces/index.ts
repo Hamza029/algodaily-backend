@@ -1,4 +1,4 @@
-export { IUser, IUserInput, IUserDbInput } from './user';
+export { IUser, IUserInput, IUserDbInput, IUserUpdateInput } from './user';
 export {
   IAuth,
   IAuthInput,

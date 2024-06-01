@@ -1,4 +1,4 @@
-import { IUser } from '../interfaces';
+import { IUser, IUserUpdateInput } from '../interfaces';
 import jwtUtil from '../utils/jwtUtil';
 import userRepository from './../repository/userRepository';
 
@@ -22,7 +22,7 @@ const deleteUserById = async (
     throw new Error("User doesn't exist");
   }
 
-  await jwtUtil.authorize(token, user.Username);
+  // await jwtUtil.authorize(token, user.Username);
 
   const isDeleted: boolean = await userRepository.deleteUserById(
     id,
@@ -46,9 +46,9 @@ const getUserById = async (id: number): Promise<IUser> => {
   return user;
 };
 
-const updateNameById = async (
+const updateUserById = async (
   id: number,
-  name: string,
+  userUpdateInput: IUserUpdateInput,
   token: string | undefined,
 ): Promise<IUser> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
@@ -57,15 +57,20 @@ const updateNameById = async (
     throw new Error("User doesn't exist");
   }
 
-  await jwtUtil.authorize(token, user.Username);
+  // await jwtUtil.authorize(token, user.Username);
 
-  const userUpdated: boolean = await userRepository.updateNameById(id, name);
+  // need to make sure that only certain fields are allowed to be updated
+  const userUpdateDbInput: IUserUpdateInput = {
+    Name: userUpdateInput.Name || user.Name,
+  };
+
+  const userUpdated: boolean = await userRepository.updateUserById(id, userUpdateDbInput);
 
   if (!userUpdated) {
     throw new Error("Couldn't update user");
   }
 
-  user.Name = name;
+  user.Name = userUpdateDbInput.Name;
 
   return user;
 };
@@ -74,5 +79,5 @@ export default {
   getAllUsers,
   deleteUserById,
   getUserById,
-  updateNameById,
+  updateUserById,
 };

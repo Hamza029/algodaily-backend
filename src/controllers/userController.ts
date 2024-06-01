@@ -3,6 +3,7 @@ import { IUser } from './../interfaces';
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
 import sendResponse from '../utils/sendResponse';
+import { IUserUpdateInput } from '../interfaces';
 
 export const getAllUsers = async (
   req: Request,
@@ -56,7 +57,7 @@ const getUserById = async (
   }
 };
 
-const updateNameById = async (
+const updateUserById = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -64,15 +65,11 @@ const updateNameById = async (
   try {
     const id = parseIdParam(req);
 
-    const name: string | undefined = req.body.Name;
+    const userUpdateInput: IUserUpdateInput = req.body as IUserUpdateInput;
 
-    if (!name) {
-      throw new Error("Could't find name in request body");
-    }
-
-    const user: IUser = await userService.updateNameById(
+    const user: IUser = await userService.updateUserById(
       id,
-      name,
+      userUpdateInput,
       req.header('Authorization'),
     );
 
@@ -93,5 +90,5 @@ export default {
   getAllUsers,
   deleteUserById,
   getUserById,
-  updateNameById,
+  updateUserById,
 };

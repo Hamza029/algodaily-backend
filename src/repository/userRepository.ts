@@ -1,4 +1,4 @@
-import { IUser, IAuth } from '../interfaces';
+import { IUser, IAuth, IUserUpdateInput } from '../interfaces';
 import db from '../database/db';
 import { Knex } from 'knex';
 
@@ -34,10 +34,10 @@ const getUserById = async (id: number): Promise<IUser | undefined> => {
   return user;
 };
 
-const updateNameById = async (id: number, name: string): Promise<boolean> => {
+const updateUserById = async (id: number, userUpdateDbInput: IUserUpdateInput): Promise<boolean> => {
   const userUpdated = await db<IUser>('User')
     .where('Id', '=', id)
-    .update({ Name: name });
+    .update(userUpdateDbInput);
 
   return userUpdated === 1;
 };
@@ -56,6 +56,6 @@ export default {
   getAllUsers,
   deleteUserById,
   getUserById,
-  updateNameById,
+  updateUserById,
   getUserByUsername,
 };
