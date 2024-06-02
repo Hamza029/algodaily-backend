@@ -4,7 +4,7 @@ interface IUserAttributes {
   Email: string;
   Name: string;
   JoinDate: Date;
-  Role: number;
+  Role: 0 | 1;
   Password: string;
 }
 
