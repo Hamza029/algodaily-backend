@@ -34,7 +34,10 @@ const getUserById = async (id: number): Promise<IUser | undefined> => {
   return user;
 };
 
-const updateUserById = async (id: number, userUpdateDbInput: IUserUpdateInput): Promise<boolean> => {
+const updateUserById = async (
+  id: number,
+  userUpdateDbInput: IUserUpdateInput,
+): Promise<boolean> => {
   const userUpdated = await db<IUser>('User')
     .where('Id', '=', id)
     .update(userUpdateDbInput);

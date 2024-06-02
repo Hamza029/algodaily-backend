@@ -49,7 +49,7 @@ const login = async (
 
     const loginResponse: IAuthLoginResponse =
       await authService.login(authInput);
-      
+
     sendResponse<IAuthLoginResponse>(
       req,
       res,

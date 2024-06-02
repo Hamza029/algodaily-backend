@@ -8,8 +8,8 @@ router.route('/').get(userController.getAllUsers);
 
 router
   .route('/:id')
-  .delete(userController.deleteUserById)
+  .delete(userController.protect, userController.deleteUserById)
   .get(userController.getUserById)
-  .patch(userController.updateUserById);
+  .patch(userController.protect, userController.updateUserById);
 
 export default router;

@@ -18,6 +18,16 @@ export const getAllUsers = async (
   }
 };
 
+const protect = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseIdParam(req);
+    await userService.protect(id, req.header('Authorization'));
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteUserById = async (
   req: Request,
   res: Response,
@@ -26,7 +36,7 @@ const deleteUserById = async (
   try {
     const id = parseIdParam(req);
 
-    await userService.deleteUserById(id, req.header('Authorization'));
+    await userService.deleteUserById(id);
 
     sendResponse(req, res, 200, 'deleted', `deleted user with id ${id}.`);
   } catch (err) {
@@ -67,11 +77,7 @@ const updateUserById = async (
 
     const userUpdateInput: IUserUpdateInput = req.body as IUserUpdateInput;
 
-    const user: IUser = await userService.updateUserById(
-      id,
-      userUpdateInput,
-      req.header('Authorization'),
-    );
+    const user: IUser = await userService.updateUserById(id, userUpdateInput);
 
     sendResponse<IUser>(
       req,
@@ -91,4 +97,5 @@ export default {
   deleteUserById,
   getUserById,
   updateUserById,
+  protect,
 };

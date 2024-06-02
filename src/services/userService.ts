@@ -12,17 +12,22 @@ const getAllUsers = async (): Promise<IUser[]> => {
   return users;
 };
 
-const deleteUserById = async (
-  id: number,
-  token: string | undefined,
-): Promise<boolean> => {
+const protect = async (id: number, token: string | undefined) => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
     throw new Error("User doesn't exist");
   }
 
-  // await jwtUtil.authorize(token, user.Username);
+  await jwtUtil.authorize(token, user.Username);
+};
+
+const deleteUserById = async (id: number): Promise<boolean> => {
+  const user: IUser | undefined = await userRepository.getUserById(id);
+
+  if (!user) {
+    throw new Error("User doesn't exist");
+  }
 
   const isDeleted: boolean = await userRepository.deleteUserById(
     id,
@@ -49,7 +54,6 @@ const getUserById = async (id: number): Promise<IUser> => {
 const updateUserById = async (
   id: number,
   userUpdateInput: IUserUpdateInput,
-  token: string | undefined,
 ): Promise<IUser> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
@@ -57,14 +61,15 @@ const updateUserById = async (
     throw new Error("User doesn't exist");
   }
 
-  // await jwtUtil.authorize(token, user.Username);
-
   // need to make sure that only certain fields are allowed to be updated
   const userUpdateDbInput: IUserUpdateInput = {
     Name: userUpdateInput.Name || user.Name,
   };
 
-  const userUpdated: boolean = await userRepository.updateUserById(id, userUpdateDbInput);
+  const userUpdated: boolean = await userRepository.updateUserById(
+    id,
+    userUpdateDbInput,
+  );
 
   if (!userUpdated) {
     throw new Error("Couldn't update user");
@@ -80,4 +85,5 @@ export default {
   deleteUserById,
   getUserById,
   updateUserById,
+  protect,
 };
