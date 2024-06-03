@@ -1,4 +1,5 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
+import morgan from 'morgan';
 
 import userRoute from './routes/userRoute';
 import authRoute from './routes/authRoute';
@@ -6,6 +7,10 @@ import { conf } from './config/conf';
 
 const app: Express = express();
 const port: number = Number(conf.PORT) || 3500;
+
+if (conf.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.use(express.json({ limit: '50kb' }));
 
@@ -18,6 +23,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
     status: 'fail',
     message: err.message,
+    err,
   });
 });
 
