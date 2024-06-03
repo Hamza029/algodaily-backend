@@ -1,10 +1,15 @@
+export enum UserRoles {
+  USER = 0,
+  ADMIN = 1,
+}
+
 interface IUserAttributes {
   Id: number;
   Username: string;
   Email: string;
   Name: string;
   JoinDate: Date;
-  Role: 0 | 1;
+  Role: UserRoles;
   Password: string;
 }
 

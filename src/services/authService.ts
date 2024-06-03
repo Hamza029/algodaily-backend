@@ -7,6 +7,7 @@ import {
   IUserInput,
   IUserDbInput,
   IAuthLoginResponse,
+  UserRoles,
 } from '../interfaces';
 import authRepository from '../repository/authRepository';
 import userRepository from '../repository/userRepository';
@@ -19,7 +20,7 @@ const signup = async (userInput: IUserInput): Promise<IUser> => {
     Username: userInput.Username,
     Email: userInput.Email,
     JoinDate: new Date(),
-    Role: 0,
+    Role: UserRoles.USER,
   };
 
   const authDbInput: IAuthDbInput = {
@@ -47,7 +48,7 @@ const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
   }
 
   const user: IUser | undefined = await userRepository.getUserByUsername(
-    auth.Username,
+    auth.Username
   );
 
   if (!user) {

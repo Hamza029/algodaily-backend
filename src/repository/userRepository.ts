@@ -9,7 +9,7 @@ const getAllUsers = async (): Promise<IUser[]> => {
 
 const deleteUserById = async (
   id: number,
-  username: string,
+  username: string
 ): Promise<boolean> => {
   const trx: Knex.Transaction = await db.transaction();
 
@@ -36,7 +36,7 @@ const getUserById = async (id: number): Promise<IUser | undefined> => {
 
 const updateUserById = async (
   id: number,
-  userUpdateDbInput: IUserUpdateInput,
+  userUpdateDbInput: IUserUpdateInput
 ): Promise<boolean> => {
   const userUpdated = await db<IUser>('User')
     .where('Id', '=', id)
@@ -46,7 +46,7 @@ const updateUserById = async (
 };
 
 const getUserByUsername = async (
-  username: string,
+  username: string
 ): Promise<IUser | undefined> => {
   const targetUser: IUser | undefined = await db<IUser>('User')
     .where('Username', '=', username)

@@ -5,7 +5,7 @@ import db from './../database/db';
 
 const signup = async (
   userDbInput: IUserDbInput,
-  authDbInput: IAuthDbInput,
+  authDbInput: IAuthDbInput
 ): Promise<IUser> => {
   const trx: Knex.Transaction = await db.transaction();
 

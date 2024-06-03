@@ -9,6 +9,7 @@
   ],
   "rules": {
     "prettier/prettier": 1,
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    "endOfLine": "auto"
   }
 }

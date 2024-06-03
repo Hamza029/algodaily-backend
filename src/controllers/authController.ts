@@ -11,7 +11,7 @@ import sendResponse from '../utils/sendResponse';
 const signup = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const userInput: IUserInput = {
@@ -23,14 +23,7 @@ const signup = async (
 
     const newUser: IUser = await authService.signup(userInput);
 
-    sendResponse<IUser>(
-      req,
-      res,
-      201,
-      'created',
-      'successfully signed up',
-      newUser,
-    );
+    sendResponse<IUser>(req, res, 201, 'successfully signed up', newUser);
   } catch (err) {
     next(err);
   }
@@ -39,7 +32,7 @@ const signup = async (
 const login = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const authInput: IAuthInput = {
@@ -50,14 +43,7 @@ const login = async (
     const loginResponse: IAuthLoginResponse =
       await authService.login(authInput);
 
-    sendResponse<IAuthLoginResponse>(
-      req,
-      res,
-      200,
-      'success',
-      'logged in',
-      loginResponse,
-    );
+    sendResponse<IAuthLoginResponse>(req, res, 200, 'logged in', loginResponse);
   } catch (err) {
     next(err);
   }

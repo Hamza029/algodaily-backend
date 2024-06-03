@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { IAuthJWTPayload } from '../interfaces';
+import { IAuthJWTPayload, UserRoles } from '../interfaces';
 import { conf } from '../config/conf';
 
 const getToken = (payload: IAuthJWTPayload): string => {
@@ -17,7 +17,7 @@ const getToken = (payload: IAuthJWTPayload): string => {
 
 const authorize = async (
   token: string | undefined,
-  username: string,
+  username: string
 ): Promise<void> => {
   if (!token) {
     throw new Error('Authentication token not found');
@@ -31,7 +31,7 @@ const authorize = async (
 
   if (
     username !== (payload as IAuthJWTPayload).Username &&
-    (payload as IAuthJWTPayload).Role !== 1
+    (payload as IAuthJWTPayload).Role !== UserRoles.ADMIN
   ) {
     throw new Error('Forbidden request');
   }

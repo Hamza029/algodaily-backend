@@ -31,7 +31,7 @@ const deleteUserById = async (id: number): Promise<boolean> => {
 
   const isDeleted: boolean = await userRepository.deleteUserById(
     id,
-    user.Username,
+    user.Username
   );
 
   if (!isDeleted) {
@@ -53,7 +53,7 @@ const getUserById = async (id: number): Promise<IUser> => {
 
 const updateUserById = async (
   id: number,
-  userUpdateInput: IUserUpdateInput,
+  userUpdateInput: IUserUpdateInput
 ): Promise<IUser> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
@@ -68,7 +68,7 @@ const updateUserById = async (
 
   const userUpdated: boolean = await userRepository.updateUserById(
     id,
-    userUpdateDbInput,
+    userUpdateDbInput
   );
 
   if (!userUpdated) {
