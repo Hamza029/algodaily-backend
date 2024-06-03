@@ -1,10 +1,15 @@
+export enum UserRoles {
+  USER = 0,
+  ADMIN = 1,
+}
+
 interface IUserAttributes {
   Id: number;
   Username: string;
   Email: string;
   Name: string;
   JoinDate: Date;
-  Role: number;
+  Role: UserRoles;
   Password: string;
 }
 
@@ -15,3 +20,5 @@ export interface IUserInput
 
 export interface IUserDbInput
   extends Omit<IUserAttributes, 'Id' | 'Password'> {}
+
+export interface IUserUpdateInput extends Pick<IUserAttributes, 'Name'> {}

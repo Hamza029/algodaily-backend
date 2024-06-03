@@ -1,12 +1,11 @@
 import { Knex } from 'knex';
 
-import { IUserDbInput, IUser } from '../interfaces/user';
-import { IAuthDbInput, IAuth } from '../interfaces/auth';
+import { IUserDbInput, IUser, IAuthDbInput, IAuth } from '../interfaces';
 import db from './../database/db';
 
 const signup = async (
   userDbInput: IUserDbInput,
-  authDbInput: IAuthDbInput,
+  authDbInput: IAuthDbInput
 ): Promise<IUser> => {
   const trx: Knex.Transaction = await db.transaction();
 

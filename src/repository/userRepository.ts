@@ -1,7 +1,6 @@
-import { IUser } from '../interfaces/user';
+import { IUser, IAuth, IUserUpdateInput } from '../interfaces';
 import db from '../database/db';
 import { Knex } from 'knex';
-import { IAuth } from '../interfaces';
 
 const getAllUsers = async (): Promise<IUser[]> => {
   const users: IUser[] = await db<IUser>('User').select('*');
@@ -10,7 +9,7 @@ const getAllUsers = async (): Promise<IUser[]> => {
 
 const deleteUserById = async (
   id: number,
-  username: string,
+  username: string
 ): Promise<boolean> => {
   const trx: Knex.Transaction = await db.transaction();
 
@@ -35,17 +34,31 @@ const getUserById = async (id: number): Promise<IUser | undefined> => {
   return user;
 };
 
-const updateNameById = async (id: number, name: string): Promise<boolean> => {
+const updateUserById = async (
+  id: number,
+  userUpdateDbInput: IUserUpdateInput
+): Promise<boolean> => {
   const userUpdated = await db<IUser>('User')
     .where('Id', '=', id)
-    .update({ Name: name });
+    .update(userUpdateDbInput);
 
   return userUpdated === 1;
+};
+
+const getUserByUsername = async (
+  username: string
+): Promise<IUser | undefined> => {
+  const targetUser: IUser | undefined = await db<IUser>('User')
+    .where('Username', '=', username)
+    .first();
+
+  return targetUser;
 };
 
 export default {
   getAllUsers,
   deleteUserById,
   getUserById,
-  updateNameById,
+  updateUserById,
+  getUserByUsername,
 };

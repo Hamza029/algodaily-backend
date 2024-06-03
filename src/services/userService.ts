@@ -1,4 +1,5 @@
-import { IUser } from '../interfaces/user';
+import { IUser, IUserUpdateInput } from '../interfaces';
+import jwtUtil from '../utils/jwtUtil';
 import userRepository from './../repository/userRepository';
 
 const getAllUsers = async (): Promise<IUser[]> => {
@@ -11,6 +12,16 @@ const getAllUsers = async (): Promise<IUser[]> => {
   return users;
 };
 
+const protect = async (id: number, token: string | undefined) => {
+  const user: IUser | undefined = await userRepository.getUserById(id);
+
+  if (!user) {
+    throw new Error("User doesn't exist");
+  }
+
+  await jwtUtil.authorize(token, user.Username);
+};
+
 const deleteUserById = async (id: number): Promise<boolean> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
@@ -20,7 +31,7 @@ const deleteUserById = async (id: number): Promise<boolean> => {
 
   const isDeleted: boolean = await userRepository.deleteUserById(
     id,
-    user.Username,
+    user.Username
   );
 
   if (!isDeleted) {
@@ -40,20 +51,31 @@ const getUserById = async (id: number): Promise<IUser> => {
   return user;
 };
 
-const updateNameById = async (id: number, name: string): Promise<IUser> => {
+const updateUserById = async (
+  id: number,
+  userUpdateInput: IUserUpdateInput
+): Promise<IUser> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
     throw new Error("User doesn't exist");
   }
 
-  const userUpdated: boolean = await userRepository.updateNameById(id, name);
+  // need to make sure that only certain fields are allowed to be updated
+  const userUpdateDbInput: IUserUpdateInput = {
+    Name: userUpdateInput.Name || user.Name,
+  };
+
+  const userUpdated: boolean = await userRepository.updateUserById(
+    id,
+    userUpdateDbInput
+  );
 
   if (!userUpdated) {
     throw new Error("Couldn't update user");
   }
 
-  user.Name = name;
+  user.Name = userUpdateDbInput.Name;
 
   return user;
 };
@@ -62,5 +84,6 @@ export default {
   getAllUsers,
   deleteUserById,
   getUserById,
-  updateNameById,
+  updateUserById,
+  protect,
 };

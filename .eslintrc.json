@@ -8,6 +8,8 @@
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": 1,
+    "linebreak-style": 0,
+    "endOfLine": "auto"
   }
 }

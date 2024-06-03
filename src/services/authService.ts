@@ -1,7 +1,18 @@
-import { IAuth, IAuthInput, IAuthDbInput } from '../interfaces/auth';
-import { IUser, IUserInput, IUserDbInput } from './../interfaces/user';
+import { IAuthJWTPayload } from './../interfaces/auth';
+import {
+  IAuth,
+  IAuthInput,
+  IAuthDbInput,
+  IUser,
+  IUserInput,
+  IUserDbInput,
+  IAuthLoginResponse,
+  UserRoles,
+} from '../interfaces';
 import authRepository from '../repository/authRepository';
+import userRepository from '../repository/userRepository';
 import passwordUtil from '../utils/passwordUtil';
+import jwtUtil from '../utils/jwtUtil';
 
 const signup = async (userInput: IUserInput): Promise<IUser> => {
   const userDbInput: IUserDbInput = {
@@ -9,7 +20,7 @@ const signup = async (userInput: IUserInput): Promise<IUser> => {
     Username: userInput.Username,
     Email: userInput.Email,
     JoinDate: new Date(),
-    Role: 0,
+    Role: UserRoles.USER,
   };
 
   const authDbInput: IAuthDbInput = {
@@ -26,7 +37,7 @@ const signup = async (userInput: IUserInput): Promise<IUser> => {
   return newUser;
 };
 
-const login = async (authInput: IAuthInput): Promise<string> => {
+const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
   const auth: IAuth | undefined = await authRepository.login(authInput);
 
   if (
@@ -36,7 +47,28 @@ const login = async (authInput: IAuthInput): Promise<string> => {
     throw new Error('wrong username or password');
   }
 
-  return 'Logged in';
+  const user: IUser | undefined = await userRepository.getUserByUsername(
+    auth.Username
+  );
+
+  if (!user) {
+    throw new Error('wrong username or password');
+  }
+
+  const jwtPayload: IAuthJWTPayload = {
+    Username: user.Username,
+    Name: user.Name,
+    Role: user.Role,
+  };
+
+  const token: string = jwtUtil.getToken(jwtPayload);
+
+  const loginResponse: IAuthLoginResponse = {
+    ...jwtPayload,
+    Token: token,
+  };
+
+  return loginResponse;
 };
 
 export default {

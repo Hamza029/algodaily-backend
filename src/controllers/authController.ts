@@ -1,13 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
-import { IAuthInput } from '../interfaces/auth';
-import { IUserInput, IUser } from '../interfaces/user';
+import {
+  IAuthInput,
+  IUserInput,
+  IUser,
+  IAuthLoginResponse,
+} from '../interfaces';
 import sendResponse from '../utils/sendResponse';
 
 const signup = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const userInput: IUserInput = {
@@ -19,7 +23,7 @@ const signup = async (
 
     const newUser: IUser = await authService.signup(userInput);
 
-    sendResponse(req, res, 201, 'created', 'successfully signed up', newUser);
+    sendResponse<IUser>(req, res, 201, 'successfully signed up', newUser);
   } catch (err) {
     next(err);
   }
@@ -28,7 +32,7 @@ const signup = async (
 const login = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const authInput: IAuthInput = {
@@ -36,8 +40,10 @@ const login = async (
       Password: req.body.Password,
     };
 
-    const loginResponse: string = await authService.login(authInput);
-    sendResponse(req, res, 200, 'success', loginResponse);
+    const loginResponse: IAuthLoginResponse =
+      await authService.login(authInput);
+
+    sendResponse<IAuthLoginResponse>(req, res, 200, 'logged in', loginResponse);
   } catch (err) {
     next(err);
   }
