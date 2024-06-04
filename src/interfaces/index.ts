@@ -1,11 +1,4 @@
-import { IKnexError } from './knexError';
-export {
-  IUser,
-  IUserInput,
-  IUserDbInput,
-  IUserUpdateInput,
-  UserRoles,
-} from './user';
+export { IUser, IUserInput, IUserDbInput, IUserUpdateInput } from './user';
 
 export {
   IAuth,
