@@ -7,42 +7,37 @@ import {
   IUserInput,
   IUserDbInput,
   IAuthLoginResponse,
-  UserRoles,
 } from '../interfaces';
 import authRepository from '../repository/authRepository';
 import userRepository from '../repository/userRepository';
 import passwordUtil from '../utils/passwordUtil';
 import jwtUtil from '../utils/jwtUtil';
+import { UserDbInputDTO } from './dtos/user.dto';
+import { AuthDbInputDTO, AuthInputDTO, AuthLoginResponseDTO } from './dtos/auth.dto';
+import { validate } from 'class-validator';
 
-const signup = async (userInput: IUserInput): Promise<IUser> => {
-  const userDbInput: IUserDbInput = {
-    Name: userInput.Name,
-    Username: userInput.Username,
-    Email: userInput.Email,
-    JoinDate: new Date(),
-    Role: UserRoles.USER,
-  };
+const signup = async (userInput: IUserInput): Promise<void> => {
+  const userDbInputDTO: IUserDbInput = new UserDbInputDTO(userInput);
 
-  const authDbInput: IAuthDbInput = {
-    Username: userInput.Username,
-    Password: await passwordUtil.hash(userInput.Password),
-  };
+  const authDbInputDTO: IAuthDbInput = new AuthDbInputDTO(userInput);
+  
+  authDbInputDTO.Password = await passwordUtil.hash(authDbInputDTO.Password);
 
-  const newUser: IUser = await authRepository.signup(userDbInput, authDbInput);
+  const success: boolean = await authRepository.signup(userDbInputDTO, authDbInputDTO);
 
-  if (!newUser) {
+  if (!success) {
     throw new Error("Couldn't register user");
   }
-
-  return newUser;
 };
 
-const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
-  const auth: IAuth | undefined = await authRepository.login(authInput);
+const login = async (authUserInput: IAuthInput): Promise<IAuthLoginResponse> => {
+  const authInputDTO: IAuthInput = new AuthInputDTO(authUserInput);
+
+  const auth: IAuth | undefined = await authRepository.login(authInputDTO);
 
   if (
     !auth ||
-    !(await passwordUtil.compare(authInput.Password, auth.Password))
+    !(await passwordUtil.compare(authInputDTO.Password, auth.Password))
   ) {
     throw new Error('wrong username or password');
   }
@@ -63,10 +58,7 @@ const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
 
   const token: string = jwtUtil.getToken(jwtPayload);
 
-  const loginResponse: IAuthLoginResponse = {
-    ...jwtPayload,
-    Token: token,
-  };
+  const loginResponse: IAuthLoginResponse = new AuthLoginResponseDTO(token);
 
   return loginResponse;
 };

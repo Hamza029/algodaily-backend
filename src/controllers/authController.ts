@@ -14,16 +14,10 @@ const signup = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const userInput: IUserInput = {
-      Username: req.body.Username,
-      Email: req.body.Email,
-      Password: req.body.Password,
-      Name: req.body.Name,
-    };
+    const requestBody = { ...req.body }
+    await authService.signup(requestBody);
 
-    const newUser: IUser = await authService.signup(userInput);
-
-    sendResponse<IUser>(req, res, 201, 'successfully signed up', newUser);
+    sendResponse<IUser>(req, res, 201, 'successfully signed up');
   } catch (err) {
     next(err);
   }
@@ -35,13 +29,10 @@ const login = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const authInput: IAuthInput = {
-      Username: req.body.Username,
-      Password: req.body.Password,
-    };
+    const requestBody = { ...req.body }
 
     const loginResponse: IAuthLoginResponse =
-      await authService.login(authInput);
+      await authService.login(requestBody);
 
     sendResponse<IAuthLoginResponse>(req, res, 200, 'logged in', loginResponse);
   } catch (err) {

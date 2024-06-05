@@ -6,21 +6,16 @@ import db from './../database/db';
 const signup = async (
   userDbInput: IUserDbInput,
   authDbInput: IAuthDbInput
-): Promise<IUser> => {
+): Promise<boolean> => {
   const trx: Knex.Transaction = await db.transaction();
 
   try {
     await trx<IAuth>('Auth').insert(authDbInput);
-    const [newUserId] = await trx<IUser>('User').insert(userDbInput);
+    await trx<IUser>('User').insert(userDbInput);
 
     await trx.commit();
 
-    const newUser: IUser = {
-      Id: newUserId,
-      ...userDbInput,
-    };
-
-    return newUser;
+    return true;
   } catch (err) {
     await trx.rollback();
     throw err;
