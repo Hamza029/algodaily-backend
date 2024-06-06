@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 
 import userRoute from './routes/userRoute';
 import authRoute from './routes/authRoute';
+import blogRoute from './routes/blogRoute';
 import { conf } from './config/conf';
 
 const app: Express = express();
@@ -12,6 +13,8 @@ app.use(express.json({ limit: '50kb' }));
 app.use('/api/users', userRoute);
 
 app.use('/api/auth', authRoute);
+
+app.use('/api/blogs', blogRoute);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
