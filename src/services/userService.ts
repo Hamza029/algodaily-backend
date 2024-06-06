@@ -74,20 +74,20 @@ const updateUserById = async (
   }
 
   // need to make sure that only certain fields are allowed to be updated
-  const userUpdateDbInput: IUserUpdateDbInput = new UserUpdateDBInputDTO(
+  const userUpdateDbInputDTO: IUserUpdateDbInput = new UserUpdateDBInputDTO(
     userUpdateInput
   );
 
   const userUpdated: boolean = await userRepository.updateUserById(
     id,
-    userUpdateDbInput
+    userUpdateDbInputDTO
   );
 
   if (!userUpdated) {
     throw new Error("Couldn't update user");
   }
 
-  user.Name = userUpdateDbInput.Name;
+  user.Name = userUpdateDbInputDTO.Name;
 
   const userResponseDTO: IUserResponse = new UserResponseDTO(user);
 

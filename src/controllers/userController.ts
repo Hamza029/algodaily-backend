@@ -74,11 +74,11 @@ const updateUserById = async (
   try {
     const id = parseIdParam(req);
 
-    const userUpdateInput: IUserUpdateInput = req.body as IUserUpdateInput;
+    const requestBody = { ...req.body };
 
     const user: IUserResponse = await userService.updateUserById(
       id,
-      userUpdateInput
+      requestBody
     );
 
     sendResponse<IUserResponse>(
