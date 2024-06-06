@@ -1,14 +1,12 @@
-import { IsNotEmpty, MinLength, validate} from "class-validator";
-
-import { IUserInput, IAuthDbInput, IAuthInput, IAuthLoginResponse, IAuthJWTPayload, IUser } from "../../interfaces";
-import { whitelist } from "validator";
+import {
+  IUserInput,
+  IAuthDbInput,
+  IAuthInput,
+  IAuthLoginResponse,
+} from '../../interfaces';
 
 export class AuthDbInputDTO implements IAuthDbInput {
-  @IsNotEmpty()
   Username: string;
-
-  @IsNotEmpty()
-  @MinLength(5)
   Password: string;
 
   constructor(user: IUserInput) {
@@ -18,10 +16,7 @@ export class AuthDbInputDTO implements IAuthDbInput {
 }
 
 export class AuthInputDTO implements IAuthInput {
-  @IsNotEmpty()
   Username: string;
-
-  @IsNotEmpty()
   Password: string;
 
   constructor(auth: IAuthInput) {
@@ -34,6 +29,6 @@ export class AuthLoginResponseDTO implements IAuthLoginResponse {
   Token: string;
 
   constructor(Token: string) {
-    this.Token = Token;
+    this.Token = `Bearer ${Token}`;
   }
 }

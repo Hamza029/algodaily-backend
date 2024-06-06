@@ -6,7 +6,7 @@ import db from './../database/db';
 const signup = async (
   userDbInput: IUserDbInput,
   authDbInput: IAuthDbInput
-): Promise<boolean> => {
+): Promise<void> => {
   const trx: Knex.Transaction = await db.transaction();
 
   try {
@@ -14,8 +14,6 @@ const signup = async (
     await trx<IUser>('User').insert(userDbInput);
 
     await trx.commit();
-
-    return true;
   } catch (err) {
     await trx.rollback();
     throw err;

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUser } from './../interfaces';
+import { IUser, IUserResponse } from './../interfaces';
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
 import sendResponse from '../utils/sendResponse';
@@ -11,8 +11,8 @@ export const getAllUsers = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const users: IUser[] = await userService.getAllUsers();
-    sendResponse<IUser[]>(req, res, 200, 'fetched all users', users);
+    const users: IUserResponse[] = await userService.getAllUsers();
+    sendResponse<IUserResponse[]>(req, res, 200, 'fetched all users', users);
   } catch (err) {
     next(err);
   }
@@ -52,9 +52,15 @@ const getUserById = async (
   try {
     const id = parseIdParam(req);
 
-    const user: IUser = await userService.getUserById(id);
+    const user: IUserResponse = await userService.getUserById(id);
 
-    sendResponse<IUser>(req, res, 200, `fetched user with id ${id}`, user);
+    sendResponse<IUserResponse>(
+      req,
+      res,
+      200,
+      `fetched user with id ${id}`,
+      user
+    );
   } catch (err) {
     next(err);
   }
@@ -70,9 +76,12 @@ const updateUserById = async (
 
     const userUpdateInput: IUserUpdateInput = req.body as IUserUpdateInput;
 
-    const user: IUser = await userService.updateUserById(id, userUpdateInput);
+    const user: IUserResponse = await userService.updateUserById(
+      id,
+      userUpdateInput
+    );
 
-    sendResponse<IUser>(
+    sendResponse<IUserResponse>(
       req,
       res,
       200,

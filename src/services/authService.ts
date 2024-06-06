@@ -13,24 +13,25 @@ import userRepository from '../repository/userRepository';
 import passwordUtil from '../utils/passwordUtil';
 import jwtUtil from '../utils/jwtUtil';
 import { UserDbInputDTO } from './dtos/user.dto';
-import { AuthDbInputDTO, AuthInputDTO, AuthLoginResponseDTO } from './dtos/auth.dto';
-import { validate } from 'class-validator';
+import {
+  AuthDbInputDTO,
+  AuthInputDTO,
+  AuthLoginResponseDTO,
+} from './dtos/auth.dto';
 
 const signup = async (userInput: IUserInput): Promise<void> => {
   const userDbInputDTO: IUserDbInput = new UserDbInputDTO(userInput);
 
   const authDbInputDTO: IAuthDbInput = new AuthDbInputDTO(userInput);
-  
+
   authDbInputDTO.Password = await passwordUtil.hash(authDbInputDTO.Password);
 
-  const success: boolean = await authRepository.signup(userDbInputDTO, authDbInputDTO);
-
-  if (!success) {
-    throw new Error("Couldn't register user");
-  }
+  await authRepository.signup(userDbInputDTO, authDbInputDTO);
 };
 
-const login = async (authUserInput: IAuthInput): Promise<IAuthLoginResponse> => {
+const login = async (
+  authUserInput: IAuthInput
+): Promise<IAuthLoginResponse> => {
   const authInputDTO: IAuthInput = new AuthInputDTO(authUserInput);
 
   const auth: IAuth | undefined = await authRepository.login(authInputDTO);
@@ -58,9 +59,9 @@ const login = async (authUserInput: IAuthInput): Promise<IAuthLoginResponse> => 
 
   const token: string = jwtUtil.getToken(jwtPayload);
 
-  const loginResponse: IAuthLoginResponse = new AuthLoginResponseDTO(token);
+  const loginResponseDTO: IAuthLoginResponse = new AuthLoginResponseDTO(token);
 
-  return loginResponse;
+  return loginResponseDTO;
 };
 
 export default {

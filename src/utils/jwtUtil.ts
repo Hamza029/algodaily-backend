@@ -27,7 +27,11 @@ const authorize = async (
     throw new Error('internal server error');
   }
 
+  token = `${token}`.split(' ')[1];
+
   const payload = jwt.verify(token, conf.JWT_ACCESS_TOKEN_SECRET);
+
+  console.log(payload, username);
 
   if (
     username !== (payload as IAuthJWTPayload).Username &&

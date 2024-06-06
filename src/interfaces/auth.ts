@@ -18,5 +18,4 @@ export interface IAuthDbInput
 export interface IAuthJWTPayload
   extends Pick<IAuthAttributes, 'Username' | 'Name' | 'Role'> {}
 
-export interface IAuthLoginResponse
-  extends Pick<IAuthAttributes, 'Token'> {}
+export interface IAuthLoginResponse extends Pick<IAuthAttributes, 'Token'> {}
