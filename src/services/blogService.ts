@@ -38,6 +38,19 @@ const getBlogById = async (id: number): Promise<IBlogResponse> => {
   return blogResponseDTO;
 };
 
+const getBlogsByAuthorUsername = async (
+  username: string
+): Promise<IBlogResponse[]> => {
+  const blogs: IBlog[] =
+    await blogRepository.getBlogsByAuthorUsername(username);
+
+  const blogsResponseDTO: IBlogResponse[] = blogs.map(
+    (blog) => new BlogResponseDTO(blog)
+  );
+
+  return blogsResponseDTO;
+};
+
 const protect = async (id: number, token: string | undefined) => {
   const blog: IBlog | undefined = await blogRepository.getBlogById(id);
 
@@ -103,6 +116,7 @@ const updateBlogById = async (
 export default {
   getAllBlogs,
   getBlogById,
+  getBlogsByAuthorUsername,
   protect,
   createBlog,
   deleteBlogById,

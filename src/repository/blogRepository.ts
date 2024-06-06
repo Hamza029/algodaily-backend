@@ -1,5 +1,10 @@
 import db from '../database/db';
-import { IBlog, IBlogDbInput, IBlogUpdateDbInput } from '../interfaces';
+import {
+  IBlog,
+  IBlogDbInput,
+  IBlogResponse,
+  IBlogUpdateDbInput,
+} from '../interfaces';
 
 const getALlBlogs = async (): Promise<IBlog[]> => {
   const blogs: IBlog[] = await db<IBlog>('Blog').select('*');
@@ -12,6 +17,13 @@ const getBlogById = async (id: number): Promise<IBlog | undefined> => {
     .where('id', '=', id)
     .first();
   return blog;
+};
+
+const getBlogsByAuthorUsername = async (username: string): Promise<IBlog[]> => {
+  const blogs: IBlog[] = await db<IBlog>('IBlog')
+    .select('*')
+    .where({ authorUsername: username });
+  return blogs;
 };
 
 const createBlog = async (blogDbInput: IBlogDbInput): Promise<void> => {
@@ -32,6 +44,7 @@ const updateBlogById = async (
 export default {
   getALlBlogs,
   getBlogById,
+  getBlogsByAuthorUsername,
   createBlog,
   deleteBlogById,
   updateBlogById,
