@@ -22,3 +22,5 @@ export {
   IBlogUpdateInput,
   IBlogUpdateDbInput,
 } from './blog';
+
+export { IBlogQueryParams } from './queryParams';

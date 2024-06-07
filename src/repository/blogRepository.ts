@@ -1,17 +1,8 @@
 import db from '../database/db';
-import {
-  IBlog,
-  IBlogDbInput,
-  IBlogResponse,
-  IBlogUpdateDbInput,
-} from '../interfaces';
+import { IBlog, IBlogDbInput, IBlogUpdateDbInput } from '../interfaces';
 
-const getALlBlogs = async (queryObj: {
-  authorUsername: string;
-}): Promise<IBlog[]> => {
-  const blogs: IBlog[] = await db<IBlog>('Blog')
-    .select('*')
-    .where('authorUsername', 'like', `%${queryObj.authorUsername}%`);
+const getALlBlogs = async (): Promise<IBlog[]> => {
+  const blogs: IBlog[] = await db<IBlog>('Blog').select('*');
   return blogs;
 };
 
@@ -23,10 +14,12 @@ const getBlogById = async (id: number): Promise<IBlog | undefined> => {
   return blog;
 };
 
-const getBlogsByAuthorUsername = async (username: string): Promise<IBlog[]> => {
-  const blogs: IBlog[] = await db<IBlog>('IBlog')
+const getBlogsByAuthorUsername = async (
+  authorUsername: string
+): Promise<IBlog[]> => {
+  const blogs: IBlog[] = await db<IBlog>('Blog')
     .select('*')
-    .where({ authorUsername: username });
+    .where({ authorUsername: authorUsername });
   return blogs;
 };
 

@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUser, IUserResponse } from './../interfaces';
+import { IUserResponse } from './../interfaces';
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
 import sendResponse from '../utils/sendResponse';
-import { IUserUpdateInput } from '../interfaces';
 
 export const getAllUsers = async (
   req: Request,

@@ -2,6 +2,7 @@ import {
   IBlog,
   IBlogDbInput,
   IBlogInput,
+  IBlogQueryParams,
   IBlogResponse,
   IBlogUpdateDbInput,
   IBlogUpdateInput,
@@ -16,12 +17,14 @@ import {
   BlogUpdateDbInput,
 } from './dtos/blog.dto';
 
-const getAllBlogs = async (queryParams: any): Promise<IBlogResponse[]> => {
-  const queryObj = {
-    authorUsername: queryParams.authorUsername || '',
-  };
+const getAllBlogs = async (
+  queryParams: IBlogQueryParams
+): Promise<IBlogResponse[]> => {
+  const { authorUsername } = queryParams;
 
-  const blogs: IBlog[] = await blogRepository.getALlBlogs(queryObj);
+  const blogs: IBlog[] = await (!authorUsername
+    ? blogRepository.getALlBlogs()
+    : blogRepository.getBlogsByAuthorUsername(authorUsername));
 
   const blogsResponseDTO: IBlogResponse[] = blogs.map(
     (blog) => new BlogResponseDTO(blog)
@@ -40,19 +43,6 @@ const getBlogById = async (id: number): Promise<IBlogResponse> => {
   const blogResponseDTO: IBlogResponse = new BlogResponseDTO(blog);
 
   return blogResponseDTO;
-};
-
-const getBlogsByAuthorUsername = async (
-  username: string
-): Promise<IBlogResponse[]> => {
-  const blogs: IBlog[] =
-    await blogRepository.getBlogsByAuthorUsername(username);
-
-  const blogsResponseDTO: IBlogResponse[] = blogs.map(
-    (blog) => new BlogResponseDTO(blog)
-  );
-
-  return blogsResponseDTO;
 };
 
 const protect = async (id: number, token: string | undefined) => {
@@ -120,7 +110,6 @@ const updateBlogById = async (
 export default {
   getAllBlogs,
   getBlogById,
-  getBlogsByAuthorUsername,
   protect,
   createBlog,
   deleteBlogById,
