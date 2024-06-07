@@ -1,4 +1,11 @@
-export { IUser, IUserInput, IUserDbInput, IUserUpdateInput } from './user';
+export {
+  IUser,
+  IUserInput,
+  IUserDbInput,
+  IUserUpdateInput,
+  IUserResponse,
+  IUserUpdateDbInput,
+} from './user';
 
 export {
   IAuth,

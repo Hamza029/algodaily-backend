@@ -17,7 +17,7 @@ const getToken = (payload: IAuthJWTPayload): string => {
     expiresIn: conf.JWT_EXPIRES_AFTER,
   });
 
-  return `Bearer ${token}`;
+  return token;
 };
 
 const authorize = async (
