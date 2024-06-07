@@ -6,7 +6,7 @@ import {
   IUserUpdateDbInput,
   IUserUpdateInput,
 } from '../../interfaces';
-import { UserRoles } from '../../interfaces';
+import { UserRoles } from '../../constants';
 
 export class UserDbInputDTO implements IUserDbInput {
   Username: string;

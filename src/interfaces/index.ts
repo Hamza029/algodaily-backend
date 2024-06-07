@@ -5,8 +5,8 @@ export {
   IUserUpdateInput,
   IUserResponse,
   IUserUpdateDbInput,
-  UserRoles,
 } from './user';
+
 export {
   IAuth,
   IAuthInput,

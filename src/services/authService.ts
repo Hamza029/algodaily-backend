@@ -12,6 +12,8 @@ import authRepository from '../repository/authRepository';
 import userRepository from '../repository/userRepository';
 import passwordUtil from '../utils/passwordUtil';
 import jwtUtil from '../utils/jwtUtil';
+import { HTTPStatusCode } from './../constants';
+import AppError from '../utils/appError';
 import { UserDbInputDTO } from './dtos/user.dto';
 import {
   AuthDbInputDTO,
@@ -40,7 +42,10 @@ const login = async (
     !auth ||
     !(await passwordUtil.compare(authInputDTO.Password, auth.Password))
   ) {
-    throw new Error('wrong username or password');
+    throw new AppError(
+      'wrong username or password',
+      HTTPStatusCode.Unauthorized
+    );
   }
 
   const user: IUser | undefined = await userRepository.getUserByUsername(
@@ -48,7 +53,10 @@ const login = async (
   );
 
   if (!user) {
-    throw new Error('wrong username or password');
+    throw new AppError(
+      'wrong username or password',
+      HTTPStatusCode.Unauthorized
+    );
   }
 
   const jwtPayload: IAuthJWTPayload = {
