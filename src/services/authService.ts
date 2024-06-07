@@ -7,12 +7,13 @@ import {
   IUserInput,
   IUserDbInput,
   IAuthLoginResponse,
-  UserRoles,
 } from '../interfaces';
 import authRepository from '../repository/authRepository';
 import userRepository from '../repository/userRepository';
 import passwordUtil from '../utils/passwordUtil';
 import jwtUtil from '../utils/jwtUtil';
+import { HTTPStatusCode, UserRoles } from './../constants';
+import AppError from '../utils/appError';
 
 const signup = async (userInput: IUserInput): Promise<IUser> => {
   const userDbInput: IUserDbInput = {
@@ -31,7 +32,10 @@ const signup = async (userInput: IUserInput): Promise<IUser> => {
   const newUser: IUser = await authRepository.signup(userDbInput, authDbInput);
 
   if (!newUser) {
-    throw new Error("Couldn't register user");
+    throw new AppError(
+      'An unexpected error occurred while signing up',
+      HTTPStatusCode.InternalServerError
+    );
   }
 
   return newUser;
@@ -44,7 +48,10 @@ const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
     !auth ||
     !(await passwordUtil.compare(authInput.Password, auth.Password))
   ) {
-    throw new Error('wrong username or password');
+    throw new AppError(
+      'wrong username or password',
+      HTTPStatusCode.Unauthorized
+    );
   }
 
   const user: IUser | undefined = await userRepository.getUserByUsername(
@@ -52,7 +59,10 @@ const login = async (authInput: IAuthInput): Promise<IAuthLoginResponse> => {
   );
 
   if (!user) {
-    throw new Error('wrong username or password');
+    throw new AppError(
+      'wrong username or password',
+      HTTPStatusCode.Unauthorized
+    );
   }
 
   const jwtPayload: IAuthJWTPayload = {

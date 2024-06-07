@@ -1,4 +1,6 @@
+import { HTTPStatusCode } from '../constants';
 import { IUser, IUserUpdateInput } from '../interfaces';
+import AppError from '../utils/appError';
 import jwtUtil from '../utils/jwtUtil';
 import userRepository from './../repository/userRepository';
 
@@ -6,7 +8,10 @@ const getAllUsers = async (): Promise<IUser[]> => {
   const users: IUser[] = await userRepository.getAllUsers();
 
   if (!users || users.length === 0) {
-    throw new Error('No users found');
+    throw new AppError(
+      'No users found in the database',
+      HTTPStatusCode.NotFound
+    );
   }
 
   return users;
@@ -16,36 +21,27 @@ const protect = async (id: number, token: string | undefined) => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
-    throw new Error("User doesn't exist");
+    throw new AppError('User not found', HTTPStatusCode.NotFound);
   }
 
   await jwtUtil.authorize(token, user.Username);
 };
 
-const deleteUserById = async (id: number): Promise<boolean> => {
+const deleteUserById = async (id: number): Promise<void> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
-    throw new Error("User doesn't exist");
+    throw new AppError('User not found', HTTPStatusCode.NotFound);
   }
 
-  const isDeleted: boolean = await userRepository.deleteUserById(
-    id,
-    user.Username
-  );
-
-  if (!isDeleted) {
-    throw new Error("Couldn't delete user");
-  }
-
-  return isDeleted;
+  await userRepository.deleteUserById(id, user.Username);
 };
 
 const getUserById = async (id: number): Promise<IUser> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
-    throw new Error("User doesn't exist!");
+    throw new AppError('User not found', HTTPStatusCode.NotFound);
   }
 
   return user;
@@ -58,7 +54,7 @@ const updateUserById = async (
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
-    throw new Error("User doesn't exist");
+    throw new AppError('User not found', HTTPStatusCode.NotFound);
   }
 
   // need to make sure that only certain fields are allowed to be updated
@@ -72,7 +68,10 @@ const updateUserById = async (
   );
 
   if (!userUpdated) {
-    throw new Error("Couldn't update user");
+    throw new AppError(
+      'An unexpected error occurred while updating user',
+      HTTPStatusCode.InternalServerError
+    );
   }
 
   user.Name = userUpdateDbInput.Name;

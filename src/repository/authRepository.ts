@@ -2,6 +2,7 @@ import { Knex } from 'knex';
 
 import { IUserDbInput, IUser, IAuthDbInput, IAuth } from '../interfaces';
 import db from './../database/db';
+import KnexError from '../utils/knexError';
 
 const signup = async (
   userDbInput: IUserDbInput,
@@ -10,8 +11,8 @@ const signup = async (
   const trx: Knex.Transaction = await db.transaction();
 
   try {
-    await trx<IAuth>('Auth').insert(authDbInput);
     const [newUserId] = await trx<IUser>('User').insert(userDbInput);
+    await trx<IAuth>('Auth').insert(authDbInput);
 
     await trx.commit();
 
@@ -23,7 +24,7 @@ const signup = async (
     return newUser;
   } catch (err) {
     await trx.rollback();
-    throw err;
+    throw err as KnexError;
   }
 };
 
