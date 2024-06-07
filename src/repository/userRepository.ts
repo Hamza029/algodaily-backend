@@ -1,16 +1,15 @@
 import { IUser, IAuth, IUserUpdateInput } from '../interfaces';
 import db from '../database/db';
 import { Knex } from 'knex';
+import AppError from '../utils/appError';
+import { HTTPStatusCode } from '../constants';
 
 const getAllUsers = async (): Promise<IUser[]> => {
   const users: IUser[] = await db<IUser>('User').select('*');
   return users;
 };
 
-const deleteUserById = async (
-  id: number,
-  username: string
-): Promise<boolean> => {
+const deleteUserById = async (id: number, username: string): Promise<void> => {
   const trx: Knex.Transaction = await db.transaction();
 
   try {
@@ -18,11 +17,12 @@ const deleteUserById = async (
     await trx<IAuth>('Auth').where({ Username: username }).del();
 
     await trx.commit();
-
-    return true;
   } catch (err) {
     await trx.rollback();
-    throw err;
+    throw new AppError(
+      'An unexpected error occurred while deleting user',
+      HTTPStatusCode.InternalServerError
+    );
   }
 };
 

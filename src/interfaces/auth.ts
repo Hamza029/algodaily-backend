@@ -21,5 +21,4 @@ export interface IAuthJWTPayload
   exp?: number;
 }
 
-export interface IAuthLoginResponse
-  extends Pick<IAuthAttributes, 'Username' | 'Name' | 'Role' | 'Token'> {}
+export interface IAuthLoginResponse extends Pick<IAuthAttributes, 'Token'> {}

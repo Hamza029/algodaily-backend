@@ -1,7 +1,4 @@
-export enum UserRoles {
-  USER = 0,
-  ADMIN = 1,
-}
+import { UserRoles } from '../constants';
 
 interface IUserAttributes {
   Id: number;
@@ -18,7 +15,12 @@ export interface IUser extends Omit<IUserAttributes, 'Password'> {}
 export interface IUserInput
   extends Omit<IUserAttributes, 'Id' | 'JoinDate' | 'Role'> {}
 
+export interface IUserResponse
+  extends Pick<IUserAttributes, 'Username' | 'Name' | 'Email'> {}
+
 export interface IUserDbInput
   extends Omit<IUserAttributes, 'Id' | 'Password'> {}
 
 export interface IUserUpdateInput extends Pick<IUserAttributes, 'Name'> {}
+
+export interface IUserUpdateDbInput extends Pick<IUserAttributes, 'Name'> {}

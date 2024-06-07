@@ -16,7 +16,7 @@ const envs: Record<string, Knex.Config> = {
       extension: 'ts',
       directory: './../migrations/',
     },
-    debug: true,
+    debug: false,
   },
 };
 

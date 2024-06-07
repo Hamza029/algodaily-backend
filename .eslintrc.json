@@ -8,8 +8,11 @@
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": 1,
+    "prettier/prettier": 0,
     "linebreak-style": 0,
-    "endOfLine": "auto"
+    "@typescript-eslint/no-unused-vars": [
+      1,
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ]
   }
 }

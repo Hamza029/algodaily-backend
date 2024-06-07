@@ -3,8 +3,10 @@ export {
   IUserInput,
   IUserDbInput,
   IUserUpdateInput,
-  UserRoles,
+  IUserResponse,
+  IUserUpdateDbInput,
 } from './user';
+
 export {
   IAuth,
   IAuthInput,
