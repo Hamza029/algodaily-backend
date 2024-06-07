@@ -10,7 +10,7 @@ const getAllBlogs = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const blogs: IBlogResponse[] = await blogService.getAllBlogs();
+    const blogs: IBlogResponse[] = await blogService.getAllBlogs(req.query);
 
     sendResponse<IBlogResponse[]>(
       req,

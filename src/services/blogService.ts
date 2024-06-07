@@ -16,8 +16,12 @@ import {
   BlogUpdateDbInput,
 } from './dtos/blog.dto';
 
-const getAllBlogs = async (): Promise<IBlogResponse[]> => {
-  const blogs: IBlog[] = await blogRepository.getALlBlogs();
+const getAllBlogs = async (queryParams: any): Promise<IBlogResponse[]> => {
+  const queryObj = {
+    authorUsername: queryParams.authorUsername || '',
+  };
+
+  const blogs: IBlog[] = await blogRepository.getALlBlogs(queryObj);
 
   const blogsResponseDTO: IBlogResponse[] = blogs.map(
     (blog) => new BlogResponseDTO(blog)

@@ -6,8 +6,12 @@ import {
   IBlogUpdateDbInput,
 } from '../interfaces';
 
-const getALlBlogs = async (): Promise<IBlog[]> => {
-  const blogs: IBlog[] = await db<IBlog>('Blog').select('*');
+const getALlBlogs = async (queryObj: {
+  authorUsername: string;
+}): Promise<IBlog[]> => {
+  const blogs: IBlog[] = await db<IBlog>('Blog')
+    .select('*')
+    .where('authorUsername', 'like', `%${queryObj.authorUsername}%`);
   return blogs;
 };
 
