@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+<<<<<<< HEAD
 import { IProtectedRequest, IUser, IUserResponse } from './../interfaces';
+=======
+import { IUserResponse } from './../interfaces';
+>>>>>>> 8a0076fe7d73578ee401549b30b9c688bc6c3305
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
 import sendResponse from '../utils/sendResponse';
-import { IUserUpdateInput } from '../interfaces';
 
 export const getAllUsers = async (
   req: Request,

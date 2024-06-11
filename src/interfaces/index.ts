@@ -15,3 +15,13 @@ export {
   IAuthLoginResponse,
 } from './auth';
 export { IProtectedRequest } from './protectedRequest';
+export {
+  IBlog,
+  IBlogInput,
+  IBlogDbInput,
+  IBlogResponse,
+  IBlogUpdateInput,
+  IBlogUpdateDbInput,
+} from './blog';
+
+export { IBlogQueryParams } from './queryParams';
