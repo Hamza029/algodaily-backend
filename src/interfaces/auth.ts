@@ -7,7 +7,8 @@ interface IAuthAttributes {
   Token: string;
 }
 
-export interface IAuth extends Omit<IAuthAttributes, 'Name' | 'Role'> {}
+export interface IAuth
+  extends Omit<IAuthAttributes, 'Name' | 'Role' | 'Token'> {}
 
 export interface IAuthInput
   extends Pick<IAuthAttributes, 'Username' | 'Password'> {}
@@ -22,3 +23,8 @@ export interface IAuthJWTPayload
 }
 
 export interface IAuthLoginResponse extends Pick<IAuthAttributes, 'Token'> {}
+
+export interface IUpdatePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+}

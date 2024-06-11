@@ -30,7 +30,26 @@ const login = async (authInput: IAuthDbInput): Promise<IAuth | undefined> => {
   return auth;
 };
 
+const updateMyPassword = async (
+  id: number,
+  password: string
+): Promise<void> => {
+  await db<IAuth>('Auth').update({ Password: password }).where({ Id: id });
+};
+
+const getAuthByUsername = async (
+  useranme: string
+): Promise<IAuth | undefined> => {
+  const auth: IAuth | undefined = await db<IAuth>('Auth')
+    .select('*')
+    .where({ Username: useranme })
+    .first();
+  return auth;
+};
+
 export default {
   signup,
   login,
+  updateMyPassword,
+  getAuthByUsername,
 };

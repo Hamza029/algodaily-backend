@@ -1,4 +1,4 @@
-import { IAuthJWTPayload } from './../interfaces/auth';
+import { IAuthJWTPayload, IUpdatePasswordInput } from './../interfaces/auth';
 import {
   IAuth,
   IAuthInput,
@@ -72,7 +72,27 @@ const login = async (
   return loginResponseDTO;
 };
 
+const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
+  const id = user.Id;
+
+  const auth: IAuth = (await authRepository.getAuthByUsername(user.Username))!;
+
+  const passwordMatches = passwordUtil.compare(
+    reqBody.currentPassword,
+    auth.Password
+  );
+
+  if (!passwordMatches) {
+    throw new AppError("Password doesn't exist", HTTPStatusCode.BadRequest);
+  }
+
+  const newPassword = reqBody.newPassword;
+  const newHashedPassword = await passwordUtil.hash(newPassword);
+  await authRepository.updateMyPassword(id, newHashedPassword);
+};
+
 export default {
   signup,
   login,
+  updateMyPassword,
 };
