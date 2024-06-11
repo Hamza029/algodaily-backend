@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
-import { IAuthJWTPayload, IUser } from '../interfaces';
-import { HTTPStatusCode, UserRoles } from './../constants';
+import { IAuthJWTPayload } from '../interfaces';
+import { HTTPStatusCode } from './../constants';
 import { conf } from '../config/conf';
 import AppError from './appError';
 
@@ -47,23 +47,7 @@ const authenticate = async (
   return payload;
 };
 
-const authorize = async (
-  currentUser: IUser,
-  username: string
-): Promise<void> => {
-  if (
-    username !== currentUser.Username &&
-    currentUser.Role !== UserRoles.ADMIN
-  ) {
-    throw new AppError(
-      "You don't have permission to perform this request",
-      HTTPStatusCode.Forbidden
-    );
-  }
-};
-
 export default {
   getToken,
   authenticate,
-  authorize,
 };

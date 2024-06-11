@@ -1,3 +1,4 @@
+import { HTTPStatusCode } from '../constants';
 import {
   IBlog,
   IBlogDbInput,
@@ -9,8 +10,7 @@ import {
   IUser,
 } from '../interfaces';
 import blogRepository from '../repository/blogRepository';
-import userRepository from '../repository/userRepository';
-import jwtUtil from '../utils/jwtUtil';
+import AppError from '../utils/appError';
 import {
   BlogDbInputDTO,
   BlogResponseDTO,
@@ -37,7 +37,7 @@ const getBlogById = async (id: number): Promise<IBlogResponse> => {
   const blog: IBlog | undefined = await blogRepository.getBlogById(id);
 
   if (!blog) {
-    throw new Error("This blog doesn't exist");
+    throw new AppError("This blog doesn't exist", HTTPStatusCode.NotFound);
   }
 
   const blogResponseDTO: IBlogResponse = new BlogResponseDTO(blog);
@@ -45,30 +45,10 @@ const getBlogById = async (id: number): Promise<IBlogResponse> => {
   return blogResponseDTO;
 };
 
-const protect = async (id: number, token: string | undefined) => {
-  const blog: IBlog | undefined = await blogRepository.getBlogById(id);
-
-  if (!blog) {
-    throw new Error("This blog doesn't exist");
-  }
-
-  await jwtUtil.authorize(token, blog.authorUsername);
-};
-
 const createBlog = async (
   blogInput: IBlogInput,
-  token: string | undefined
+  user: IUser
 ): Promise<void> => {
-  const payload = await jwtUtil.isLoggedIn(token);
-
-  const user: IUser | undefined = await userRepository.getUserByUsername(
-    payload.Username
-  );
-
-  if (!user) {
-    throw new Error('the owner of this token no longer exists');
-  }
-
   const blogDbInputDTO: IBlogDbInput = new BlogDbInputDTO(blogInput, user);
 
   await blogRepository.createBlog(blogDbInputDTO);
@@ -78,7 +58,7 @@ const deleteBlogById = async (id: number) => {
   const blog = await blogRepository.getBlogById(id);
 
   if (!blog) {
-    throw new Error("This blog doesn't exist");
+    throw new AppError("This blog doesn't exist", HTTPStatusCode.NotFound);
   }
 
   await blogRepository.deleteBlogById(id);
@@ -110,7 +90,6 @@ const updateBlogById = async (
 export default {
   getAllBlogs,
   getBlogById,
-  protect,
   createBlog,
   deleteBlogById,
   updateBlogById,

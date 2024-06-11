@@ -1,9 +1,10 @@
 import { Response, NextFunction } from 'express';
 import { HTTPStatusCode, UserRoles } from '../constants';
-import { IUser, IProtectedRequest } from '../interfaces';
+import { IUser, IProtectedRequest, IBlog } from '../interfaces';
 import userRepository from '../repository/userRepository';
 import AppError from '../utils/appError';
 import { parseIdParam } from '../utils/parseParam';
+import blogRepository from '../repository/blogRepository';
 
 const authorize = async (
   req: IProtectedRequest,
@@ -13,12 +14,22 @@ const authorize = async (
   try {
     const id = parseIdParam(req);
 
-    const user: IUser | undefined = await userRepository.getUserById(id);
+    const blog: IBlog | undefined = await blogRepository.getBlogById(id);
+
+    if (!blog) {
+      return next(
+        new AppError("Requested blog doesn't exist", HTTPStatusCode.NotFound)
+      );
+    }
+
+    const user: IUser | undefined = await userRepository.getUserByUsername(
+      blog.authorUsername
+    );
 
     if (!user) {
       return next(
         new AppError(
-          "The requested user doesn't exist",
+          'The author of this blog has been removed',
           HTTPStatusCode.NotFound
         )
       );
@@ -34,7 +45,7 @@ const authorize = async (
     }
 
     if (
-      user.Username !== req.user.Username &&
+      blog.authorUsername !== req.user.Username &&
       req.user.Role !== UserRoles.ADMIN
     ) {
       return next(
