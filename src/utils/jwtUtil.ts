@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { IAuthJWTPayload } from '../interfaces';
+import { IAuthJWTPayload, IUser } from '../interfaces';
 import { HTTPStatusCode, UserRoles } from './../constants';
 import { conf } from '../config/conf';
 import AppError from './appError';
@@ -20,10 +20,9 @@ const getToken = (payload: IAuthJWTPayload): string => {
   return token;
 };
 
-const authorize = async (
-  token: string | undefined,
-  username: string
-): Promise<void> => {
+const authenticate = async (
+  token: string | undefined
+): Promise<IAuthJWTPayload> => {
   if (!token) {
     throw new AppError(
       'Authorization header missing',
@@ -40,14 +39,24 @@ const authorize = async (
     );
   }
 
-  const payload = jwt.verify(token, conf.JWT_ACCESS_TOKEN_SECRET);
+  const payload: IAuthJWTPayload = jwt.verify(
+    token,
+    conf.JWT_ACCESS_TOKEN_SECRET
+  ) as IAuthJWTPayload;
 
+  return payload;
+};
+
+const authorize = async (
+  currentUser: IUser,
+  username: string
+): Promise<void> => {
   if (
-    username !== (payload as IAuthJWTPayload).Username &&
-    (payload as IAuthJWTPayload).Role !== UserRoles.ADMIN
+    username !== currentUser.Username &&
+    currentUser.Role !== UserRoles.ADMIN
   ) {
     throw new AppError(
-      'You do not have permission to perform this action',
+      "You don't have permission to perform this request",
       HTTPStatusCode.Forbidden
     );
   }
@@ -55,5 +64,6 @@ const authorize = async (
 
 export default {
   getToken,
+  authenticate,
   authorize,
 };

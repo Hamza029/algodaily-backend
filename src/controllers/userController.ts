@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUser, IUserResponse } from './../interfaces';
+import { IProtectedRequest, IUser, IUserResponse } from './../interfaces';
 import userService from './../services/userService';
 import { parseIdParam } from '../utils/parseParam';
 import sendResponse from '../utils/sendResponse';
@@ -18,18 +18,8 @@ export const getAllUsers = async (
   }
 };
 
-const protect = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = parseIdParam(req);
-    await userService.protect(id, req.header('Authorization'));
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
-
 const deleteUserById = async (
-  req: Request,
+  req: IProtectedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -98,5 +88,4 @@ export default {
   deleteUserById,
   getUserById,
   updateUserById,
-  protect,
 };

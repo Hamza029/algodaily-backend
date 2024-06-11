@@ -14,3 +14,4 @@ export {
   IAuthJWTPayload,
   IAuthLoginResponse,
 } from './auth';
+export { IProtectedRequest } from './protectedRequest';

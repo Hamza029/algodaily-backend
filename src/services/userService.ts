@@ -6,7 +6,6 @@ import {
   IUserUpdateInput,
 } from '../interfaces';
 import AppError from '../utils/appError';
-import jwtUtil from '../utils/jwtUtil';
 import userRepository from './../repository/userRepository';
 import { UserResponseDTO, UserUpdateDBInputDTO } from './dtos/user.dto';
 
@@ -25,16 +24,6 @@ const getAllUsers = async (): Promise<IUserResponse[]> => {
   );
 
   return usersResponseDTO;
-};
-
-const protect = async (id: number, token: string | undefined) => {
-  const user: IUser | undefined = await userRepository.getUserById(id);
-
-  if (!user) {
-    throw new AppError('User not found', HTTPStatusCode.NotFound);
-  }
-
-  await jwtUtil.authorize(token, user.Username);
 };
 
 const deleteUserById = async (id: number): Promise<void> => {
@@ -98,5 +87,4 @@ export default {
   deleteUserById,
   getUserById,
   updateUserById,
-  protect,
 };
