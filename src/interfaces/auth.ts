@@ -16,6 +16,9 @@ export interface IAuthDbInput
   extends Pick<IAuthAttributes, 'Username' | 'Password'> {}
 
 export interface IAuthJWTPayload
-  extends Pick<IAuthAttributes, 'Username' | 'Name' | 'Role'> {}
+  extends Pick<IAuthAttributes, 'Username' | 'Name' | 'Role'> {
+  iat?: number;
+  exp?: number;
+}
 
 export interface IAuthLoginResponse extends Pick<IAuthAttributes, 'Token'> {}

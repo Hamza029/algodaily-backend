@@ -3,6 +3,7 @@ import morgan from 'morgan';
 
 import userRoute from './routes/userRoute';
 import authRoute from './routes/authRoute';
+import blogRoute from './routes/blogRoute';
 import { conf } from './config/conf';
 import errorHandler from './utils/errorHandler';
 import AppError from './utils/appError';
@@ -21,6 +22,8 @@ app.use('/api/users', userRoute);
 
 app.use('/api/auth', authRoute);
 
+app.use('/api/blogs', blogRoute);
+
 app.use('*', (req: Request, res: Response, next: NextFunction) => {
   next(
     new AppError(
@@ -30,7 +33,7 @@ app.use('*', (req: Request, res: Response, next: NextFunction) => {
   );
 });
 
-app.use(errorHandler);
+app.use(errorHandler.handleError);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

@@ -38,7 +38,7 @@ const handleDuplicateFieldsDB = (err: KnexError) => {
   return new AppError(message, HTTPStatusCode.BadRequest);
 };
 
-const errorHandler = (
+export const handleError = (
   err: AppError | KnexError,
   _req: Request,
   res: Response,
@@ -58,4 +58,6 @@ const errorHandler = (
   sendError(err, res);
 };
 
-export default errorHandler;
+export default {
+  handleError,
+};

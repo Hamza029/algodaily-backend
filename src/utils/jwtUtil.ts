@@ -20,10 +20,9 @@ const getToken = (payload: IAuthJWTPayload): string => {
   return token;
 };
 
-const authorize = async (
-  token: string | undefined,
-  username: string
-): Promise<void> => {
+const isLoggedIn = async (
+  token: string | undefined
+): Promise<IAuthJWTPayload> => {
   if (!token) {
     throw new AppError(
       'Authorization header missing',
@@ -42,10 +41,16 @@ const authorize = async (
 
   const payload = jwt.verify(token, conf.JWT_ACCESS_TOKEN_SECRET);
 
-  if (
-    username !== (payload as IAuthJWTPayload).Username &&
-    (payload as IAuthJWTPayload).Role !== UserRoles.ADMIN
-  ) {
+  return payload as IAuthJWTPayload;
+};
+
+const authorize = async (
+  token: string | undefined,
+  username: string
+): Promise<void> => {
+  const payload: IAuthJWTPayload = await isLoggedIn(token);
+
+  if (username !== payload.Username && payload.Role !== UserRoles.ADMIN) {
     throw new AppError(
       'You do not have permission to perform this action',
       HTTPStatusCode.Forbidden
@@ -55,5 +60,6 @@ const authorize = async (
 
 export default {
   getToken,
+  isLoggedIn,
   authorize,
 };
