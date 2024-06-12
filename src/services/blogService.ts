@@ -1,3 +1,4 @@
+import { HTTPStatusCode } from '../constants';
 import {
   IBlog,
   IBlogDbInput,
@@ -10,6 +11,7 @@ import {
 } from '../interfaces';
 import blogRepository from '../repository/blogRepository';
 import userRepository from '../repository/userRepository';
+import AppError from '../utils/appError';
 import jwtUtil from '../utils/jwtUtil';
 import {
   BlogDbInputDTO,
@@ -22,9 +24,22 @@ const getAllBlogs = async (
 ): Promise<IBlogResponse[]> => {
   const { authorUsername } = queryParams;
 
+  const page: number = queryParams.page ? Number(queryParams.page) : 1;
+
+  if (!page) {
+    throw new AppError('Invalid page number', HTTPStatusCode.BadRequest);
+  }
+
+  const limit: number = 3;
+  const skip: number = (page - 1) * limit;
+
   const blogs: IBlog[] = await (!authorUsername
-    ? blogRepository.getALlBlogs()
-    : blogRepository.getBlogsByAuthorUsername(authorUsername));
+    ? blogRepository.getALlBlogs(skip, limit)
+    : blogRepository.getBlogsByAuthorUsername(authorUsername, skip, limit));
+
+  if (blogs.length === 0) {
+    throw new AppError('No blogs found', HTTPStatusCode.NotFound);
+  }
 
   const blogsResponseDTO: IBlogResponse[] = blogs.map(
     (blog) => new BlogResponseDTO(blog)

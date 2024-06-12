@@ -23,4 +23,4 @@ export {
   IBlogUpdateDbInput,
 } from './blog';
 
-export { IBlogQueryParams } from './queryParams';
+export { IBlogQueryParams, IUserQueryParams } from './queryParams';
