@@ -7,6 +7,7 @@ import {
   IUserInput,
   IUserDbInput,
   IAuthLoginResponse,
+  IUpdatePasswordDbInput,
 } from '../interfaces';
 import authRepository from '../repository/authRepository';
 import userRepository from '../repository/userRepository';
@@ -19,6 +20,7 @@ import {
   AuthDbInputDTO,
   AuthInputDTO,
   AuthLoginResponseDTO,
+  UpdatePasswordDbInputDTO,
 } from './dtos/auth.dto';
 
 const signup = async (userInput: IUserInput): Promise<void> => {
@@ -73,8 +75,6 @@ const login = async (
 };
 
 const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
-  const id = user.Id;
-
   const auth: IAuth = (await authRepository.getAuthByUsername(user.Username))!;
 
   const passwordMatches = passwordUtil.compare(
@@ -88,7 +88,16 @@ const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
 
   const newPassword = reqBody.newPassword;
   const newHashedPassword = await passwordUtil.hash(newPassword);
-  await authRepository.updateMyPassword(id, newHashedPassword);
+
+  reqBody.newPassword = newHashedPassword;
+
+  const updatePasswordDbInputDTO: IUpdatePasswordDbInput =
+    new UpdatePasswordDbInputDTO(reqBody);
+
+  await authRepository.updateMyPassword(
+    auth.Username,
+    updatePasswordDbInputDTO
+  );
 };
 
 export default {

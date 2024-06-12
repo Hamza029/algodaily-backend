@@ -17,7 +17,7 @@ const getToken = (payload: IAuthJWTPayload): string => {
     expiresIn: conf.JWT_EXPIRES_AFTER,
   });
 
-  return token;
+  return `Bearer ${token}`;
 };
 
 const authenticate = async (
@@ -43,6 +43,8 @@ const authenticate = async (
     token,
     conf.JWT_ACCESS_TOKEN_SECRET
   ) as IAuthJWTPayload;
+
+  console.log(payload);
 
   return payload;
 };
