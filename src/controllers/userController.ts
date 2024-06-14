@@ -10,7 +10,9 @@ export const getAllUsers = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const users: IUserResponse[] = await userService.getAllUsers();
+    const users: IUserResponse[] = await userService.getAllUsers({
+      ...req.query,
+    });
     sendResponse<IUserResponse[]>(req, res, 200, 'fetched all users', users);
   } catch (err) {
     next(err);

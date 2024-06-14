@@ -4,8 +4,12 @@ import { Knex } from 'knex';
 import AppError from '../utils/appError';
 import { HTTPStatusCode } from '../constants';
 
-const getAllUsers = async (): Promise<IUser[]> => {
-  const users: IUser[] = await db<IUser>('User').select('*');
+const getAllUsers = async (skip: number, limit: number): Promise<IUser[]> => {
+  const users: IUser[] = await db<IUser>('User')
+    .select('*')
+    .limit(limit)
+    .offset(skip);
+
   return users;
 };
 

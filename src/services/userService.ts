@@ -5,12 +5,24 @@ import {
   IUserUpdateDbInput,
   IUserUpdateInput,
 } from '../interfaces';
+import { IUserQueryParams } from '../interfaces/queryParams';
 import AppError from '../utils/appError';
 import userRepository from './../repository/userRepository';
 import { UserResponseDTO, UserUpdateDBInputDTO } from './dtos/user.dto';
 
-const getAllUsers = async (): Promise<IUserResponse[]> => {
-  const users: IUser[] = await userRepository.getAllUsers();
+const getAllUsers = async (
+  queryParams: IUserQueryParams
+): Promise<IUserResponse[]> => {
+  const page: number = queryParams.page ? Number(queryParams.page) : 1;
+
+  if (!page) {
+    throw new AppError('Invalid page number', HTTPStatusCode.BadRequest);
+  }
+
+  const limit: number = 4;
+  const skip: number = (page - 1) * limit;
+
+  const users: IUser[] = await userRepository.getAllUsers(skip, limit);
 
   if (!users || users.length === 0) {
     throw new AppError(
