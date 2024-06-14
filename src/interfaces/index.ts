@@ -13,7 +13,10 @@ export {
   IAuthDbInput,
   IAuthJWTPayload,
   IAuthLoginResponse,
+  IUpdatePasswordInput,
+  IUpdatePasswordDbInput,
 } from './auth';
+export { IProtectedRequest } from './protectedRequest';
 export {
   IBlog,
   IBlogInput,

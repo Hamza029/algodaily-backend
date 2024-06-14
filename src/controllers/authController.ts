@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
-import { IUser, IAuthLoginResponse } from '../interfaces';
+import { IUser, IAuthLoginResponse, IProtectedRequest } from '../interfaces';
 import sendResponse from '../utils/sendResponse';
 
 const signup = async (
@@ -35,7 +35,22 @@ const login = async (
   }
 };
 
+const updateMyPassword = async (
+  req: IProtectedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const requestBody = { ...req.body };
+    await authService.updateMyPassword(req.user!, requestBody);
+    sendResponse(req, res, 200, 'successfully updated password');
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   signup,
   login,
+  updateMyPassword,
 };

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import { IAuthJWTPayload } from '../interfaces';
-import { HTTPStatusCode, UserRoles } from './../constants';
+import { HTTPStatusCode } from './../constants';
 import { conf } from '../config/conf';
 import AppError from './appError';
 
@@ -17,10 +17,10 @@ const getToken = (payload: IAuthJWTPayload): string => {
     expiresIn: conf.JWT_EXPIRES_AFTER,
   });
 
-  return token;
+  return `Bearer ${token}`;
 };
 
-const isLoggedIn = async (
+const authenticate = async (
   token: string | undefined
 ): Promise<IAuthJWTPayload> => {
   if (!token) {
@@ -39,27 +39,17 @@ const isLoggedIn = async (
     );
   }
 
-  const payload = jwt.verify(token, conf.JWT_ACCESS_TOKEN_SECRET);
+  const payload: IAuthJWTPayload = jwt.verify(
+    token,
+    conf.JWT_ACCESS_TOKEN_SECRET
+  ) as IAuthJWTPayload;
 
-  return payload as IAuthJWTPayload;
-};
+  console.log(payload);
 
-const authorize = async (
-  token: string | undefined,
-  username: string
-): Promise<void> => {
-  const payload: IAuthJWTPayload = await isLoggedIn(token);
-
-  if (username !== payload.Username && payload.Role !== UserRoles.ADMIN) {
-    throw new AppError(
-      'You do not have permission to perform this action',
-      HTTPStatusCode.Forbidden
-    );
-  }
+  return payload;
 };
 
 export default {
   getToken,
-  isLoggedIn,
-  authorize,
+  authenticate,
 };
