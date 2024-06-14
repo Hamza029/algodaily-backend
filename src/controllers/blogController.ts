@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import blogService from '../services/blogService';
 import sendResponse from '../utils/sendResponse';
 import { parseIdParam } from '../utils/parseParam';
+import { IProtectedRequest } from '../interfaces';
 
 const getAllBlogs = async (
   req: Request,
@@ -46,26 +47,15 @@ const getBlogById = async (
   }
 };
 
-const protect = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = parseIdParam(req);
-    await blogService.protect(id, req.header('Authorization'));
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
-
 const createBlog = async (
-  req: Request,
+  req: IProtectedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const token = req.header('Authorization');
   const requestBody = { ...req.body };
 
   try {
-    await blogService.createBlog(requestBody, token);
+    await blogService.createBlog(requestBody, req.user!);
 
     sendResponse(req, res, 201, 'successfully created you blog');
   } catch (err) {
@@ -118,7 +108,6 @@ const updateBlogById = async (
 export default {
   getAllBlogs,
   getBlogById,
-  protect,
   createBlog,
   deleteBlogById,
   updateBlogById,

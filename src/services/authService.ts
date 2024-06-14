@@ -1,4 +1,4 @@
-import { IAuthJWTPayload } from './../interfaces/auth';
+import { IAuthJWTPayload, IUpdatePasswordInput } from './../interfaces/auth';
 import {
   IAuth,
   IAuthInput,
@@ -7,6 +7,7 @@ import {
   IUserInput,
   IUserDbInput,
   IAuthLoginResponse,
+  IUpdatePasswordDbInput,
 } from '../interfaces';
 import authRepository from '../repository/authRepository';
 import userRepository from '../repository/userRepository';
@@ -19,6 +20,7 @@ import {
   AuthDbInputDTO,
   AuthInputDTO,
   AuthLoginResponseDTO,
+  UpdatePasswordDbInputDTO,
 } from './dtos/auth.dto';
 
 const signup = async (userInput: IUserInput): Promise<void> => {
@@ -72,7 +74,34 @@ const login = async (
   return loginResponseDTO;
 };
 
+const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
+  const auth: IAuth = (await authRepository.getAuthByUsername(user.Username))!;
+
+  const passwordMatches = passwordUtil.compare(
+    reqBody.currentPassword,
+    auth.Password
+  );
+
+  if (!passwordMatches) {
+    throw new AppError("Password doesn't exist", HTTPStatusCode.BadRequest);
+  }
+
+  const newPassword = reqBody.newPassword;
+  const newHashedPassword = await passwordUtil.hash(newPassword);
+
+  reqBody.newPassword = newHashedPassword;
+
+  const updatePasswordDbInputDTO: IUpdatePasswordDbInput =
+    new UpdatePasswordDbInputDTO(reqBody);
+
+  await authRepository.updateMyPassword(
+    auth.Username,
+    updatePasswordDbInputDTO
+  );
+};
+
 export default {
   signup,
   login,
+  updateMyPassword,
 };

@@ -1,6 +1,13 @@
 import { Knex } from 'knex';
 
-import { IUserDbInput, IUser, IAuthDbInput, IAuth } from '../interfaces';
+import {
+  IUserDbInput,
+  IUser,
+  IAuthDbInput,
+  IAuth,
+  IAuthInput,
+  IUpdatePasswordDbInput,
+} from '../interfaces';
 import db from './../database/db';
 import KnexError from '../utils/knexError';
 
@@ -21,7 +28,7 @@ const signup = async (
   }
 };
 
-const login = async (authInput: IAuthDbInput): Promise<IAuth | undefined> => {
+const login = async (authInput: IAuthInput): Promise<IAuth | undefined> => {
   const auth: IAuth | undefined = await db<IAuth>('Auth')
     .select('*')
     .where('Username', '=', authInput.Username)
@@ -30,7 +37,28 @@ const login = async (authInput: IAuthDbInput): Promise<IAuth | undefined> => {
   return auth;
 };
 
+const updateMyPassword = async (
+  username: string,
+  updatePasswordDbInput: IUpdatePasswordDbInput
+): Promise<void> => {
+  await db<IAuth>('Auth')
+    .update(updatePasswordDbInput)
+    .where({ Username: username });
+};
+
+const getAuthByUsername = async (
+  useranme: string
+): Promise<IAuth | undefined> => {
+  const auth: IAuth | undefined = await db<IAuth>('Auth')
+    .select('*')
+    .where({ Username: useranme })
+    .first();
+  return auth;
+};
+
 export default {
   signup,
   login,
+  updateMyPassword,
+  getAuthByUsername,
 };
