@@ -37,7 +37,7 @@ jest.mock('./../../services/dtos/user.dto', () => {
 
 describe('userService.getAllUsers', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should return list of users', async () => {
@@ -126,7 +126,7 @@ describe('userService.getUserById', () => {
   const id: number = 3;
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should return a user', async () => {
@@ -182,7 +182,7 @@ describe('userService.deleteUserById', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should delete a user', async () => {

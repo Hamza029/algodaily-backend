@@ -61,7 +61,7 @@ const mockBlogsResponse: IBlogResponse[] = [
 
 describe('blogService.getAllBlogs', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should return list of blogs', async () => {
@@ -121,7 +121,7 @@ describe('blogService.getAllBlogs', () => {
 
 describe('blogService.getBlogById', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should return a blog', async () => {
@@ -150,7 +150,7 @@ describe('blogService.getBlogById', () => {
 
 describe('blogService.createBlog', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   const mockUser: IUser = {
@@ -184,7 +184,7 @@ describe('blogService.createBlog', () => {
 
 describe('blogService.updateBlogById', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   const id = mockBlogs[0].id;
@@ -228,7 +228,7 @@ describe('blogService.updateBlogById', () => {
 
 describe('blogService.deleteBlogById', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   const id = mockBlogs[0].id;

@@ -56,7 +56,7 @@ const mockError = new AppError('Test Error', HTTPStatusCode.NotImplemented);
 
 describe('BlogController.getAllBlogs', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   const mockRequest: Partial<Request> = {
@@ -112,7 +112,7 @@ describe('BlogController.getAllBlogs', () => {
 
 describe('BlogController.getBlogById', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   const mockRequest: Partial<Request> = {
@@ -165,7 +165,7 @@ describe('BlogController.getBlogById', () => {
 
 describe('BlogController.updateBlogById', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   const mockRequest: Partial<IProtectedRequest> = {
@@ -273,7 +273,7 @@ describe('BlogController.createBlog', () => {
 
 describe('BlogController.updateBlogById', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   const mockRequest: Partial<IProtectedRequest> = {

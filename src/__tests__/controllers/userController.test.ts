@@ -40,7 +40,7 @@ describe('userController.getAllUsers', () => {
   const mockNext: jest.Mock = jest.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should return list of users with status 200', async () => {
@@ -135,7 +135,7 @@ describe('userController.getUserById', () => {
   const mockNext: jest.Mock = jest.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should return a user with status 200', async () => {
@@ -212,7 +212,7 @@ describe('userController.deleteUserById', () => {
   const mockNext: jest.Mock = jest.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should delete user with status 200', async () => {
@@ -283,7 +283,7 @@ describe('userController.updateUserById', () => {
   const mockNext: jest.Mock = jest.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should update user with status 200', async () => {
