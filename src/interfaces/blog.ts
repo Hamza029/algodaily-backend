@@ -13,7 +13,7 @@ export interface IBlogInput
 
 export interface IBlogDbInput extends Omit<IBlogAttributes, 'id'> {}
 
-export interface IBlogResponse extends Omit<IBlogAttributes, 'id'> {}
+export interface IBlogResponse extends IBlogAttributes {}
 
 export interface IBlogUpdateInput
   extends Pick<IBlogAttributes, 'title' | 'description'> {}

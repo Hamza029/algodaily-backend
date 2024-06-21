@@ -1,7 +1,7 @@
 import db from '../database/db';
 import { IBlog, IBlogDbInput, IBlogUpdateDbInput } from '../interfaces';
 
-const getALlBlogs = async (skip: number, limit: number): Promise<IBlog[]> => {
+const getAllBlogs = async (skip: number, limit: number): Promise<IBlog[]> => {
   const blogs: IBlog[] = await db<IBlog>('Blog')
     .select('*')
     .offset(skip)
@@ -48,7 +48,7 @@ const updateBlogById = async (
 };
 
 export default {
-  getALlBlogs,
+  getAllBlogs,
   getBlogById,
   getBlogsByAuthorUsername,
   createBlog,

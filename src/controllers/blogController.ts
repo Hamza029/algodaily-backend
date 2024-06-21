@@ -64,7 +64,7 @@ const createBlog = async (
 };
 
 const deleteBlogById = async (
-  req: Request,
+  req: IProtectedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -80,7 +80,7 @@ const deleteBlogById = async (
 };
 
 const updateBlogById = async (
-  req: Request,
+  req: IProtectedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
