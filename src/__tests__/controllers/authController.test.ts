@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import authService from '../../services/authService';
 import authController from '../../controllers/authController';
 import sendResponse from '../../utils/sendResponse';
-import { IAuthLoginResponse, IProtectedRequest, IUser } from '../../interfaces';
+import { IAuthLoginResponse, IProtectedRequest } from '../../interfaces';
 import { HTTPStatusCode, UserRoles } from '../../constants';
 import AppError from '../../utils/appError';
 

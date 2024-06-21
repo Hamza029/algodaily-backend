@@ -3,14 +3,9 @@ import {
   IUser,
   IUserQueryParams,
   IUserResponse,
-  IUserUpdateDbInput,
   IUserUpdateInput,
 } from '../../interfaces';
 import userRepository from '../../repository/userRepository';
-import {
-  UserResponseDTO,
-  UserUpdateDBInputDTO,
-} from '../../services/dtos/user.dto';
 import userService from '../../services/userService';
 import AppError from '../../utils/appError';
 
@@ -24,14 +19,6 @@ jest.mock('./../../repository/userRepository.ts', () => {
       updateUserById: jest.fn(),
       getUserByUsername: jest.fn(),
     },
-  };
-});
-
-jest.mock('./../../services/dtos/user.dto', () => {
-  return {
-    __esModule: true,
-    UserResponseDTO: jest.fn(),
-    UserUpdateDBInputDTO: jest.fn(),
   };
 });
 
@@ -78,10 +65,6 @@ describe('userService.getAllUsers', () => {
     ];
 
     (userRepository.getAllUsers as jest.Mock).mockResolvedValueOnce(mockUsers);
-
-    mockUsersResponseDTO.forEach((user) => {
-      (UserResponseDTO as jest.Mock).mockReturnValueOnce(user);
-    });
 
     const usersResponseDTO: IUserResponse[] =
       await userService.getAllUsers(mockQueryParams);
@@ -146,8 +129,6 @@ describe('userService.getUserById', () => {
     };
 
     (userRepository.getUserById as jest.Mock).mockResolvedValueOnce(mockUser);
-
-    (UserResponseDTO as jest.Mock).mockReturnValueOnce(mockUserResponseDTO);
 
     const userResponseDTO: IUserResponse | undefined =
       await userService.getUserById(id);
@@ -230,10 +211,6 @@ describe('userService.updateUserById', () => {
     Name: 'b',
   };
 
-  const mockUserUpdateDbInput: IUserUpdateDbInput = {
-    Name: 'b',
-  };
-
   const mockUserResponseDTO: IUserResponse = {
     Name: 'b',
     Username: 'a',
@@ -242,11 +219,7 @@ describe('userService.updateUserById', () => {
 
   it('should update a user', async () => {
     (userRepository.getUserById as jest.Mock).mockResolvedValueOnce(mockUser);
-    (UserUpdateDBInputDTO as jest.Mock).mockResolvedValueOnce(
-      mockUserUpdateDbInput
-    );
     (userRepository.updateUserById as jest.Mock).mockResolvedValueOnce(true);
-    (UserResponseDTO as jest.Mock).mockResolvedValueOnce(mockUserResponseDTO);
 
     const userResponseDTO = await userService.updateUserById(
       id,
@@ -258,11 +231,7 @@ describe('userService.updateUserById', () => {
 
   it('should throw unexpected error', async () => {
     (userRepository.getUserById as jest.Mock).mockResolvedValueOnce(mockUser);
-    (UserUpdateDBInputDTO as jest.Mock).mockResolvedValueOnce(
-      mockUserUpdateDbInput
-    );
     (userRepository.updateUserById as jest.Mock).mockResolvedValueOnce(false);
-    (UserResponseDTO as jest.Mock).mockResolvedValueOnce(mockUserResponseDTO);
 
     const mockUnexpectedError = new AppError(
       'An unexpected error occurred while updating user',
