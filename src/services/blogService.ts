@@ -22,17 +22,18 @@ const getAllBlogs = async (
 ): Promise<IBlogResponse[]> => {
   const { authorUsername } = queryParams;
 
-  const page: number = queryParams.page ? Number(queryParams.page) : 1;
+  let page: number = queryParams.page ? Number(queryParams.page) : 1;
+  page = page ? page : 1;
 
-  if (!page) {
-    throw new AppError('Invalid page number', HTTPStatusCode.BadRequest);
-  }
+  // if (!page) {
+  //   throw new AppError('Invalid page number', HTTPStatusCode.BadRequest);
+  // }
 
   const limit: number = 3;
   const skip: number = (page - 1) * limit;
 
   const blogs: IBlog[] = await (!authorUsername
-    ? blogRepository.getALlBlogs(skip, limit)
+    ? blogRepository.getAllBlogs(skip, limit)
     : blogRepository.getBlogsByAuthorUsername(authorUsername, skip, limit));
 
   if (blogs.length === 0) {
@@ -84,7 +85,7 @@ const updateBlogById = async (
   const blog: IBlog | undefined = await blogRepository.getBlogById(id);
 
   if (!blog) {
-    throw new Error("This blog doesn't exist");
+    throw new AppError("This blog doesn't exist", HTTPStatusCode.NotFound);
   }
 
   const blogUpdateDbInput: IBlogUpdateDbInput = new BlogUpdateDbInput(

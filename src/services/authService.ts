@@ -77,13 +77,16 @@ const login = async (
 const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
   const auth: IAuth = (await authRepository.getAuthByUsername(user.Username))!;
 
-  const passwordMatches = passwordUtil.compare(
+  const passwordMatches = await passwordUtil.compare(
     reqBody.currentPassword,
     auth.Password
   );
 
   if (!passwordMatches) {
-    throw new AppError("Password doesn't exist", HTTPStatusCode.BadRequest);
+    throw new AppError(
+      'Your current password is incorrect',
+      HTTPStatusCode.BadRequest
+    );
   }
 
   const newPassword = reqBody.newPassword;
