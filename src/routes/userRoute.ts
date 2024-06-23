@@ -3,6 +3,7 @@ import express, { Router } from 'express';
 import userController from './../controllers/userController';
 import userProtection from '../middlewares/userProtection';
 import authMiddleware from '../middlewares/authMiddleware';
+import validator from '../validators';
 
 const router: Router = express.Router();
 
@@ -19,6 +20,7 @@ router
   .patch(
     authMiddleware.authenticate,
     userProtection.authorize,
+    validator('user_update'),
     userController.updateUserById
   )
   .get();
