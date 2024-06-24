@@ -26,9 +26,7 @@ const authenticate = async (
     );
 
     if (!auth) {
-      return next(
-        new AppError('User has been removed', HTTPStatusCode.NotFound)
-      );
+      return next(new AppError('User does not exist', HTTPStatusCode.NotFound));
     }
 
     const passwordChangedAt: number = Math.floor(
@@ -37,7 +35,7 @@ const authenticate = async (
 
     const jwtIssuedAt: number = payload.iat!;
 
-    console.log(passwordChangedAt, jwtIssuedAt);
+    // console.log(passwordChangedAt, jwtIssuedAt);
 
     if (passwordChangedAt > jwtIssuedAt) {
       return next(

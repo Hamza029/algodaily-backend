@@ -22,14 +22,9 @@ const getAllBlogs = async (
 ): Promise<IBlogResponse[]> => {
   const { authorUsername } = queryParams;
 
-  let page: number = queryParams.page ? Number(queryParams.page) : 1;
-  page = page ? page : 1;
+  const page: number = Number(queryParams.page) || 1;
 
-  // if (!page) {
-  //   throw new AppError('Invalid page number', HTTPStatusCode.BadRequest);
-  // }
-
-  const limit: number = 3;
+  const limit: number = 4;
   const skip: number = (page - 1) * limit;
 
   const blogs: IBlog[] = await (!authorUsername

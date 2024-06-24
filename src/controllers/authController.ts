@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import authService from './../services/authService';
 import { IUser, IAuthLoginResponse, IProtectedRequest } from '../interfaces';
 import sendResponse from '../utils/sendResponse';
+import { HTTPStatusCode } from '../constants';
 
 const signup = async (
   req: Request,
@@ -12,7 +13,12 @@ const signup = async (
     const requestBody = { ...req.body };
     await authService.signup(requestBody);
 
-    sendResponse<IUser>(req, res, 201, 'successfully signed up');
+    sendResponse<IUser>(
+      req,
+      res,
+      HTTPStatusCode.Created,
+      'successfully signed up'
+    );
   } catch (err) {
     next(err);
   }
@@ -29,7 +35,13 @@ const login = async (
     const loginResponse: IAuthLoginResponse =
       await authService.login(requestBody);
 
-    sendResponse<IAuthLoginResponse>(req, res, 200, 'logged in', loginResponse);
+    sendResponse<IAuthLoginResponse>(
+      req,
+      res,
+      HTTPStatusCode.Ok,
+      'logged in',
+      loginResponse
+    );
   } catch (err) {
     next(err);
   }
@@ -43,7 +55,7 @@ const updateMyPassword = async (
   try {
     const requestBody = { ...req.body };
     await authService.updateMyPassword(req.user!, requestBody);
-    sendResponse(req, res, 200, 'successfully updated password');
+    sendResponse(req, res, HTTPStatusCode.Ok, 'successfully updated password');
   } catch (err) {
     next(err);
   }

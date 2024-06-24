@@ -72,36 +72,17 @@ describe('userService.getAllUsers', () => {
     expect(usersResponseDTO).toEqual(mockUsersResponseDTO);
   });
 
-  it('should throw invalid page number error', async () => {
-    const mockBadQueryParams: IUserQueryParams = {
-      page: 'abcd',
-    };
-
-    const BadRequestError = new AppError(
-      'Invalid page number',
-      HTTPStatusCode.BadRequest
-    );
-
-    await expect(userService.getAllUsers(mockBadQueryParams)).rejects.toThrow(
-      BadRequestError
-    );
-  });
-
-  it('should return list of users with status 200', async () => {
+  it('should return empty list with status 200', async () => {
     const mockQueryParams: IUserQueryParams = {
       page: '2',
     };
 
-    const mockUserNotFoundError = new AppError(
-      'No users found in the database',
-      HTTPStatusCode.NotFound
-    );
-
     (userRepository.getAllUsers as jest.Mock).mockResolvedValueOnce([]);
 
-    await expect(userService.getAllUsers(mockQueryParams)).rejects.toThrow(
-      mockUserNotFoundError
-    );
+    const usersResponseDTO: IUserResponse[] =
+      await userService.getAllUsers(mockQueryParams);
+
+    expect(usersResponseDTO).toEqual([]);
   });
 });
 
@@ -168,10 +149,6 @@ describe('userService.deleteUserById', () => {
 
   it('should delete a user', async () => {
     (userRepository.getUserById as jest.Mock).mockResolvedValueOnce(mockUser);
-
-    (userRepository.deleteUserById as jest.Mock).mockImplementationOnce(
-      async (_id: number) => {}
-    );
 
     expect(userService.deleteUserById(id)).resolves.toBeNull;
   });

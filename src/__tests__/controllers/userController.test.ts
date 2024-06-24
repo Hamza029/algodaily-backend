@@ -1,12 +1,7 @@
 import { Request, Response } from 'express';
 import userController from '../../controllers/userController';
 import sendResponse from '../../utils/sendResponse';
-import {
-  IProtectedRequest,
-  IUser,
-  IUserResponse,
-  IUserUpdateInput,
-} from '../../interfaces';
+import { IProtectedRequest, IUser, IUserResponse } from '../../interfaces';
 import userService from '../../services/userService';
 import AppError from '../../utils/appError';
 import { HTTPStatusCode, UserRoles } from '../../constants';
@@ -49,8 +44,8 @@ describe('userController.getAllUsers', () => {
       { Username: 'b', Name: 'b', Email: 'b@gmail.com' },
     ];
 
-    (userService.getAllUsers as jest.Mock).mockImplementationOnce(
-      async (): Promise<IUserResponse[]> => mockUsersResponse
+    (userService.getAllUsers as jest.Mock).mockResolvedValueOnce(
+      mockUsersResponse
     );
 
     await userController.getAllUsers(
@@ -59,7 +54,11 @@ describe('userController.getAllUsers', () => {
       mockNext
     );
 
-    expect(userService.getAllUsers).toHaveBeenCalled();
+    expect(userService.getAllUsers).toHaveBeenCalledTimes(1);
+    expect(userService.getAllUsers).toHaveBeenCalledWith(mockRequest.query);
+    expect(userService.getAllUsers).toHaveReturnedWith(
+      Promise.resolve(mockUsersResponse)
+    );
 
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
@@ -68,20 +67,56 @@ describe('userController.getAllUsers', () => {
       'fetched all users',
       mockUsersResponse
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
 
     expect(mockNext).not.toHaveBeenCalled();
   });
 
-  it('should return no user found error with status 404', async () => {
-    const mockUserNotFoundError = new AppError(
-      'User not found',
-      HTTPStatusCode.NotFound
+  it('should return empty list with status 200', async () => {
+    const mockRequest: Partial<Request> = {
+      query: {
+        page: '1000',
+      },
+    };
+
+    (userService.getAllUsers as jest.Mock).mockResolvedValueOnce([]);
+
+    await userController.getAllUsers(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
     );
 
-    (userService.getAllUsers as jest.Mock).mockImplementationOnce(
-      async (): Promise<IUserResponse[]> => {
-        throw mockUserNotFoundError;
-      }
+    expect(userService.getAllUsers).toHaveBeenCalledTimes(1);
+    expect(userService.getAllUsers).toHaveBeenCalledWith(mockRequest.query);
+    expect(userService.getAllUsers).toHaveReturnedWith(Promise.resolve([]));
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      200,
+      'fetched all users',
+      []
+    );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should return contents of page number 1 with status 200', async () => {
+    const mockRequest: Partial<Request> = {
+      query: {
+        page: 'abcd',
+      },
+    };
+
+    const mockUsersResponse: IUserResponse[] = [
+      { Username: 'a', Name: 'a', Email: 'a@gmail.com' },
+      { Username: 'b', Name: 'b', Email: 'b@gmail.com' },
+    ];
+
+    (userService.getAllUsers as jest.Mock).mockResolvedValueOnce(
+      mockUsersResponse
     );
 
     await userController.getAllUsers(
@@ -90,38 +125,22 @@ describe('userController.getAllUsers', () => {
       mockNext
     );
 
-    expect(sendResponse).not.toHaveBeenCalled();
-
-    expect(mockNext).toHaveBeenCalledWith(mockUserNotFoundError);
-  });
-
-  it('should return invalid page number error with status 400', async () => {
-    const mockBadRequest: Partial<Request> = {
-      query: {
-        page: 'abcd',
-      },
-    };
-
-    const mockBadRequestError = new AppError(
-      'Invalid page number',
-      HTTPStatusCode.BadRequest
+    expect(userService.getAllUsers).toHaveBeenCalledTimes(1);
+    expect(userService.getAllUsers).toHaveBeenCalledWith(mockRequest.query);
+    expect(userService.getAllUsers).toHaveReturnedWith(
+      Promise.resolve(mockUsersResponse)
     );
 
-    (userService.getAllUsers as jest.Mock).mockImplementationOnce(
-      async (): Promise<IUserResponse[]> => {
-        throw mockBadRequestError;
-      }
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      200,
+      'fetched all users',
+      mockUsersResponse
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
 
-    await userController.getAllUsers(
-      mockBadRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
-
-    expect(sendResponse).not.toHaveBeenCalled();
-
-    expect(mockNext).toHaveBeenCalledWith(mockBadRequestError);
+    expect(mockNext).not.toHaveBeenCalled();
   });
 });
 
@@ -145,16 +164,22 @@ describe('userController.getUserById', () => {
       Email: 'a@gmail.com',
     };
 
-    (userService.getUserById as jest.Mock).mockImplementationOnce(
-      async (_id: number): Promise<IUserResponse> => {
-        return mockUserResponse;
-      }
+    (userService.getUserById as jest.Mock).mockResolvedValueOnce(
+      mockUserResponse
     );
 
     await userController.getUserById(
       mockRequest as Request,
       mockResponse as Response,
       mockNext
+    );
+
+    expect(userService.getUserById).toHaveBeenCalledTimes(1);
+    expect(userService.getUserById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
+    );
+    expect(userService.getUserById).toHaveReturnedWith(
+      Promise.resolve(mockUserResponse)
     );
 
     expect(sendResponse).toHaveBeenCalledWith(
@@ -164,6 +189,7 @@ describe('userController.getUserById', () => {
       `fetched user with id ${mockRequest.params!.id}`,
       mockUserResponse
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
 
     expect(mockNext).not.toHaveBeenCalled();
   });
@@ -174,10 +200,8 @@ describe('userController.getUserById', () => {
       HTTPStatusCode.NotFound
     );
 
-    (userService.getUserById as jest.Mock).mockImplementationOnce(
-      (): Promise<IUserResponse> => {
-        throw mockUserNotFoundError;
-      }
+    (userService.getUserById as jest.Mock).mockRejectedValueOnce(
+      mockUserNotFoundError
     );
 
     await userController.getUserById(
@@ -186,9 +210,15 @@ describe('userController.getUserById', () => {
       mockNext
     );
 
+    expect(userService.getUserById).toHaveBeenCalledTimes(1);
+    expect(userService.getUserById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
+    );
+
     expect(sendResponse).not.toHaveBeenCalled();
 
     expect(mockNext).toHaveBeenCalledWith(mockUserNotFoundError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -216,14 +246,15 @@ describe('userController.deleteUserById', () => {
   });
 
   it('should delete user with status 200', async () => {
-    (userService.deleteUserById as jest.Mock).mockImplementationOnce(
-      async (_id: number): Promise<void> => {}
-    );
-
     await userController.deleteUserById(
       mockRequest as Request,
       mockResponse as Response,
       mockNext
+    );
+
+    expect(userService.deleteUserById).toHaveBeenCalledTimes(1);
+    expect(userService.deleteUserById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
     );
 
     expect(sendResponse).toHaveBeenCalledWith(
@@ -232,6 +263,7 @@ describe('userController.deleteUserById', () => {
       HTTPStatusCode.Ok,
       `deleted user with id ${mockUser.Id}.`
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
 
     expect(mockNext).not.toHaveBeenCalled();
   });
@@ -242,10 +274,8 @@ describe('userController.deleteUserById', () => {
       HTTPStatusCode.NotFound
     );
 
-    (userService.deleteUserById as jest.Mock).mockImplementationOnce(
-      async (_id: number): Promise<void> => {
-        throw mockUserNotFoundError;
-      }
+    (userService.deleteUserById as jest.Mock).mockRejectedValueOnce(
+      mockUserNotFoundError
     );
 
     await userController.deleteUserById(
@@ -254,9 +284,15 @@ describe('userController.deleteUserById', () => {
       mockNext
     );
 
+    expect(userService.deleteUserById).toHaveBeenCalledTimes(1);
+    expect(userService.deleteUserById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
+    );
+
     expect(sendResponse).not.toHaveBeenCalled();
 
     expect(mockNext).toHaveBeenCalledWith(mockUserNotFoundError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -287,20 +323,16 @@ describe('userController.updateUserById', () => {
   });
 
   it('should update user with status 200', async () => {
-    (userService.updateUserById as jest.Mock).mockImplementationOnce(
-      async (
-        _id: number,
-        userUpdateInput: IUserUpdateInput
-      ): Promise<IUserResponse> => {
-        const { Username, Email } = mockUser;
-        const { Name } = userUpdateInput;
-        const userUpdateResponseDTO: IUserResponse = {
-          Username,
-          Email,
-          Name,
-        };
-        return userUpdateResponseDTO;
-      }
+    const userUpdateResponseDTO: IUserResponse = {
+      Username: mockUser.Username,
+      Email: mockUser.Email,
+      Name: mockRequest.body!.Name,
+    };
+
+    console.log(userUpdateResponseDTO);
+
+    (userService.updateUserById as jest.Mock).mockResolvedValueOnce(
+      userUpdateResponseDTO
     );
 
     await userController.updateUserById(
@@ -315,6 +347,15 @@ describe('userController.updateUserById', () => {
       Username: mockUser.Username,
     };
 
+    expect(userService.updateUserById).toHaveBeenCalledTimes(1);
+    expect(userService.updateUserById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id),
+      mockRequest.body
+    );
+    expect(userService.updateUserById).toHaveReturnedWith(
+      Promise.resolve(updatedUser)
+    );
+
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
@@ -322,6 +363,7 @@ describe('userController.updateUserById', () => {
       `updated name of user with id ${mockRequest.params!.id}`,
       updatedUser
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
 
     expect(mockNext).not.toHaveBeenCalled();
   });
@@ -332,13 +374,8 @@ describe('userController.updateUserById', () => {
       HTTPStatusCode.InternalServerError
     );
 
-    (userService.updateUserById as jest.Mock).mockImplementationOnce(
-      async (
-        _id: number,
-        _userUpdateInput: IUserUpdateInput
-      ): Promise<IUserResponse> => {
-        throw mockUnexpectedError;
-      }
+    (userService.updateUserById as jest.Mock).mockRejectedValueOnce(
+      mockUnexpectedError
     );
 
     await userController.updateUserById(
@@ -347,8 +384,15 @@ describe('userController.updateUserById', () => {
       mockNext
     );
 
+    expect(userService.updateUserById).toHaveBeenCalledTimes(1);
+    expect(userService.updateUserById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id),
+      mockRequest.body
+    );
+
     expect(sendResponse).not.toHaveBeenCalled();
 
     expect(mockNext).toHaveBeenCalledWith(mockUnexpectedError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });

@@ -2,7 +2,7 @@ import { Request } from 'express';
 import AppError from './appError';
 import { HTTPStatusCode } from '../constants';
 
-export const parseIdParam = (req: Request): number => {
+export default (req: Request): number => {
   const { id } = req.params;
   const idNum = Number(id);
 
@@ -14,8 +14,4 @@ export const parseIdParam = (req: Request): number => {
   }
 
   return idNum;
-};
-
-export default {
-  parseIdParam,
 };

@@ -8,7 +8,7 @@ import AppError from './appError';
 const getToken = (payload: IAuthJWTPayload): string => {
   if (!conf.JWT_ACCESS_TOKEN_SECRET || !conf.JWT_EXPIRES_AFTER) {
     throw new AppError(
-      'JWT information not found in server configuration',
+      'Something went wrong',
       HTTPStatusCode.InternalServerError
     );
   }
@@ -24,17 +24,14 @@ const authenticate = async (
   token: string | undefined
 ): Promise<IAuthJWTPayload> => {
   if (!token) {
-    throw new AppError(
-      'Authorization header missing',
-      HTTPStatusCode.Unauthorized
-    );
+    throw new AppError('Token is not valid', HTTPStatusCode.Unauthorized);
   }
 
   token = token.split(' ')[1];
 
   if (!conf.JWT_ACCESS_TOKEN_SECRET) {
     throw new AppError(
-      'JWT information not found in server configuration',
+      'Something went wrong',
       HTTPStatusCode.InternalServerError
     );
   }
@@ -43,8 +40,6 @@ const authenticate = async (
     token,
     conf.JWT_ACCESS_TOKEN_SECRET
   ) as IAuthJWTPayload;
-
-  console.log(payload);
 
   return payload;
 };
