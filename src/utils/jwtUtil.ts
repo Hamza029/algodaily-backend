@@ -44,7 +44,7 @@ const authenticate = async (
     conf.JWT_ACCESS_TOKEN_SECRET
   ) as IAuthJWTPayload;
 
-  console.log(payload);
+  // console.log(payload);
 
   return payload;
 };

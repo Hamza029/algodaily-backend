@@ -1,6 +1,6 @@
-import Joi from "joi";
-import { IUserUpdateInput } from "../../interfaces";
+import Joi from 'joi';
+import { IUserUpdateInput } from '../../interfaces';
 
 export default Joi.object<IUserUpdateInput>({
-    Name: Joi.string().required(),
+  Name: Joi.string().required().max(30),
 });

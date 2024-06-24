@@ -7,7 +7,12 @@ const tableSchema = (table: Knex.CreateTableBuilder) => {
   table.string('authorName').notNullable();
   table.string('authorUsername').notNullable();
 
-  table.foreign('authorUsername').references('username').inTable('User');
+  table
+    .foreign('authorUsername')
+    .references('username')
+    .inTable('User')
+    .onUpdate('CASCADE')
+    .onDelete('CASCADE');
 };
 
 export default tableSchema;

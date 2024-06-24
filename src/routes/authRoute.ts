@@ -12,6 +12,10 @@ router.route('/login').post(validator('login'), authController.login);
 
 router
   .route('/password')
-  .patch(authMiddleware.authenticate, authController.updateMyPassword);
+  .patch(
+    authMiddleware.authenticate,
+    validator('password_update'),
+    authController.updateMyPassword
+  );
 
 export default router;

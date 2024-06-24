@@ -37,7 +37,7 @@ const authenticate = async (
 
     const jwtIssuedAt: number = payload.iat!;
 
-    console.log(passwordChangedAt, jwtIssuedAt);
+    // console.log(passwordChangedAt, jwtIssuedAt);
 
     if (passwordChangedAt > jwtIssuedAt) {
       return next(
