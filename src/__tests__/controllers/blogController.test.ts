@@ -78,6 +78,12 @@ describe('BlogController.getAllBlogs', () => {
       mockNext
     );
 
+    expect(blogService.getAllBlogs).toHaveBeenCalledTimes(1);
+    expect(blogService.getAllBlogs).toHaveBeenCalledWith(mockRequest.query);
+    expect(blogService.getAllBlogs).toHaveReturnedWith(
+      Promise.resolve(mockBlogsResponse)
+    );
+
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
@@ -85,19 +91,12 @@ describe('BlogController.getAllBlogs', () => {
       'successfully fetched all blogs',
       mockBlogsResponse
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
-  it('should send not blogs found error through next function', async () => {
-    const mockNoBlogFoundError = new AppError(
-      'No blogs found',
-      HTTPStatusCode.NotFound
-    );
-
-    (blogService.getAllBlogs as jest.Mock).mockImplementationOnce(
-      (_queryParams) => {
-        throw mockNoBlogFoundError;
-      }
-    );
+  it('should send empty list with status 200', async () => {
+    (blogService.getAllBlogs as jest.Mock).mockRejectedValueOnce([]);
 
     await blogController.getAllBlogs(
       mockRequest as Request,
@@ -105,8 +104,13 @@ describe('BlogController.getAllBlogs', () => {
       mockNext
     );
 
+    expect(blogService.getAllBlogs).toHaveBeenCalledTimes(1);
+    expect(blogService.getAllBlogs).toHaveBeenCalledWith(mockRequest.query);
+    expect(blogService.getAllBlogs).toHaveReturnedWith(Promise.resolve([]));
+
     expect(sendResponse).not.toHaveBeenCalled();
-    expect(mockNext).toHaveBeenCalledWith(mockNoBlogFoundError);
+    expect(mockNext).toHaveBeenCalledWith([]);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -134,6 +138,14 @@ describe('BlogController.getBlogById', () => {
       mockNext
     );
 
+    expect(blogService.getBlogById).toHaveBeenCalledTimes(1);
+    expect(blogService.getBlogById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
+    );
+    expect(blogService.getBlogById).toHaveReturnedWith(
+      Promise.resolve(mockBlogsResponse[0])
+    );
+
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
@@ -141,6 +153,8 @@ describe('BlogController.getBlogById', () => {
       'successfully fetched blog',
       mockBlogsResponse[0]
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should send no blogs found error through next function', async () => {
@@ -159,7 +173,15 @@ describe('BlogController.getBlogById', () => {
       mockNext
     );
 
+    expect(blogService.getBlogById).toHaveBeenCalledTimes(1);
+    expect(blogService.getBlogById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
     expect(mockNext).toHaveBeenCalledWith(mockNoBlogFoundError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -199,6 +221,15 @@ describe('BlogController.updateBlogById', () => {
       mockNext
     );
 
+    expect(blogService.updateBlogById).toHaveBeenCalledTimes(1);
+    expect(blogService.updateBlogById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id),
+      mockRequest.body
+    );
+    expect(blogService.updateBlogById).toHaveReturnedWith(
+      Promise.resolve(mockUpdatedBlogResponse)
+    );
+
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
@@ -206,6 +237,8 @@ describe('BlogController.updateBlogById', () => {
       'successfully updated your blog',
       mockUpdatedBlogResponse
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should send no blog found error through next function', async () => {
@@ -224,12 +257,23 @@ describe('BlogController.updateBlogById', () => {
       mockNext
     );
 
+    expect(blogService.updateBlogById).toHaveBeenCalledTimes(1);
+    expect(blogService.updateBlogById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id),
+      mockRequest.body
+    );
+
     expect(sendResponse).not.toHaveBeenCalled();
     expect(mockNext).toHaveBeenCalledWith(mockNoBlogFoundError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
 describe('BlogController.createBlog', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   const mockRequest: Partial<IProtectedRequest> = {
     body: {
       title: 'A',
@@ -249,12 +293,21 @@ describe('BlogController.createBlog', () => {
       mockNext
     );
 
+    expect(blogService.createBlog).toHaveBeenCalledTimes(1);
+    expect(blogService.createBlog).toHaveBeenCalledWith(
+      mockRequest.body,
+      mockRequest.user
+    );
+
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
       HTTPStatusCode.Created,
       'successfully created you blog'
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should send an error through next function', async () => {
@@ -266,12 +319,20 @@ describe('BlogController.createBlog', () => {
       mockNext
     );
 
+    expect(blogService.createBlog).toHaveBeenCalledTimes(1);
+    expect(blogService.createBlog).toHaveBeenCalledWith(
+      mockRequest.body,
+      mockRequest.user
+    );
+
     expect(sendResponse).not.toHaveBeenCalledWith();
+
     expect(mockNext).toHaveBeenCalledWith(mockError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
-describe('BlogController.updateBlogById', () => {
+describe('BlogController.deleteBlogById', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -285,14 +346,15 @@ describe('BlogController.updateBlogById', () => {
   const mockNext: jest.Mock = jest.fn();
 
   it('should send response for a successful deletion', async () => {
-    (blogService.deleteBlogById as jest.Mock).mockResolvedValueOnce(
-      mockBlogsResponse[0]
-    );
-
     await blogController.deleteBlogById(
       mockRequest as Request,
       mockResponse as Response,
       mockNext
+    );
+
+    expect(blogService.deleteBlogById).toHaveBeenCalledTimes(1);
+    expect(blogService.deleteBlogById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
     );
 
     expect(sendResponse).toHaveBeenCalledWith(
@@ -301,6 +363,9 @@ describe('BlogController.updateBlogById', () => {
       HTTPStatusCode.Ok,
       'successfully deleted your blog'
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should send no blog found error through next function', async () => {
@@ -319,7 +384,14 @@ describe('BlogController.updateBlogById', () => {
       mockNext
     );
 
+    expect(blogService.deleteBlogById).toHaveBeenCalledTimes(1);
+    expect(blogService.deleteBlogById).toHaveBeenCalledWith(
+      Number(mockRequest.params!.id)
+    );
+
     expect(sendResponse).not.toHaveBeenCalled();
+
     expect(mockNext).toHaveBeenCalledWith(mockNoBlogFoundError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });

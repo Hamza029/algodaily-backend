@@ -3,7 +3,7 @@ import { HTTPStatusCode, UserRoles } from '../constants';
 import { IUser, IProtectedRequest, IBlog } from '../interfaces';
 import userRepository from '../repository/userRepository';
 import AppError from '../utils/appError';
-import { parseIdParam } from '../utils/parseParam';
+import parseIdParam from '../utils/parseIdParam';
 import blogRepository from '../repository/blogRepository';
 
 const authorize = async (
@@ -29,7 +29,7 @@ const authorize = async (
     if (!user) {
       return next(
         new AppError(
-          'The author of this blog has been removed',
+          'The author of this blog does not exist',
           HTTPStatusCode.NotFound
         )
       );
@@ -37,10 +37,7 @@ const authorize = async (
 
     if (!req.user) {
       return next(
-        new AppError(
-          "The user of this token doesn't exist",
-          HTTPStatusCode.NotFound
-        )
+        new AppError('Token is not valid', HTTPStatusCode.Unauthorized)
       );
     }
 

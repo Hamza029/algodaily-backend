@@ -13,23 +13,12 @@ import { UserResponseDTO, UserUpdateDBInputDTO } from './dtos/user.dto';
 const getAllUsers = async (
   queryParams: IUserQueryParams
 ): Promise<IUserResponse[]> => {
-  const page: number = queryParams.page ? Number(queryParams.page) : 1;
-
-  if (!page) {
-    throw new AppError('Invalid page number', HTTPStatusCode.BadRequest);
-  }
+  const page: number = Number(queryParams.page) || 1;
 
   const limit: number = 4;
   const skip: number = (page - 1) * limit;
 
   const users: IUser[] = await userRepository.getAllUsers(skip, limit);
-
-  if (!users || users.length === 0) {
-    throw new AppError(
-      'No users found in the database',
-      HTTPStatusCode.NotFound
-    );
-  }
 
   const usersResponseDTO: IUserResponse[] = users.map(
     (user) => new UserResponseDTO(user)
@@ -70,7 +59,6 @@ const updateUserById = async (
     throw new AppError('User not found', HTTPStatusCode.NotFound);
   }
 
-  // need to make sure that only certain fields are allowed to be updated
   const userUpdateDbInputDTO: IUserUpdateDbInput = new UserUpdateDBInputDTO(
     userUpdateInput
   );

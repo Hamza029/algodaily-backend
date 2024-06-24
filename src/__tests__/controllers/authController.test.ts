@@ -55,12 +55,18 @@ describe('AuthController.signup', () => {
       mockNext
     );
 
+    expect(authService.signup).toHaveBeenCalledTimes(1);
+    expect(authService.signup).toHaveBeenCalledWith(mockRequest.body);
+
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
       HTTPStatusCode.Created,
       'successfully signed up'
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should send the error through next function', async () => {
@@ -72,9 +78,13 @@ describe('AuthController.signup', () => {
       mockNext
     );
 
+    expect(authService.signup).toHaveBeenCalledTimes(1);
+    expect(authService.signup).toHaveBeenCalledWith(mockRequest.body);
+
     expect(sendResponse).not.toHaveBeenCalled();
 
     expect(mockNext).toHaveBeenCalledWith(mockError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -107,6 +117,13 @@ describe('AuthController.login', () => {
       mockNext
     );
 
+    expect(authService.login).toHaveBeenCalledTimes(1);
+    expect(authService.login).toHaveBeenCalledWith(mockRequest.body!);
+    expect(authService.login).toHaveReturnedWith(
+      Promise.resolve(mockLoginResponse)
+    );
+
+    expect(sendResponse).toHaveBeenCalledTimes(1);
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
@@ -114,6 +131,8 @@ describe('AuthController.login', () => {
       'logged in',
       mockLoginResponse
     );
+
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should send wrong username or password error through next function', async () => {
@@ -130,9 +149,13 @@ describe('AuthController.login', () => {
       mockNext
     );
 
+    expect(authService.login).toHaveBeenCalledTimes(1);
+    expect(authService.login).toHaveBeenCalledWith(mockRequest.body);
+
     expect(sendResponse).not.toHaveBeenCalled();
 
     expect(mockNext).toHaveBeenCalledWith(mockWrongInfoError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -158,12 +181,18 @@ describe('AuthController.updateMyPassword', () => {
   const mockResponse: Partial<Response> = {};
   const mockNext: jest.Mock = jest.fn();
 
-  it('should send response for successful login with status 200', async () => {
+  it('should send response for successful password update with status 200', async () => {
     await authController.updateMyPassword(
       mockRequest as IProtectedRequest,
       mockResponse as Response,
       mockNext
     );
+
+    expect(authService.updateMyPassword).toHaveBeenCalledWith(
+      mockRequest.user,
+      mockRequest.body
+    );
+    expect(authService.updateMyPassword).toHaveBeenCalledTimes(1);
 
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
@@ -171,6 +200,8 @@ describe('AuthController.updateMyPassword', () => {
       HTTPStatusCode.Ok,
       'successfully updated password'
     );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should send current password incorrect error through next function', async () => {
@@ -189,8 +220,15 @@ describe('AuthController.updateMyPassword', () => {
       mockNext
     );
 
+    expect(authService.updateMyPassword).toHaveBeenCalledTimes(1);
+    expect(authService.updateMyPassword).toHaveBeenCalledWith(
+      mockRequest.user,
+      mockRequest.body
+    );
+
     expect(sendResponse).not.toHaveBeenCalled();
 
     expect(mockNext).toHaveBeenCalledWith(mockCurrentPasswordIncorrectError);
+    expect(mockNext).toHaveBeenCalledTimes(1);
   });
 });

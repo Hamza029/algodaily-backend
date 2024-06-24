@@ -3,7 +3,7 @@ import { HTTPStatusCode, UserRoles } from '../constants';
 import { IUser, IProtectedRequest } from '../interfaces';
 import userRepository from '../repository/userRepository';
 import AppError from '../utils/appError';
-import { parseIdParam } from '../utils/parseParam';
+import parseIdParam from '../utils/parseIdParam';
 
 const authorize = async (
   req: IProtectedRequest,
@@ -26,10 +26,7 @@ const authorize = async (
 
     if (!req.user) {
       return next(
-        new AppError(
-          "The user of this token doesn't exist",
-          HTTPStatusCode.NotFound
-        )
+        new AppError('Token is not valid', HTTPStatusCode.Unauthorized)
       );
     }
 

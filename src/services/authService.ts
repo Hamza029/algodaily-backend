@@ -45,7 +45,7 @@ const login = async (
     !(await passwordUtil.compare(authInputDTO.Password, auth.Password))
   ) {
     throw new AppError(
-      'wrong username or password',
+      'Wrong username or password',
       HTTPStatusCode.Unauthorized
     );
   }
@@ -56,7 +56,7 @@ const login = async (
 
   if (!user) {
     throw new AppError(
-      'wrong username or password',
+      'Wrong username or password',
       HTTPStatusCode.Unauthorized
     );
   }

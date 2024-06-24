@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 
 import authController from '../controllers/authController';
-import authMiddleware from '../middlewares/authMiddleware';
+import authProtection from '../middlewares/authProtection';
 import validator from './../validators';
 
 const router: Router = express.Router();
@@ -13,7 +13,7 @@ router.route('/login').post(validator('login'), authController.login);
 router
   .route('/password')
   .patch(
-    authMiddleware.authenticate,
+    authProtection.authenticate,
     validator('password_update'),
     authController.updateMyPassword
   );

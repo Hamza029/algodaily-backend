@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { IProtectedRequest, IUserResponse } from './../interfaces';
 import userService from './../services/userService';
-import { parseIdParam } from '../utils/parseParam';
+import parseIdParam from '../utils/parseIdParam';
 import sendResponse from '../utils/sendResponse';
+import { HTTPStatusCode } from '../constants';
 
+// No hardcoded status code
 export const getAllUsers = async (
   req: Request,
   res: Response,
@@ -13,7 +15,13 @@ export const getAllUsers = async (
     const users: IUserResponse[] = await userService.getAllUsers({
       ...req.query,
     });
-    sendResponse<IUserResponse[]>(req, res, 200, 'fetched all users', users);
+    sendResponse<IUserResponse[]>(
+      req,
+      res,
+      HTTPStatusCode.Ok,
+      'fetched all users',
+      users
+    );
   } catch (err) {
     next(err);
   }
@@ -29,7 +37,7 @@ const deleteUserById = async (
 
     await userService.deleteUserById(id);
 
-    sendResponse(req, res, 200, `deleted user with id ${id}.`);
+    sendResponse(req, res, HTTPStatusCode.Ok, `deleted user with id ${id}.`);
   } catch (err) {
     next(err);
   }
@@ -48,7 +56,7 @@ const getUserById = async (
     sendResponse<IUserResponse>(
       req,
       res,
-      200,
+      HTTPStatusCode.Ok,
       `fetched user with id ${id}`,
       user
     );
@@ -58,7 +66,7 @@ const getUserById = async (
 };
 
 const updateUserById = async (
-  req: Request,
+  req: IProtectedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -75,7 +83,7 @@ const updateUserById = async (
     sendResponse<IUserResponse>(
       req,
       res,
-      200,
+      HTTPStatusCode.Ok,
       `updated name of user with id ${id}`,
       user
     );

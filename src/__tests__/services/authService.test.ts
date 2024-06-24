@@ -127,7 +127,7 @@ describe('AuthService.login', () => {
     (passwordUtil.compare as jest.Mock).mockResolvedValueOnce(false);
 
     await expect(authService.login(mockAuthInput)).rejects.toThrow(
-      new AppError('wrong username or password', HTTPStatusCode.Unauthorized)
+      new AppError('Wrong username or password', HTTPStatusCode.Unauthorized)
     );
   });
 
@@ -136,7 +136,7 @@ describe('AuthService.login', () => {
     (passwordUtil.compare as jest.Mock).mockResolvedValueOnce(true);
 
     await expect(authService.login(mockAuthInput)).rejects.toThrow(
-      new AppError('wrong username or password', HTTPStatusCode.Unauthorized)
+      new AppError('Wrong username or password', HTTPStatusCode.Unauthorized)
     );
   });
 
@@ -148,7 +148,7 @@ describe('AuthService.login', () => {
     );
 
     await expect(authService.login(mockAuthInput)).rejects.toThrow(
-      new AppError('wrong username or password', HTTPStatusCode.Unauthorized)
+      new AppError('Wrong username or password', HTTPStatusCode.Unauthorized)
     );
   });
 });
