@@ -11,8 +11,7 @@
     "dev": "npx nodemon",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "format": "prettier --write \"**/*.{ts,js,json}\"",
-    "vercel-build": "echo hello"
+    "format": "prettier --write \"**/*.{ts,js,json}\""
   },
   "author": "Golam Ibna Hamza",
   "license": "ISC",
