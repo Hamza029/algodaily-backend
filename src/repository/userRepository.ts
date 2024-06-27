@@ -31,7 +31,7 @@ const deleteUserById = async (id: number, username: string): Promise<void> => {
 };
 
 const getUserById = async (id: number): Promise<IUser | undefined> => {
-  const user: IUser | undefined = await db<IUser>('user')
+  const user: IUser | undefined = await db<IUser>('User')
     .where('Id', id)
     .select('*')
     .first();
