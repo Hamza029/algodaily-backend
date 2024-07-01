@@ -18,7 +18,10 @@ export interface IUserInput
   extends Omit<IUserAttributes, 'Id' | 'JoinDate' | 'Role' | '_links'> {}
 
 export interface IUserResponse
-  extends Pick<IUserAttributes, 'Username' | 'Name' | 'Email' | '_links'> {}
+  extends Pick<
+    IUserAttributes,
+    'Id' | 'Username' | 'Name' | 'Email' | '_links'
+  > {}
 
 export interface IUserDbInput
   extends Omit<IUserAttributes, 'Id' | 'Password' | '_links'> {}

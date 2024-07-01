@@ -26,12 +26,14 @@ export class UserDbInputDTO implements IUserDbInput {
 }
 
 export class UserResponseDTO implements IUserResponse {
+  Id: string;
   Username: string;
   Name: string;
   Email: string;
   _links: HATEOAS_Types;
 
   constructor(user: IUser) {
+    this.Id = user.Id;
     this.Username = user.Username;
     this.Name = user.Name;
     this.Email = user.Email;

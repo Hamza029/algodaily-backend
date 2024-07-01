@@ -29,6 +29,7 @@ jest.mock('./../../utils/sendResponse', () => {
 const mockBlogsResponse: IBlogResponse[] = [
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
@@ -49,6 +50,7 @@ const mockBlogsResponse: IBlogResponse[] = [
   },
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
@@ -230,6 +232,7 @@ describe('BlogController.updateBlogById', () => {
 
   const mockUpdatedBlogResponse: IBlogResponse = {
     id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
     title: 'C',
     description: 'C',
     authorUsername: mockBlogsResponse[0].authorUsername,

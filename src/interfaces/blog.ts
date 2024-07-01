@@ -2,6 +2,7 @@ import { HATEOAS_Types } from './hateoas';
 
 interface IBlogAttributes {
   id: string;
+  authorId: string;
   title: string;
   description: string;
   authorUsername: string;

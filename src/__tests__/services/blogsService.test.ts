@@ -28,12 +28,14 @@ jest.mock('./../../repository/blogRepository', () => {
 const mockBlogs: IBlog[] = [
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
   },
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
@@ -43,6 +45,7 @@ const mockBlogs: IBlog[] = [
 const mockBlogsResponse: IBlogResponse[] = [
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
@@ -63,6 +66,7 @@ const mockBlogsResponse: IBlogResponse[] = [
   },
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
@@ -178,7 +182,7 @@ describe('blogService.createBlog', () => {
   });
 
   const mockUser: IUser = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -193,6 +197,7 @@ describe('blogService.createBlog', () => {
 
   const blogDbInput: IBlogDbInput = {
     ...blogInput,
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
     authorUsername: mockUser.Username,
   };
 
@@ -219,6 +224,7 @@ describe('blogService.updateBlogById', () => {
 
   const mockUpdatedBlog: IBlog = {
     id: mockBlogs[0].id,
+    authorId: mockBlogs[0].authorId,
     title: 'C',
     description: 'C',
     authorUsername: mockBlogs[0].authorUsername,

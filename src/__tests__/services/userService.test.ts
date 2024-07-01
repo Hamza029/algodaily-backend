@@ -53,6 +53,7 @@ describe('userService.getAllUsers', () => {
 
     const mockUsersResponseDTO: IUserResponse[] = [
       {
+        Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
         Username: 'a',
         Name: 'a',
         Email: 'a@gmail.com',
@@ -72,6 +73,7 @@ describe('userService.getAllUsers', () => {
         },
       },
       {
+        Id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
         Username: 'b',
         Name: 'b',
         Email: 'b@gmail.com',
@@ -132,6 +134,7 @@ describe('userService.getUserById', () => {
     };
 
     const mockUserResponseDTO: IUserResponse = {
+      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
       Username: 'a',
       Name: 'a',
       Email: 'a@gmail.com',
@@ -227,11 +230,12 @@ describe('userService.updateUserById', () => {
   };
 
   const mockUserUpdateInput: IUserUpdateInput = {
-    Name: 'b',
+    Name: 'c',
   };
 
   const mockUserResponseDTO: IUserResponse = {
-    Name: 'b',
+    Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    Name: 'c',
     Username: 'a',
     Email: 'a@gmail.com',
     _links: {

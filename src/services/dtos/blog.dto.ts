@@ -10,11 +10,13 @@ import {
 } from '../../interfaces';
 
 export class BlogDbInputDTO implements IBlogDbInput {
+  authorId: string;
   title: string;
   description: string;
   authorUsername: string;
 
   constructor(blogInput: IBlogInput, user: IUser) {
+    this.authorId = user.Id;
     this.title = blogInput.title;
     this.description = blogInput.description;
     this.authorUsername = user.Username;
@@ -23,6 +25,7 @@ export class BlogDbInputDTO implements IBlogDbInput {
 
 export class BlogResponseDTO implements IBlogResponse {
   id: string;
+  authorId: string;
   title: string;
   description: string;
   authorUsername: string;
@@ -30,6 +33,7 @@ export class BlogResponseDTO implements IBlogResponse {
 
   constructor(blog: IBlog) {
     this.id = blog.id;
+    this.authorId = blog.authorId;
     this.title = blog.title;
     this.description = blog.description;
     this.authorUsername = blog.authorUsername;
