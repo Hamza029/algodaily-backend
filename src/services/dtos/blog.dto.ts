@@ -11,29 +11,25 @@ import {
 export class BlogDbInputDTO implements IBlogDbInput {
   title: string;
   description: string;
-  authorName: string;
   authorUsername: string;
 
   constructor(blogInput: IBlogInput, user: IUser) {
     this.title = blogInput.title;
     this.description = blogInput.description;
-    this.authorName = user.Name;
     this.authorUsername = user.Username;
   }
 }
 
 export class BlogResponseDTO implements IBlogResponse {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  authorName: string;
   authorUsername: string;
 
   constructor(blog: IBlog) {
     this.id = blog.id;
     this.title = blog.title;
     this.description = blog.description;
-    this.authorName = blog.authorName;
     this.authorUsername = blog.authorUsername;
   }
 }

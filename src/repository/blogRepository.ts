@@ -10,7 +10,7 @@ const getAllBlogs = async (skip: number, limit: number): Promise<IBlog[]> => {
   return blogs;
 };
 
-const getBlogById = async (id: number): Promise<IBlog | undefined> => {
+const getBlogById = async (id: string): Promise<IBlog | undefined> => {
   const blog: IBlog | undefined = await db<IBlog>('Blog')
     .select('*')
     .where('id', '=', id)
@@ -36,12 +36,12 @@ const createBlog = async (blogDbInput: IBlogDbInput): Promise<void> => {
   await db<IBlog>('Blog').insert(blogDbInput);
 };
 
-const deleteBlogById = async (id: number): Promise<void> => {
+const deleteBlogById = async (id: string): Promise<void> => {
   await db<IBlog>('Blog').where('id', '=', id).del();
 };
 
 const updateBlogById = async (
-  id: number,
+  id: string,
   blogUpdateDbInput: IBlogUpdateDbInput
 ): Promise<void> => {
   await db<IBlog>('Blog').where('id', '=', id).update(blogUpdateDbInput);

@@ -34,7 +34,7 @@ describe('userService.getAllUsers', () => {
 
     const mockUsers: IUser[] = [
       {
-        Id: 1,
+        Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
         Username: 'a',
         Name: 'a',
         Email: 'a@gmail.com',
@@ -42,7 +42,7 @@ describe('userService.getAllUsers', () => {
         JoinDate: new Date(),
       },
       {
-        Id: 2,
+        Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
         Username: 'b',
         Name: 'b',
         Email: 'b@gmail.com',
@@ -87,7 +87,7 @@ describe('userService.getAllUsers', () => {
 });
 
 describe('userService.getUserById', () => {
-  const id: number = 3;
+  const id: string = 'fe32bd7f-376b-11ef-bf41-088fc3196e05';
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -95,7 +95,7 @@ describe('userService.getUserById', () => {
 
   it('should return a user', async () => {
     const mockUser: IUser = {
-      Id: 1,
+      Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
       Username: 'a',
       Name: 'a',
       Email: 'a@gmail.com',
@@ -132,10 +132,10 @@ describe('userService.getUserById', () => {
 });
 
 describe('userService.deleteUserById', () => {
-  const id: number = 3;
+  const id: string = 'fe32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 3,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -173,10 +173,10 @@ describe('userService.deleteUserById', () => {
 });
 
 describe('userService.updateUserById', () => {
-  const id: number = 3;
+  const id: string = 'fe32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 3,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',

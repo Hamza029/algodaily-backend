@@ -27,34 +27,30 @@ jest.mock('./../../repository/blogRepository', () => {
 
 const mockBlogs: IBlog[] = [
   {
-    id: 1,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     title: 'A',
     description: 'A',
-    authorName: 'userA',
     authorUsername: 'userA',
   },
   {
-    id: 2,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     title: 'B',
     description: 'B',
-    authorName: 'userB',
     authorUsername: 'userB',
   },
 ];
 
 const mockBlogsResponse: IBlogResponse[] = [
   {
-    id: 1,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     title: 'A',
     description: 'A',
-    authorName: 'userA',
     authorUsername: 'userA',
   },
   {
-    id: 2,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     title: 'B',
     description: 'B',
-    authorName: 'userB',
     authorUsername: 'userB',
   },
 ];
@@ -125,7 +121,7 @@ describe('blogService.getBlogById', () => {
   });
 
   it('should return a blog', async () => {
-    const id: number = mockBlogs[0].id;
+    const id: string = mockBlogs[0].id;
 
     (blogRepository.getBlogById as jest.Mock).mockResolvedValueOnce(
       mockBlogs[0]
@@ -138,7 +134,7 @@ describe('blogService.getBlogById', () => {
   });
 
   it('should return a blog', async () => {
-    const id: number = mockBlogs[0].id;
+    const id: string = mockBlogs[0].id;
 
     (blogRepository.getBlogById as jest.Mock).mockResolvedValueOnce(undefined);
 
@@ -154,7 +150,7 @@ describe('blogService.createBlog', () => {
   });
 
   const mockUser: IUser = {
-    Id: 1,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -169,7 +165,6 @@ describe('blogService.createBlog', () => {
 
   const blogDbInput: IBlogDbInput = {
     ...blogInput,
-    authorName: mockUser.Name,
     authorUsername: mockUser.Username,
   };
 
@@ -198,7 +193,6 @@ describe('blogService.updateBlogById', () => {
     id: mockBlogs[0].id,
     title: 'C',
     description: 'C',
-    authorName: mockBlogs[0].authorName,
     authorUsername: mockBlogs[0].authorUsername,
   };
 

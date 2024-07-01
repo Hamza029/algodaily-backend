@@ -1,8 +1,7 @@
 interface IBlogAttributes {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  authorName: string;
   authorUsername: string;
 }
 

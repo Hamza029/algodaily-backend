@@ -147,7 +147,7 @@ describe('userController.getAllUsers', () => {
 describe('userController.getUserById', () => {
   const mockRequest: Partial<Request> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     },
   };
   const mockResponse: Partial<Response> = {};
@@ -176,7 +176,7 @@ describe('userController.getUserById', () => {
 
     expect(userService.getUserById).toHaveBeenCalledTimes(1);
     expect(userService.getUserById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
     expect(userService.getUserById).toHaveReturnedWith(
       Promise.resolve(mockUserResponse)
@@ -186,7 +186,7 @@ describe('userController.getUserById', () => {
       mockRequest,
       mockResponse,
       HTTPStatusCode.Ok,
-      `fetched user with id ${mockRequest.params!.id}`,
+      `fetched user`,
       mockUserResponse
     );
     expect(sendResponse).toHaveBeenCalledTimes(1);
@@ -212,7 +212,7 @@ describe('userController.getUserById', () => {
 
     expect(userService.getUserById).toHaveBeenCalledTimes(1);
     expect(userService.getUserById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).not.toHaveBeenCalled();
@@ -224,7 +224,7 @@ describe('userController.getUserById', () => {
 
 describe('userController.deleteUserById', () => {
   const mockUser: IUser = {
-    Id: 1,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -234,7 +234,7 @@ describe('userController.deleteUserById', () => {
 
   const mockRequest: Partial<IProtectedRequest> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     },
     user: mockUser,
   };
@@ -254,14 +254,14 @@ describe('userController.deleteUserById', () => {
 
     expect(userService.deleteUserById).toHaveBeenCalledTimes(1);
     expect(userService.deleteUserById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).toHaveBeenCalledWith(
       mockRequest,
       mockResponse,
       HTTPStatusCode.Ok,
-      `deleted user with id ${mockUser.Id}.`
+      `deleted user.`
     );
     expect(sendResponse).toHaveBeenCalledTimes(1);
 
@@ -286,7 +286,7 @@ describe('userController.deleteUserById', () => {
 
     expect(userService.deleteUserById).toHaveBeenCalledTimes(1);
     expect(userService.deleteUserById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).not.toHaveBeenCalled();
@@ -298,7 +298,7 @@ describe('userController.deleteUserById', () => {
 
 describe('userController.updateUserById', () => {
   const mockUser: IUser = {
-    Id: 1,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -308,7 +308,7 @@ describe('userController.updateUserById', () => {
 
   const mockRequest: Partial<IProtectedRequest> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     },
     user: mockUser,
     body: {
@@ -349,7 +349,7 @@ describe('userController.updateUserById', () => {
 
     expect(userService.updateUserById).toHaveBeenCalledTimes(1);
     expect(userService.updateUserById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id),
+      mockRequest.params!.id,
       mockRequest.body
     );
     expect(userService.updateUserById).toHaveReturnedWith(
@@ -360,7 +360,7 @@ describe('userController.updateUserById', () => {
       mockRequest,
       mockResponse,
       HTTPStatusCode.Ok,
-      `updated name of user with id ${mockRequest.params!.id}`,
+      `updated name of user`,
       updatedUser
     );
     expect(sendResponse).toHaveBeenCalledTimes(1);
@@ -386,7 +386,7 @@ describe('userController.updateUserById', () => {
 
     expect(userService.updateUserById).toHaveBeenCalledTimes(1);
     expect(userService.updateUserById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id),
+      mockRequest.params!.id,
       mockRequest.body
     );
 

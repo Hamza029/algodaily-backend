@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { IProtectedRequest, IUserResponse } from './../interfaces';
 import userService from './../services/userService';
-import parseIdParam from '../utils/parseIdParam';
 import sendResponse from '../utils/sendResponse';
 import { HTTPStatusCode } from '../constants';
 
@@ -33,11 +32,9 @@ const deleteUserById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const id = parseIdParam(req);
+    await userService.deleteUserById(req.params.id);
 
-    await userService.deleteUserById(id);
-
-    sendResponse(req, res, HTTPStatusCode.Ok, `deleted user with id ${id}.`);
+    sendResponse(req, res, HTTPStatusCode.Ok, `deleted user.`);
   } catch (err) {
     next(err);
   }
@@ -49,15 +46,13 @@ const getUserById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const id = parseIdParam(req);
-
-    const user: IUserResponse = await userService.getUserById(id);
+    const user: IUserResponse = await userService.getUserById(req.params.id);
 
     sendResponse<IUserResponse>(
       req,
       res,
       HTTPStatusCode.Ok,
-      `fetched user with id ${id}`,
+      `fetched user`,
       user
     );
   } catch (err) {
@@ -71,12 +66,10 @@ const updateUserById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const id = parseIdParam(req);
-
     const requestBody = { ...req.body };
 
     const user: IUserResponse = await userService.updateUserById(
-      id,
+      req.params.id,
       requestBody
     );
 
@@ -84,7 +77,7 @@ const updateUserById = async (
       req,
       res,
       HTTPStatusCode.Ok,
-      `updated name of user with id ${id}`,
+      `updated name of user`,
       user
     );
   } catch (err) {

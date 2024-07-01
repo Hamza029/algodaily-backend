@@ -4,9 +4,12 @@ import AppError from './appError';
 import KnexError from './knexError';
 import { HTTPStatusCode } from '../constants';
 import sendResponse from './sendResponse';
-import { conf } from '../config/conf';
 
 const sendError = (err: AppError, req: Request, res: Response): void => {
+  if (err.logging) {
+    console.error(err);
+  }
+
   if (err.isOperational) {
     // operational error
     sendResponse(req, res, err.statusCode, `${err.status}: ${err.message}`);
@@ -42,10 +45,7 @@ export const handleError = (
   res: Response,
   _next: NextFunction
 ) => {
-  if (conf.NODE_ENV === 'development') {
-    console.log(err);
-  }
-
+  console.log(err);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 

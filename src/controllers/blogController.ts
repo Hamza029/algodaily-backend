@@ -2,7 +2,6 @@ import { IBlogResponse } from './../interfaces/blog';
 import { Request, Response, NextFunction } from 'express';
 import blogService from '../services/blogService';
 import sendResponse from '../utils/sendResponse';
-import parseIdParam from '../utils/parseIdParam';
 import { IProtectedRequest } from '../interfaces';
 import { HTTPStatusCode } from '../constants';
 
@@ -32,9 +31,7 @@ const getBlogById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const id: number = parseIdParam(req);
-
-    const blog = await blogService.getBlogById(id);
+    const blog = await blogService.getBlogById(req.params.id);
 
     sendResponse<IBlogResponse>(
       req,
@@ -75,9 +72,7 @@ const deleteBlogById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const id = parseIdParam(req);
-
-    await blogService.deleteBlogById(id);
+    await blogService.deleteBlogById(req.params.id);
 
     sendResponse(req, res, HTTPStatusCode.Ok, 'successfully deleted your blog');
   } catch (err) {
@@ -93,10 +88,8 @@ const updateBlogById = async (
   const requestBody = { ...req.body };
 
   try {
-    const id = parseIdParam(req);
-
     const blog: IBlogResponse = await blogService.updateBlogById(
-      id,
+      req.params.id,
       requestBody
     );
 

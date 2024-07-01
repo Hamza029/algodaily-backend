@@ -28,23 +28,21 @@ jest.mock('./../../utils/sendResponse', () => {
 
 const mockBlogsResponse: IBlogResponse[] = [
   {
-    id: 1,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     title: 'A',
     description: 'A',
-    authorName: 'userA',
     authorUsername: 'userA',
   },
   {
-    id: 2,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     title: 'B',
     description: 'B',
-    authorName: 'userB',
     authorUsername: 'userB',
   },
 ];
 
 const mockUser: IUser = {
-  Id: 1,
+  Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
   Username: 'userA',
   Name: 'userA',
   Email: 'a@gmail.com',
@@ -121,7 +119,7 @@ describe('BlogController.getBlogById', () => {
 
   const mockRequest: Partial<Request> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     },
   };
   const mockResponse: Partial<Response> = {};
@@ -140,7 +138,7 @@ describe('BlogController.getBlogById', () => {
 
     expect(blogService.getBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.getBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
     expect(blogService.getBlogById).toHaveReturnedWith(
       Promise.resolve(mockBlogsResponse[0])
@@ -175,7 +173,7 @@ describe('BlogController.getBlogById', () => {
 
     expect(blogService.getBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.getBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).not.toHaveBeenCalled();
@@ -192,7 +190,7 @@ describe('BlogController.updateBlogById', () => {
 
   const mockRequest: Partial<IProtectedRequest> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     },
     body: {
       title: 'C',
@@ -203,10 +201,9 @@ describe('BlogController.updateBlogById', () => {
   const mockNext: jest.Mock = jest.fn();
 
   const mockUpdatedBlogResponse: IBlogResponse = {
-    id: 1,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     title: 'C',
     description: 'C',
-    authorName: mockBlogsResponse[0].authorName,
     authorUsername: mockBlogsResponse[0].authorUsername,
   };
 
@@ -223,7 +220,7 @@ describe('BlogController.updateBlogById', () => {
 
     expect(blogService.updateBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.updateBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id),
+      mockRequest.params!.id,
       mockRequest.body
     );
     expect(blogService.updateBlogById).toHaveReturnedWith(
@@ -259,7 +256,7 @@ describe('BlogController.updateBlogById', () => {
 
     expect(blogService.updateBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.updateBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id),
+      mockRequest.params!.id,
       mockRequest.body
     );
 
@@ -339,7 +336,7 @@ describe('BlogController.deleteBlogById', () => {
 
   const mockRequest: Partial<IProtectedRequest> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     },
   };
   const mockResponse: Partial<Response> = {};
@@ -354,7 +351,7 @@ describe('BlogController.deleteBlogById', () => {
 
     expect(blogService.deleteBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.deleteBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).toHaveBeenCalledWith(
@@ -386,7 +383,7 @@ describe('BlogController.deleteBlogById', () => {
 
     expect(blogService.deleteBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.deleteBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).not.toHaveBeenCalled();

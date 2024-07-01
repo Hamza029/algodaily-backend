@@ -30,10 +30,10 @@ export class AuthInputDTO implements IAuthInput {
 }
 
 export class AuthLoginResponseDTO implements IAuthLoginResponse {
-  Token: string;
+  token: string;
 
-  constructor(Token: string) {
-    this.Token = Token;
+  constructor(token: string) {
+    this.token = token;
   }
 }
 

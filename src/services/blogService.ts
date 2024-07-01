@@ -42,7 +42,7 @@ const getAllBlogs = async (
   return blogsResponseDTO;
 };
 
-const getBlogById = async (id: number): Promise<IBlogResponse> => {
+const getBlogById = async (id: string): Promise<IBlogResponse> => {
   const blog: IBlog | undefined = await blogRepository.getBlogById(id);
 
   if (!blog) {
@@ -63,7 +63,7 @@ const createBlog = async (
   await blogRepository.createBlog(blogDbInputDTO);
 };
 
-const deleteBlogById = async (id: number) => {
+const deleteBlogById = async (id: string) => {
   const blog = await blogRepository.getBlogById(id);
 
   if (!blog) {
@@ -74,7 +74,7 @@ const deleteBlogById = async (id: number) => {
 };
 
 const updateBlogById = async (
-  id: number,
+  id: string,
   blogUpdateInput: IBlogUpdateInput
 ): Promise<IBlogResponse> => {
   const blog: IBlog | undefined = await blogRepository.getBlogById(id);

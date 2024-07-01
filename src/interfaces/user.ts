@@ -1,7 +1,7 @@
 import { UserRoles } from '../constants';
 
 interface IUserAttributes {
-  Id: number;
+  Id: string;
   Username: string;
   Email: string;
   Name: string;

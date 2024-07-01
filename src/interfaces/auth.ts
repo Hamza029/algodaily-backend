@@ -1,15 +1,15 @@
 interface IAuthAttributes {
-  Id: number;
+  Id: string;
   Username: string;
   Name: string;
   Role: number;
   Password: string;
-  Token: string;
+  token: string;
   PasswordModifiedAt: Date;
 }
 
 export interface IAuth
-  extends Omit<IAuthAttributes, 'Name' | 'Role' | 'Token'> {}
+  extends Omit<IAuthAttributes, 'Name' | 'Role' | 'token'> {}
 
 export interface IAuthInput
   extends Pick<IAuthAttributes, 'Username' | 'Password'> {}
@@ -26,7 +26,7 @@ export interface IAuthJWTPayload
   exp?: number;
 }
 
-export interface IAuthLoginResponse extends Pick<IAuthAttributes, 'Token'> {}
+export interface IAuthLoginResponse extends Pick<IAuthAttributes, 'token'> {}
 
 export interface IUpdatePasswordInput {
   currentPassword: string;

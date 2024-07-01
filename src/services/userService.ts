@@ -27,7 +27,7 @@ const getAllUsers = async (
   return usersResponseDTO;
 };
 
-const deleteUserById = async (id: number): Promise<void> => {
+const deleteUserById = async (id: string): Promise<void> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
@@ -37,7 +37,7 @@ const deleteUserById = async (id: number): Promise<void> => {
   await userRepository.deleteUserById(id, user.Username);
 };
 
-const getUserById = async (id: number): Promise<IUserResponse> => {
+const getUserById = async (id: string): Promise<IUserResponse> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
@@ -50,7 +50,7 @@ const getUserById = async (id: number): Promise<IUserResponse> => {
 };
 
 const updateUserById = async (
-  id: number,
+  id: string,
   userUpdateInput: IUserUpdateInput
 ): Promise<IUserResponse> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
