@@ -62,6 +62,7 @@ const login = async (
   }
 
   const jwtPayload: IAuthJWTPayload = {
+    Id: user.Id,
     Username: user.Username,
     Name: user.Name,
     Role: user.Role,

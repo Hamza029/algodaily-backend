@@ -21,7 +21,7 @@ export interface IAuthDbInput
   > {}
 
 export interface IAuthJWTPayload
-  extends Pick<IAuthAttributes, 'Username' | 'Name' | 'Role'> {
+  extends Pick<IAuthAttributes, 'Id' | 'Username' | 'Name' | 'Role'> {
   iat?: number;
   exp?: number;
 }
