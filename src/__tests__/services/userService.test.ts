@@ -34,7 +34,7 @@ describe('userService.getAllUsers', () => {
 
     const mockUsers: IUser[] = [
       {
-        Id: 1,
+        Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
         Username: 'a',
         Name: 'a',
         Email: 'a@gmail.com',
@@ -42,7 +42,7 @@ describe('userService.getAllUsers', () => {
         JoinDate: new Date(),
       },
       {
-        Id: 2,
+        Id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
         Username: 'b',
         Name: 'b',
         Email: 'b@gmail.com',
@@ -53,14 +53,44 @@ describe('userService.getAllUsers', () => {
 
     const mockUsersResponseDTO: IUserResponse[] = [
       {
+        Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
         Username: 'a',
         Name: 'a',
         Email: 'a@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'DELETE',
+          },
+        },
       },
       {
+        Id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
         Username: 'b',
         Name: 'b',
         Email: 'b@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'DELETE',
+          },
+        },
       },
     ];
 
@@ -87,7 +117,7 @@ describe('userService.getAllUsers', () => {
 });
 
 describe('userService.getUserById', () => {
-  const id: number = 3;
+  const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -95,7 +125,7 @@ describe('userService.getUserById', () => {
 
   it('should return a user', async () => {
     const mockUser: IUser = {
-      Id: 1,
+      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
       Username: 'a',
       Name: 'a',
       Email: 'a@gmail.com',
@@ -104,9 +134,24 @@ describe('userService.getUserById', () => {
     };
 
     const mockUserResponseDTO: IUserResponse = {
+      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
       Username: 'a',
       Name: 'a',
       Email: 'a@gmail.com',
+      _links: {
+        self: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'GET',
+        },
+        update: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'PATCH',
+        },
+        delete: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'DELETE',
+        },
+      },
     };
 
     (userRepository.getUserById as jest.Mock).mockResolvedValueOnce(mockUser);
@@ -132,10 +177,10 @@ describe('userService.getUserById', () => {
 });
 
 describe('userService.deleteUserById', () => {
-  const id: number = 3;
+  const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 3,
+    Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -173,10 +218,10 @@ describe('userService.deleteUserById', () => {
 });
 
 describe('userService.updateUserById', () => {
-  const id: number = 3;
+  const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 3,
+    Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -185,13 +230,28 @@ describe('userService.updateUserById', () => {
   };
 
   const mockUserUpdateInput: IUserUpdateInput = {
-    Name: 'b',
+    Name: 'c',
   };
 
   const mockUserResponseDTO: IUserResponse = {
-    Name: 'b',
+    Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    Name: 'c',
     Username: 'a',
     Email: 'a@gmail.com',
+    _links: {
+      self: {
+        href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'DELETE',
+      },
+    },
   };
 
   it('should update a user', async () => {

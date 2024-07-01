@@ -62,6 +62,7 @@ const login = async (
   }
 
   const jwtPayload: IAuthJWTPayload = {
+    Id: user.Id,
     Username: user.Username,
     Name: user.Name,
     Role: user.Role,
@@ -85,7 +86,7 @@ const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
   if (!passwordMatches) {
     throw new AppError(
       'Your current password is incorrect',
-      HTTPStatusCode.BadRequest
+      HTTPStatusCode.Forbidden
     );
   }
 

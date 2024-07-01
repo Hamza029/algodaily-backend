@@ -87,3 +87,4 @@ tests/cases/user/prettier/prettier
 *v8.log
 .env
 dist/
+data/

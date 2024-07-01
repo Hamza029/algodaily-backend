@@ -87,14 +87,14 @@ describe('AuthService.login', () => {
   };
 
   const mockAuth: IAuth = {
-    Id: 1,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Password: 'hashed',
     PasswordModifiedAt: new Date(),
   };
 
   const mockUser: IUser = {
-    Id: 1,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -105,7 +105,7 @@ describe('AuthService.login', () => {
   const mockToken: string = 'Bearer jwt_token_demo';
 
   const mockLoginResponse: IAuthLoginResponse = {
-    Token: mockToken,
+    token: mockToken,
   };
 
   it('should return jwt token', async () => {
@@ -159,7 +159,7 @@ describe('AuthService.updateMyPassword', () => {
   });
 
   const mockUser: IUser = {
-    Id: 1,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Name: 'a',
     Email: 'a@gmail.com',
@@ -173,7 +173,7 @@ describe('AuthService.updateMyPassword', () => {
   };
 
   const mockAuth: IAuth = {
-    Id: 1,
+    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     Username: 'a',
     Password: 'hashed_old_password',
     PasswordModifiedAt: new Date(),

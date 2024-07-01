@@ -5,6 +5,7 @@ import {
   IUser,
   IUserUpdateDbInput,
   IUserUpdateInput,
+  HATEOAS_Types,
 } from '../../interfaces';
 import { UserRoles } from '../../constants';
 
@@ -25,14 +26,31 @@ export class UserDbInputDTO implements IUserDbInput {
 }
 
 export class UserResponseDTO implements IUserResponse {
+  Id: string;
   Username: string;
   Name: string;
   Email: string;
+  _links: HATEOAS_Types;
 
   constructor(user: IUser) {
+    this.Id = user.Id;
     this.Username = user.Username;
     this.Name = user.Name;
     this.Email = user.Email;
+    this._links = {
+      self: {
+        href: `/api/blogs/${user.Id}`,
+        method: 'GET',
+      },
+      update: {
+        href: `/api/blogs/${user.Id}`,
+        method: 'PATCH',
+      },
+      delete: {
+        href: `/api/blogs/${user.Id}`,
+        method: 'DELETE',
+      },
+    };
   }
 }
 

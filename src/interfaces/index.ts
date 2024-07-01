@@ -27,3 +27,5 @@ export {
 } from './blog';
 
 export { IBlogQueryParams, IUserQueryParams } from './queryParams';
+
+export { HATEOAS_Types } from './hateoas';

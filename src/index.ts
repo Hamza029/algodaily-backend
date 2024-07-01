@@ -16,10 +16,6 @@ if (conf.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.get('/', (req: Request, res: Response, _next: NextFunction) => {
-  res.status(200).send('Hello');
-});
-
 app.use(express.json({ limit: '50kb' }));
 
 app.use('/api/users', userRoute);
