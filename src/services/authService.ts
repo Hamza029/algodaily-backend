@@ -85,7 +85,7 @@ const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
   if (!passwordMatches) {
     throw new AppError(
       'Your current password is incorrect',
-      HTTPStatusCode.BadRequest
+      HTTPStatusCode.Forbidden
     );
   }
 

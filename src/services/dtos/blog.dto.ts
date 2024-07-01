@@ -1,4 +1,5 @@
 import {
+  HATEOAS_Types,
   IBlog,
   IBlogDbInput,
   IBlogInput,
@@ -25,12 +26,27 @@ export class BlogResponseDTO implements IBlogResponse {
   title: string;
   description: string;
   authorUsername: string;
+  _links: HATEOAS_Types;
 
   constructor(blog: IBlog) {
     this.id = blog.id;
     this.title = blog.title;
     this.description = blog.description;
     this.authorUsername = blog.authorUsername;
+    this._links = {
+      self: {
+        href: `/api/blogs/${blog.id}`,
+        method: 'GET',
+      },
+      update: {
+        href: `/api/blogs/${blog.id}`,
+        method: 'PATCH',
+      },
+      delete: {
+        href: `/api/blogs/${blog.id}`,
+        method: 'DELETE',
+      },
+    };
   }
 }
 
