@@ -40,8 +40,44 @@ describe('userController.getAllUsers', () => {
 
   it('should return list of users with status 200', async () => {
     const mockUsersResponse: IUserResponse[] = [
-      { Username: 'a', Name: 'a', Email: 'a@gmail.com' },
-      { Username: 'b', Name: 'b', Email: 'b@gmail.com' },
+      {
+        Username: 'a',
+        Name: 'a',
+        Email: 'a@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'DELETE',
+          },
+        },
+      },
+      {
+        Username: 'b',
+        Name: 'b',
+        Email: 'b@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'DELETE',
+          },
+        },
+      },
     ];
 
     (userService.getAllUsers as jest.Mock).mockResolvedValueOnce(
@@ -111,8 +147,44 @@ describe('userController.getAllUsers', () => {
     };
 
     const mockUsersResponse: IUserResponse[] = [
-      { Username: 'a', Name: 'a', Email: 'a@gmail.com' },
-      { Username: 'b', Name: 'b', Email: 'b@gmail.com' },
+      {
+        Username: 'a',
+        Name: 'a',
+        Email: 'a@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'DELETE',
+          },
+        },
+      },
+      {
+        Username: 'b',
+        Name: 'b',
+        Email: 'b@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'DELETE',
+          },
+        },
+      },
     ];
 
     (userService.getAllUsers as jest.Mock).mockResolvedValueOnce(
@@ -162,6 +234,20 @@ describe('userController.getUserById', () => {
       Name: 'a',
       Username: 'a',
       Email: 'a@gmail.com',
+      _links: {
+        self: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+          method: 'GET',
+        },
+        update: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+          method: 'PATCH',
+        },
+        delete: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+          method: 'DELETE',
+        },
+      },
     };
 
     (userService.getUserById as jest.Mock).mockResolvedValueOnce(
@@ -327,6 +413,20 @@ describe('userController.updateUserById', () => {
       Username: mockUser.Username,
       Email: mockUser.Email,
       Name: mockRequest.body!.Name,
+      _links: {
+        self: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'GET',
+        },
+        update: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'PATCH',
+        },
+        delete: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'DELETE',
+        },
+      },
     };
 
     console.log(userUpdateResponseDTO);
@@ -345,6 +445,20 @@ describe('userController.updateUserById', () => {
       Name: mockRequest.body.Name,
       Email: mockUser.Email,
       Username: mockUser.Username,
+      _links: {
+        self: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'GET',
+        },
+        update: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'PATCH',
+        },
+        delete: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'DELETE',
+        },
+      },
     };
 
     expect(userService.updateUserById).toHaveBeenCalledTimes(1);

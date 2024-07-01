@@ -46,12 +46,40 @@ const mockBlogsResponse: IBlogResponse[] = [
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
+    _links: {
+      self: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'DELETE',
+      },
+    },
   },
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
+    _links: {
+      self: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
+        method: 'DELETE',
+      },
+    },
   },
 ];
 
@@ -196,7 +224,23 @@ describe('blogService.updateBlogById', () => {
     authorUsername: mockBlogs[0].authorUsername,
   };
 
-  const mockUpdatedBlogResponse: IBlogResponse = { ...mockUpdatedBlog };
+  const mockUpdatedBlogResponse: IBlogResponse = {
+    ...mockUpdatedBlog,
+    _links: {
+      self: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'DELETE',
+      },
+    },
+  };
 
   it('should update a blog', async () => {
     (blogRepository.getBlogById as jest.Mock)
