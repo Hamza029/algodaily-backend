@@ -1,8 +1,9 @@
 import db from '../database/db';
 import { IBlog, IBlogDbInput, IBlogUpdateDbInput } from '../interfaces';
 
-const getAllBlogs = async (skip: number, limit: number): Promise<IBlog[]> => {
+const getAllBlogs = async (skip: number, limit: number, search: string): Promise<IBlog[]> => {
   const blogs: IBlog[] = await db<IBlog>('Blog')
+    .whereRaw(`Blog.title like "%${search}%" or Blog.description like "%${search}%"`)
     .select('*')
     .offset(skip)
     .limit(limit);
@@ -21,9 +22,11 @@ const getBlogById = async (id: string): Promise<IBlog | undefined> => {
 const getBlogsByAuthorUsername = async (
   authorUsername: string,
   skip: number,
-  limit: number
+  limit: number,
+  search: string,
 ): Promise<IBlog[]> => {
   const blogs: IBlog[] = await db<IBlog>('Blog')
+    .whereRaw(`Blog.title like "%${search}%" or Blog.description like "%${search}%"`)
     .select('*')
     .where({ authorUsername: authorUsername })
     .offset(skip)

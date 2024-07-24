@@ -23,17 +23,14 @@ const getAllBlogs = async (
   const { authorUsername } = queryParams;
 
   const page: number = Number(queryParams.page) || 1;
+  const search: string = queryParams.search || '';
 
-  const limit: number = 4;
+  const limit: number = 10;
   const skip: number = (page - 1) * limit;
 
   const blogs: IBlog[] = await (!authorUsername
-    ? blogRepository.getAllBlogs(skip, limit)
-    : blogRepository.getBlogsByAuthorUsername(authorUsername, skip, limit));
-
-  if (blogs.length === 0) {
-    throw new AppError('No blogs found', HTTPStatusCode.NotFound);
-  }
+    ? blogRepository.getAllBlogs(skip, limit, search)
+    : blogRepository.getBlogsByAuthorUsername(authorUsername, skip, limit, search));
 
   const blogsResponseDTO: IBlogResponse[] = blogs.map(
     (blog) => new BlogResponseDTO(blog)

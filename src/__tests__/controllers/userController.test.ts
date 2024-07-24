@@ -435,8 +435,6 @@ describe('userController.updateUserById', () => {
       },
     };
 
-    console.log(userUpdateResponseDTO);
-
     (userService.updateUserById as jest.Mock).mockResolvedValueOnce(
       userUpdateResponseDTO
     );

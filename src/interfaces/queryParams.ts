@@ -5,6 +5,6 @@ interface IQueryParams {
 }
 
 export interface IBlogQueryParams
-  extends Pick<IQueryParams, 'authorUsername' | 'page'> {}
+  extends Pick<IQueryParams, 'authorUsername' | 'page' | 'search'> {}
 
 export interface IUserQueryParams extends Pick<IQueryParams, 'page'> {}

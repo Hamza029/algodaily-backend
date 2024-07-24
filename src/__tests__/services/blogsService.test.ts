@@ -134,15 +134,15 @@ describe('blogService.getAllBlogs', () => {
     expect(blogsResponse).toEqual(mockBlogsResponse);
   });
 
-  it('should throw AppError with status 404', async () => {
+  it('should throw error', async () => {
     const queryParams = {
       page: '100',
     };
 
-    (blogRepository.getAllBlogs as jest.Mock).mockResolvedValueOnce([]);
+    (blogRepository.getAllBlogs as jest.Mock).mockRejectedValueOnce(new AppError('Something went wrong', HTTPStatusCode.InternalServerError));
 
     await expect(blogService.getAllBlogs(queryParams)).rejects.toThrow(
-      new AppError('No blogs found', HTTPStatusCode.NotFound)
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
     );
   });
 });
