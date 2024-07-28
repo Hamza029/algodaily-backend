@@ -26,9 +26,8 @@ const getBlogsByAuthorUsername = async (
   search: string,
 ): Promise<IBlog[]> => {
   const blogs: IBlog[] = await db<IBlog>('Blog')
-    .whereRaw(`Blog.title like "%${search}%" or Blog.description like "%${search}%"`)
+    .whereRaw(`authorUsername="${authorUsername}" and (Blog.title like "%${search}%" or Blog.description like "%${search}%")`)
     .select('*')
-    .where({ authorUsername: authorUsername })
     .offset(skip)
     .limit(limit);
 
