@@ -20,7 +20,7 @@ jest.mock('./../../repository/blogRepository', () => {
       createBlog: jest.fn(),
       updateBlogById: jest.fn(),
       deleteBlogById: jest.fn(),
-      getBlogsByAuthorUsername: jest.fn(),
+      getBlogsByAuthorId: jest.fn(),
     },
   };
 });
@@ -121,12 +121,12 @@ describe('blogService.getAllBlogs', () => {
   it('should return list of blogs for particular author', async () => {
     const queryParams = {
       page: '3',
-      authorUsername: 'A',
+      authorId: '504f9c47-3798-11ef-bf41-088fc3196e05',
     };
 
-    (
-      blogRepository.getBlogsByAuthorUsername as jest.Mock
-    ).mockResolvedValueOnce(mockBlogs);
+    (blogRepository.getBlogsByAuthorId as jest.Mock).mockResolvedValueOnce(
+      mockBlogs
+    );
 
     const blogsResponse: IBlogResponse[] =
       await blogService.getAllBlogs(queryParams);
@@ -139,7 +139,9 @@ describe('blogService.getAllBlogs', () => {
       page: '100',
     };
 
-    (blogRepository.getAllBlogs as jest.Mock).mockRejectedValueOnce(new AppError('Something went wrong', HTTPStatusCode.InternalServerError));
+    (blogRepository.getAllBlogs as jest.Mock).mockRejectedValueOnce(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
 
     await expect(blogService.getAllBlogs(queryParams)).rejects.toThrow(
       new AppError('Something went wrong', HTTPStatusCode.InternalServerError)

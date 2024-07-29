@@ -20,7 +20,7 @@ import {
 const getAllBlogs = async (
   queryParams: IBlogQueryParams
 ): Promise<IBlogResponse[]> => {
-  const { authorUsername } = queryParams;
+  const { authorId } = queryParams;
 
   const page: number = Number(queryParams.page) || 1;
   const search: string = queryParams.search || '';
@@ -28,9 +28,9 @@ const getAllBlogs = async (
   const limit: number = 10;
   const skip: number = (page - 1) * limit;
 
-  const blogs: IBlog[] = await (!authorUsername
+  const blogs: IBlog[] = await (!authorId
     ? blogRepository.getAllBlogs(skip, limit, search)
-    : blogRepository.getBlogsByAuthorUsername(authorUsername, skip, limit, search));
+    : blogRepository.getBlogsByAuthorId(authorId, skip, limit, search));
 
   const blogsResponseDTO: IBlogResponse[] = blogs.map(
     (blog) => new BlogResponseDTO(blog)
