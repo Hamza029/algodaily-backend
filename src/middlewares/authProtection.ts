@@ -22,7 +22,7 @@ const authenticate = async (
     const payload: IAuthJWTPayload = await jwtUtil.authenticate(token);
 
     const auth: IAuth | undefined = await authRepository.getAuthByUsername(
-      payload.Username
+      payload.username
     );
 
     if (!auth) {
@@ -30,7 +30,7 @@ const authenticate = async (
     }
 
     const passwordChangedAt: number = Math.floor(
-      Date.parse(auth.PasswordModifiedAt.toISOString()) / 1000
+      Date.parse(auth.passwordModifiedAt.toISOString()) / 1000
     );
 
     const jwtIssuedAt: number = payload.iat!;
@@ -47,7 +47,7 @@ const authenticate = async (
     }
 
     const currentUser: IUser | undefined =
-      await userRepository.getUserByUsername(payload.Username);
+      await userRepository.getUserByUsername(payload.username);
 
     req.user = currentUser;
     next();

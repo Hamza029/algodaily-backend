@@ -34,7 +34,7 @@ const deleteUserById = async (id: string): Promise<void> => {
     throw new AppError('User not found', HTTPStatusCode.NotFound);
   }
 
-  await userRepository.deleteUserById(id, user.Username);
+  await userRepository.deleteUserById(id, user.username);
 };
 
 const getUserById = async (id: string): Promise<IUserResponse> => {
@@ -75,7 +75,7 @@ const updateUserById = async (
     );
   }
 
-  user.Name = userUpdateDbInputDTO.Name;
+  user.name = userUpdateDbInputDTO.name;
 
   const userResponseDTO: IUserResponse = new UserResponseDTO(user);
 

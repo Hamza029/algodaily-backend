@@ -2,19 +2,19 @@ import type { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('User', (table: Knex.CreateTableBuilder) => {
-    table.uuid('Id').primary().defaultTo(knex.fn.uuid());
-    table.string('Username').notNullable().unique();
-    table.string('Email').notNullable().unique();
-    table.string('Name').notNullable();
-    table.dateTime('JoinDate').notNullable();
-    table.integer('Role').notNullable();
+    table.uuid('id').primary().defaultTo(knex.fn.uuid());
+    table.string('username').notNullable().unique();
+    table.string('email').notNullable().unique();
+    table.string('name').notNullable();
+    table.dateTime('joinDate').notNullable();
+    table.integer('role').notNullable();
   });
 
   await knex.schema.createTable('Auth', (table: Knex.CreateTableBuilder) => {
-    table.uuid('Id').primary().defaultTo(knex.fn.uuid());
-    table.string('Username').notNullable().unique();
-    table.string('Password').notNullable();
-    table.dateTime('PasswordModifiedAt').notNullable();
+    table.uuid('id').primary().defaultTo(knex.fn.uuid());
+    table.string('username').notNullable().unique();
+    table.string('password').notNullable();
+    table.dateTime('passwordModifiedAt').notNullable();
   });
 }
 

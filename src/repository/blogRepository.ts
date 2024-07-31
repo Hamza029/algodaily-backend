@@ -1,5 +1,14 @@
 import db from '../database/db';
-import { IBlog, IBlogDbInput, IBlogUpdateDbInput } from '../interfaces';
+import {
+  IBlog,
+  IBlogDbInput,
+  IBlogUpdateDbInput,
+  IComment,
+  ICommentDBInput,
+  ICommentResponse,
+  ILike,
+  IUser,
+} from '../interfaces';
 
 const getAllBlogs = async (
   skip: number,
@@ -57,6 +66,51 @@ const updateBlogById = async (
   await db<IBlog>('Blog').where('id', '=', id).update(blogUpdateDbInput);
 };
 
+const getLikesByBlogId = async (blogId: string): Promise<ILike[]> => {
+  const likes = await db<ILike>('Like').where({ blogId: blogId }).select('*');
+  return likes;
+};
+
+const likeBlogByBlogId = async (
+  blogId: string,
+  userId: string
+): Promise<void> => {
+  await db<ILike>('Like').insert({ blogId, userId });
+};
+
+const unlikeBlogByBlogId = async (
+  blogId: string,
+  userId: string
+): Promise<number> => {
+  const unreacted = await db<ILike>('Like')
+    .where({ blogId: blogId, userId: userId })
+    .del();
+  return unreacted;
+};
+
+const getCommentsByBlogId = async (blogId: string) => {
+  const comments: ICommentResponse[] = await db<IComment>('Comment')
+    .where({ blogId: blogId })
+    .join<IUser>('User', 'Comment.userId', 'User.id')
+    .select(
+      'Comment.id',
+      'userId',
+      'blogId',
+      'createdAt',
+      'username',
+      'content'
+    )
+    .orderBy('createdAt');
+
+  return comments;
+};
+
+const createComment = async (
+  commentDbInput: ICommentDBInput
+): Promise<void> => {
+  await db<IComment>('Comment').insert(commentDbInput);
+};
+
 export default {
   getAllBlogs,
   getBlogById,
@@ -64,4 +118,9 @@ export default {
   createBlog,
   deleteBlogById,
   updateBlogById,
+  getLikesByBlogId,
+  likeBlogByBlogId,
+  unlikeBlogByBlogId,
+  createComment,
+  getCommentsByBlogId,
 };

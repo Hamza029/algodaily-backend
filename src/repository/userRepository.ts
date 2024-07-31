@@ -17,8 +17,8 @@ const deleteUserById = async (id: string, username: string): Promise<void> => {
   const trx: Knex.Transaction = await db.transaction();
 
   try {
-    await trx<IUser>('User').where({ Id: id }).del();
-    await trx<IAuth>('Auth').where({ Username: username }).del();
+    await trx<IUser>('User').where({ id: id }).del();
+    await trx<IAuth>('Auth').where({ username: username }).del();
 
     await trx.commit();
   } catch (err) {

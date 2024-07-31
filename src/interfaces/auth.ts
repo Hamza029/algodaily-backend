@@ -1,27 +1,27 @@
 interface IAuthAttributes {
-  Id: string;
-  Username: string;
-  Name: string;
-  Role: number;
-  Password: string;
+  id: string;
+  username: string;
+  name: string;
+  role: number;
+  password: string;
   token: string;
-  PasswordModifiedAt: Date;
+  passwordModifiedAt: Date;
 }
 
 export interface IAuth
-  extends Omit<IAuthAttributes, 'Name' | 'Role' | 'token'> {}
+  extends Omit<IAuthAttributes, 'name' | 'role' | 'token'> {}
 
 export interface IAuthInput
-  extends Pick<IAuthAttributes, 'Username' | 'Password'> {}
+  extends Pick<IAuthAttributes, 'username' | 'password'> {}
 
 export interface IAuthDbInput
   extends Pick<
     IAuthAttributes,
-    'Username' | 'Password' | 'PasswordModifiedAt'
+    'username' | 'password' | 'passwordModifiedAt'
   > {}
 
 export interface IAuthJWTPayload
-  extends Pick<IAuthAttributes, 'Id' | 'Username' | 'Name' | 'Role'> {
+  extends Pick<IAuthAttributes, 'id' | 'username' | 'name' | 'role'> {
   iat?: number;
   exp?: number;
 }
@@ -34,4 +34,4 @@ export interface IUpdatePasswordInput {
 }
 
 export interface IUpdatePasswordDbInput
-  extends Pick<IAuthAttributes, 'Password' | 'PasswordModifiedAt'> {}
+  extends Pick<IAuthAttributes, 'password' | 'passwordModifiedAt'> {}

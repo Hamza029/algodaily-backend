@@ -7,6 +7,10 @@ import {
   IBlogResponse,
   IBlogUpdateDbInput,
   IBlogUpdateInput,
+  ICommentDBInput,
+  ICommentInput,
+  ICommentResponse,
+  ILike,
   IUser,
 } from '../interfaces';
 import blogRepository from '../repository/blogRepository';
@@ -16,6 +20,7 @@ import {
   BlogResponseDTO,
   BlogUpdateDbInput,
 } from './dtos/blog.dto';
+import { CommentDbInputDTO } from './dtos/comment.dto';
 
 const getAllBlogs = async (
   queryParams: IBlogQueryParams
@@ -32,9 +37,17 @@ const getAllBlogs = async (
     ? blogRepository.getAllBlogs(skip, limit, search)
     : blogRepository.getBlogsByAuthorId(authorId, skip, limit, search));
 
-  const blogsResponseDTO: IBlogResponse[] = blogs.map(
-    (blog) => new BlogResponseDTO(blog)
-  );
+  const likes: Array<ILike[]> = [];
+  const comments: Array<ICommentResponse[]> = [];
+
+  for (let i = 0; i < blogs.length; i++) {
+    likes.push(await blogRepository.getLikesByBlogId(blogs[i].id));
+    comments.push(await blogRepository.getCommentsByBlogId(blogs[i].id));
+  }
+
+  const blogsResponseDTO: IBlogResponse[] = blogs.map((blog, index) => {
+    return new BlogResponseDTO(blog, likes[index], comments[index]);
+  });
 
   return blogsResponseDTO;
 };
@@ -46,7 +59,14 @@ const getBlogById = async (id: string): Promise<IBlogResponse> => {
     throw new AppError("This blog doesn't exist", HTTPStatusCode.NotFound);
   }
 
-  const blogResponseDTO: IBlogResponse = new BlogResponseDTO(blog);
+  const likes = await blogRepository.getLikesByBlogId(blog.id);
+  const comments = await blogRepository.getCommentsByBlogId(blog.id);
+
+  const blogResponseDTO: IBlogResponse = new BlogResponseDTO(
+    blog,
+    likes,
+    comments
+  );
 
   return blogResponseDTO;
 };
@@ -88,9 +108,37 @@ const updateBlogById = async (
 
   const updatedBlog: IBlog | undefined = await blogRepository.getBlogById(id);
 
-  const blogResponseDTO = new BlogResponseDTO(updatedBlog!);
+  const blogResponseDTO = new BlogResponseDTO(
+    updatedBlog!,
+    await blogRepository.getLikesByBlogId(updatedBlog!.id),
+    await blogRepository.getCommentsByBlogId(updatedBlog!.id)
+  );
 
   return blogResponseDTO;
+};
+
+const likeBlogByBlogId = async (blogId: string, user: IUser) => {
+  await blogRepository.likeBlogByBlogId(blogId, user.id);
+};
+
+const unlikeBlogByBlogId = async (blogId: string, user: IUser) => {
+  const unreacted = await blogRepository.unlikeBlogByBlogId(blogId, user.id);
+  if (!unreacted) {
+    throw new AppError("You haven't liked this blog", HTTPStatusCode.NotFound);
+  }
+};
+
+const createComment = async (
+  commentInput: ICommentInput,
+  blogId: string,
+  user: IUser
+) => {
+  const commentDbInputDTO: ICommentDBInput = new CommentDbInputDTO(
+    commentInput.content,
+    blogId,
+    user.id
+  );
+  await blogRepository.createComment(commentDbInputDTO);
 };
 
 export default {
@@ -99,4 +147,7 @@ export default {
   createBlog,
   deleteBlogById,
   updateBlogById,
+  likeBlogByBlogId,
+  unlikeBlogByBlogId,
+  createComment,
 };

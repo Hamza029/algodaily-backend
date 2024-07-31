@@ -8,24 +8,24 @@ import {
 } from '../../interfaces';
 
 export class AuthDbInputDTO implements IAuthDbInput {
-  Username: string;
-  Password: string;
-  PasswordModifiedAt: Date;
+  username: string;
+  password: string;
+  passwordModifiedAt: Date;
 
   constructor(user: IUserInput) {
-    this.Username = user.Username;
-    this.Password = user.Password;
-    this.PasswordModifiedAt = new Date();
+    this.username = user.username;
+    this.password = user.password;
+    this.passwordModifiedAt = new Date();
   }
 }
 
 export class AuthInputDTO implements IAuthInput {
-  Username: string;
-  Password: string;
+  username: string;
+  password: string;
 
   constructor(auth: IAuthInput) {
-    this.Username = auth.Username;
-    this.Password = auth.Password;
+    this.username = auth.username;
+    this.password = auth.password;
   }
 }
 
@@ -38,11 +38,11 @@ export class AuthLoginResponseDTO implements IAuthLoginResponse {
 }
 
 export class UpdatePasswordDbInputDTO implements IUpdatePasswordDbInput {
-  Password: string;
-  PasswordModifiedAt: Date;
+  password: string;
+  passwordModifiedAt: Date;
 
   constructor(updatePasswordInput: IUpdatePasswordInput) {
-    this.Password = updatePasswordInput.newPassword;
-    this.PasswordModifiedAt = new Date();
+    this.password = updatePasswordInput.newPassword;
+    this.passwordModifiedAt = new Date();
   }
 }

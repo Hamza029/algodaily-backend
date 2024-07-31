@@ -29,3 +29,12 @@ export {
 export { IBlogQueryParams, IUserQueryParams } from './queryParams';
 
 export { HATEOAS_Types } from './hateoas';
+
+export { ILike } from './like';
+
+export {
+  IComment,
+  ICommentResponse,
+  ICommentDBInput,
+  ICommentInput,
+} from './comment';

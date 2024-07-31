@@ -6,6 +6,8 @@ import {
   IBlogResponse,
   IBlogUpdateDbInput,
   IBlogUpdateInput,
+  ICommentResponse,
+  ILike,
   IUser,
 } from '../../interfaces';
 
@@ -16,10 +18,10 @@ export class BlogDbInputDTO implements IBlogDbInput {
   authorUsername: string;
 
   constructor(blogInput: IBlogInput, user: IUser) {
-    this.authorId = user.Id;
+    this.authorId = user.id;
     this.title = blogInput.title;
     this.description = blogInput.description;
-    this.authorUsername = user.Username;
+    this.authorUsername = user.username;
   }
 }
 
@@ -29,14 +31,18 @@ export class BlogResponseDTO implements IBlogResponse {
   title: string;
   description: string;
   authorUsername: string;
+  likes: ILike[];
+  comments: ICommentResponse[];
   _links: HATEOAS_Types;
 
-  constructor(blog: IBlog) {
+  constructor(blog: IBlog, likes: ILike[], comments: ICommentResponse[]) {
     this.id = blog.id;
     this.authorId = blog.authorId;
     this.title = blog.title;
     this.description = blog.description;
     this.authorUsername = blog.authorUsername;
+    this.likes = likes;
+    this.comments = comments;
     this._links = {
       self: {
         href: `/api/blogs/${blog.id}`,

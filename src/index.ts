@@ -8,7 +8,7 @@ import { conf } from './config/conf';
 import errorHandler from './utils/errorHandler';
 import AppError from './utils/appError';
 import { HTTPStatusCode } from './constants';
-import cors from 'cors'
+import cors from 'cors';
 
 const app: Express = express();
 const port: number = Number(conf.PORT) || 3500;

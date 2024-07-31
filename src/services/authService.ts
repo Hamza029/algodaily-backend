@@ -28,7 +28,7 @@ const signup = async (userInput: IUserInput): Promise<void> => {
 
   const authDbInputDTO: IAuthDbInput = new AuthDbInputDTO(userInput);
 
-  authDbInputDTO.Password = await passwordUtil.hash(authDbInputDTO.Password);
+  authDbInputDTO.password = await passwordUtil.hash(authDbInputDTO.password);
 
   await authRepository.signup(userDbInputDTO, authDbInputDTO);
 };
@@ -42,7 +42,7 @@ const login = async (
 
   if (
     !auth ||
-    !(await passwordUtil.compare(authInputDTO.Password, auth.Password))
+    !(await passwordUtil.compare(authInputDTO.password, auth.password))
   ) {
     throw new AppError(
       'Wrong username or password',
@@ -51,7 +51,7 @@ const login = async (
   }
 
   const user: IUser | undefined = await userRepository.getUserByUsername(
-    auth.Username
+    auth.username
   );
 
   if (!user) {
@@ -62,10 +62,10 @@ const login = async (
   }
 
   const jwtPayload: IAuthJWTPayload = {
-    Id: user.Id,
-    Username: user.Username,
-    Name: user.Name,
-    Role: user.Role,
+    id: user.id,
+    username: user.username,
+    name: user.name,
+    role: user.role,
   };
 
   const token: string = jwtUtil.getToken(jwtPayload);
@@ -76,11 +76,11 @@ const login = async (
 };
 
 const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
-  const auth: IAuth = (await authRepository.getAuthByUsername(user.Username))!;
+  const auth: IAuth = (await authRepository.getAuthByUsername(user.username))!;
 
   const passwordMatches = await passwordUtil.compare(
     reqBody.currentPassword,
-    auth.Password
+    auth.password
   );
 
   if (!passwordMatches) {
@@ -99,7 +99,7 @@ const updateMyPassword = async (user: IUser, reqBody: IUpdatePasswordInput) => {
     new UpdatePasswordDbInputDTO(reqBody);
 
   await authRepository.updateMyPassword(
-    auth.Username,
+    auth.username,
     updatePasswordDbInputDTO
   );
 };

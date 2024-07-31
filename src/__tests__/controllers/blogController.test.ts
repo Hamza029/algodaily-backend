@@ -33,6 +33,8 @@ const mockBlogsResponse: IBlogResponse[] = [
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
+    likes: [],
+    comments: [],
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -54,6 +56,8 @@ const mockBlogsResponse: IBlogResponse[] = [
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
+    likes: [],
+    comments: [],
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -72,12 +76,12 @@ const mockBlogsResponse: IBlogResponse[] = [
 ];
 
 const mockUser: IUser = {
-  Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
-  Username: 'userA',
-  Name: 'userA',
-  Email: 'a@gmail.com',
-  Role: UserRoles.USER,
-  JoinDate: new Date(),
+  id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+  username: 'userA',
+  name: 'userA',
+  email: 'a@gmail.com',
+  role: UserRoles.USER,
+  joinDate: new Date(),
 };
 
 const mockError = new AppError('Test Error', HTTPStatusCode.NotImplemented);
@@ -235,6 +239,8 @@ describe('BlogController.updateBlogById', () => {
     authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
     title: 'C',
     description: 'C',
+    likes: [],
+    comments: [],
     authorUsername: mockBlogsResponse[0].authorUsername,
     _links: {
       self: {

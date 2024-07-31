@@ -21,6 +21,8 @@ jest.mock('./../../repository/blogRepository', () => {
       updateBlogById: jest.fn(),
       deleteBlogById: jest.fn(),
       getBlogsByAuthorId: jest.fn(),
+      getLikesByBlogId: jest.fn(),
+      getCommentsByBlogId: jest.fn(),
     },
   };
 });
@@ -49,6 +51,8 @@ const mockBlogsResponse: IBlogResponse[] = [
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
+    likes: [],
+    comments: [],
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -70,6 +74,8 @@ const mockBlogsResponse: IBlogResponse[] = [
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
+    likes: [],
+    comments: [],
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -90,6 +96,11 @@ const mockBlogsResponse: IBlogResponse[] = [
 describe('blogService.getAllBlogs', () => {
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  beforeEach(() => {
+    (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getCommentsByBlogId as jest.Mock).mockResolvedValue([]);
   });
 
   it('should return list of blogs', async () => {
@@ -152,6 +163,11 @@ describe('blogService.getAllBlogs', () => {
 describe('blogService.getBlogById', () => {
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  beforeEach(() => {
+    (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getCommentsByBlogId as jest.Mock).mockResolvedValue([]);
   });
 
   it('should return a blog', async () => {
@@ -217,6 +233,11 @@ describe('blogService.updateBlogById', () => {
     jest.resetAllMocks();
   });
 
+  beforeEach(() => {
+    (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getCommentsByBlogId as jest.Mock).mockResolvedValue([]);
+  });
+
   const id = mockBlogs[0].id;
 
   const blogUpdateInput: IBlogUpdateInput = {
@@ -234,6 +255,8 @@ describe('blogService.updateBlogById', () => {
 
   const mockUpdatedBlogResponse: IBlogResponse = {
     ...mockUpdatedBlog,
+    likes: [],
+    comments: [],
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',

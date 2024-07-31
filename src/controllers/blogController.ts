@@ -4,6 +4,8 @@ import blogService from '../services/blogService';
 import sendResponse from '../utils/sendResponse';
 import { IProtectedRequest } from '../interfaces';
 import { HTTPStatusCode } from '../constants';
+import KnexError from '../utils/knexError';
+import AppError from '../utils/appError';
 
 const getAllBlogs = async (
   req: Request,
@@ -105,10 +107,80 @@ const updateBlogById = async (
   }
 };
 
+const likeBlogByBlogId = async (
+  req: IProtectedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    await blogService.likeBlogByBlogId(id, req.user!);
+    sendResponse(
+      req,
+      res,
+      HTTPStatusCode.Created,
+      'Successfully liked the blog'
+    );
+  } catch (err) {
+    if ((err as KnexError).code === 'ER_DUP_ENTRY') {
+      next(
+        new AppError(
+          'You have already liked this blog',
+          HTTPStatusCode.Conflict
+        )
+      );
+    } else {
+      next(err);
+    }
+  }
+};
+
+const unlikeBlogByBlogId = async (
+  req: IProtectedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    await blogService.unlikeBlogByBlogId(id, req.user!);
+    sendResponse(
+      req,
+      res,
+      HTTPStatusCode.Created,
+      'Successfully liked the blog'
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+const createComment = async (
+  req: IProtectedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const reqBody = { ...req.body };
+    await blogService.createComment(reqBody, id, req.user!);
+    sendResponse(
+      req,
+      res,
+      HTTPStatusCode.Created,
+      'Successfylly added your comment'
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   getAllBlogs,
   getBlogById,
   createBlog,
   deleteBlogById,
   updateBlogById,
+  likeBlogByBlogId,
+  unlikeBlogByBlogId,
+  createComment,
 };

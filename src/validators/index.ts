@@ -9,6 +9,7 @@ import { IProtectedRequest } from '../interfaces';
 import AppError from '../utils/appError';
 import { HTTPStatusCode } from '../constants';
 import passwordUpdateSchema from './schemas/passwordUpdateSchema';
+import commentSchema from './schemas/commentSchema';
 
 type ValidatorType =
   | 'signup'
@@ -16,7 +17,8 @@ type ValidatorType =
   | 'user_update'
   | 'create_blog'
   | 'blog_update'
-  | 'password_update';
+  | 'password_update'
+  | 'create_comment';
 
 const validator: Record<ValidatorType, Joi.ObjectSchema> = {
   signup: signupSchema,
@@ -25,6 +27,7 @@ const validator: Record<ValidatorType, Joi.ObjectSchema> = {
   create_blog: blogSchema,
   blog_update: blogUpdateSchema,
   password_update: passwordUpdateSchema,
+  create_comment: commentSchema,
 };
 
 export default (validatorType: ValidatorType) => {
