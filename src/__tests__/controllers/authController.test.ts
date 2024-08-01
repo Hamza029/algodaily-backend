@@ -170,12 +170,12 @@ describe('AuthController.updateMyPassword', () => {
       newPassword: '5678',
     },
     user: {
-      Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
-      Username: 'a',
-      Name: 'a',
-      Email: 'a@gmail.com',
-      Role: UserRoles.USER,
-      JoinDate: new Date(),
+      id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+      username: 'a',
+      name: 'a',
+      email: 'a@gmail.com',
+      role: UserRoles.USER,
+      joinDate: new Date(),
     },
   };
   const mockResponse: Partial<Response> = {};

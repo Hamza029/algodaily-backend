@@ -200,12 +200,12 @@ describe('blogService.createBlog', () => {
   });
 
   const mockUser: IUser = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   const blogInput: IBlogInput = {
@@ -216,7 +216,7 @@ describe('blogService.createBlog', () => {
   const blogDbInput: IBlogDbInput = {
     ...blogInput,
     authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
-    authorUsername: mockUser.Username,
+    authorUsername: mockUser.username,
   };
 
   it('should create a blog', async () => {

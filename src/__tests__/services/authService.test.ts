@@ -63,10 +63,10 @@ describe('AuthService.signup', () => {
   });
 
   const mockUserInput: IUserInput = {
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Password: '1234',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    password: '1234',
   };
 
   it('should resolve successfully without any error', async () => {
@@ -82,24 +82,24 @@ describe('AuthService.login', () => {
   });
 
   const mockAuthInput: IAuthInput = {
-    Username: 'a',
-    Password: '1234',
+    username: 'a',
+    password: '1234',
   };
 
   const mockAuth: IAuth = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
-    Username: 'a',
-    Password: 'hashed',
-    PasswordModifiedAt: new Date(),
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    password: 'hashed',
+    passwordModifiedAt: new Date(),
   };
 
   const mockUser: IUser = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   const mockToken: string = 'Bearer jwt_token_demo';
@@ -159,12 +159,12 @@ describe('AuthService.updateMyPassword', () => {
   });
 
   const mockUser: IUser = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   const mockReqBody: IUpdatePasswordInput = {
@@ -173,10 +173,10 @@ describe('AuthService.updateMyPassword', () => {
   };
 
   const mockAuth: IAuth = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
-    Username: 'a',
-    Password: 'hashed_old_password',
-    PasswordModifiedAt: new Date(),
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    password: 'hashed_old_password',
+    passwordModifiedAt: new Date(),
   };
 
   const mockNewHashedPassword: string = 'hashed_new_password';

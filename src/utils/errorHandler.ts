@@ -12,10 +12,10 @@ const sendError = (err: AppError, req: Request, res: Response): void => {
 
   if (err.isOperational) {
     // operational error
-    sendResponse(req, res, err.statusCode, `${err.status}: ${err.message}`);
+    sendResponse(req, res, err.statusCode, err.message);
   } else {
     // programming error
-    sendResponse(req, res, err.statusCode, 'error: something went wrong');
+    sendResponse(req, res, err.statusCode, 'Something went wrong');
   }
 };
 

@@ -41,10 +41,10 @@ describe('userController.getAllUsers', () => {
   it('should return list of users with status 200', async () => {
     const mockUsersResponse: IUserResponse[] = [
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-        Username: 'a',
-        Name: 'a',
-        Email: 'a@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        username: 'a',
+        name: 'a',
+        email: 'a@gmail.com',
         _links: {
           self: {
             href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -61,10 +61,10 @@ describe('userController.getAllUsers', () => {
         },
       },
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
-        Username: 'b',
-        Name: 'b',
-        Email: 'b@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
+        username: 'b',
+        name: 'b',
+        email: 'b@gmail.com',
         _links: {
           self: {
             href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -150,10 +150,10 @@ describe('userController.getAllUsers', () => {
 
     const mockUsersResponse: IUserResponse[] = [
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-        Username: 'a',
-        Name: 'a',
-        Email: 'a@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        username: 'a',
+        name: 'a',
+        email: 'a@gmail.com',
         _links: {
           self: {
             href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -170,10 +170,10 @@ describe('userController.getAllUsers', () => {
         },
       },
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
-        Username: 'b',
-        Name: 'b',
-        Email: 'b@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
+        username: 'b',
+        name: 'b',
+        email: 'b@gmail.com',
         _links: {
           self: {
             href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -235,10 +235,10 @@ describe('userController.getUserById', () => {
 
   it('should return a user with status 200', async () => {
     const mockUserResponse: IUserResponse = {
-      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-      Name: 'a',
-      Username: 'a',
-      Email: 'a@gmail.com',
+      id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+      name: 'a',
+      username: 'a',
+      email: 'a@gmail.com',
       _links: {
         self: {
           href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -315,12 +315,12 @@ describe('userController.getUserById', () => {
 
 describe('userController.deleteUserById', () => {
   const mockUser: IUser = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   const mockRequest: Partial<IProtectedRequest> = {
@@ -389,12 +389,12 @@ describe('userController.deleteUserById', () => {
 
 describe('userController.updateUserById', () => {
   const mockUser: IUser = {
-    Id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   const mockRequest: Partial<IProtectedRequest> = {
@@ -415,10 +415,10 @@ describe('userController.updateUserById', () => {
 
   it('should update user with status 200', async () => {
     const userUpdateResponseDTO: IUserResponse = {
-      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-      Username: mockUser.Username,
-      Email: mockUser.Email,
-      Name: mockRequest.body!.Name,
+      id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+      username: mockUser.username,
+      email: mockUser.email,
+      name: mockRequest.body!.name,
       _links: {
         self: {
           href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -446,10 +446,10 @@ describe('userController.updateUserById', () => {
     );
 
     const updatedUser: IUserResponse = {
-      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-      Name: mockRequest.body.Name,
-      Email: mockUser.Email,
-      Username: mockUser.Username,
+      id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+      name: mockRequest.body.name,
+      email: mockUser.email,
+      username: mockUser.username,
       _links: {
         self: {
           href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',

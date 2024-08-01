@@ -34,29 +34,29 @@ describe('userService.getAllUsers', () => {
 
     const mockUsers: IUser[] = [
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-        Username: 'a',
-        Name: 'a',
-        Email: 'a@gmail.com',
-        Role: UserRoles.USER,
-        JoinDate: new Date(),
+        id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        username: 'a',
+        name: 'a',
+        email: 'a@gmail.com',
+        role: UserRoles.USER,
+        joinDate: new Date(),
       },
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
-        Username: 'b',
-        Name: 'b',
-        Email: 'b@gmail.com',
-        Role: UserRoles.USER,
-        JoinDate: new Date(),
+        id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
+        username: 'b',
+        name: 'b',
+        email: 'b@gmail.com',
+        role: UserRoles.USER,
+        joinDate: new Date(),
       },
     ];
 
     const mockUsersResponseDTO: IUserResponse[] = [
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-        Username: 'a',
-        Name: 'a',
-        Email: 'a@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        username: 'a',
+        name: 'a',
+        email: 'a@gmail.com',
         _links: {
           self: {
             href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -73,10 +73,10 @@ describe('userService.getAllUsers', () => {
         },
       },
       {
-        Id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
-        Username: 'b',
-        Name: 'b',
-        Email: 'b@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
+        username: 'b',
+        name: 'b',
+        email: 'b@gmail.com',
         _links: {
           self: {
             href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -125,19 +125,19 @@ describe('userService.getUserById', () => {
 
   it('should return a user', async () => {
     const mockUser: IUser = {
-      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-      Username: 'a',
-      Name: 'a',
-      Email: 'a@gmail.com',
-      Role: UserRoles.USER,
-      JoinDate: new Date(),
+      id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+      username: 'a',
+      name: 'a',
+      email: 'a@gmail.com',
+      role: UserRoles.USER,
+      joinDate: new Date(),
     };
 
     const mockUserResponseDTO: IUserResponse = {
-      Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-      Username: 'a',
-      Name: 'a',
-      Email: 'a@gmail.com',
+      id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+      username: 'a',
+      name: 'a',
+      email: 'a@gmail.com',
       _links: {
         self: {
           href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -180,12 +180,12 @@ describe('userService.deleteUserById', () => {
   const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   afterEach(() => {
@@ -221,23 +221,23 @@ describe('userService.updateUserById', () => {
   const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   const mockUserUpdateInput: IUserUpdateInput = {
-    Name: 'c',
+    name: 'c',
   };
 
   const mockUserResponseDTO: IUserResponse = {
-    Id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
-    Name: 'c',
-    Username: 'a',
-    Email: 'a@gmail.com',
+    id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    name: 'c',
+    username: 'a',
+    email: 'a@gmail.com',
     _links: {
       self: {
         href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
