@@ -10,7 +10,7 @@ import {
   ICommentDBInput,
   ICommentInput,
   ICommentResponse,
-  ILike,
+  ILikeResponse,
   IUser,
 } from '../interfaces';
 import blogRepository from '../repository/blogRepository';
@@ -37,7 +37,7 @@ const getAllBlogs = async (
     ? blogRepository.getAllBlogs(skip, limit, search)
     : blogRepository.getBlogsByAuthorId(authorId, skip, limit, search));
 
-  const likes: Array<ILike[]> = [];
+  const likes: Array<ILikeResponse[]> = [];
   const comments: Array<ICommentResponse[]> = [];
 
   for (let i = 0; i < blogs.length; i++) {

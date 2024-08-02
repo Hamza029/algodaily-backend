@@ -3,3 +3,7 @@ export interface ILike {
   blogId: string;
   userId: string;
 }
+
+export interface ILikeResponse {
+  username: string;
+}

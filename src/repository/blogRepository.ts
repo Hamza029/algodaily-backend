@@ -7,6 +7,7 @@ import {
   ICommentDBInput,
   ICommentResponse,
   ILike,
+  ILikeResponse,
   IUser,
 } from '../interfaces';
 
@@ -20,6 +21,7 @@ const getAllBlogs = async (
       `Blog.title like "%${search}%" or Blog.description like "%${search}%"`
     )
     .select('*')
+    .orderBy('createdAt', 'desc')
     .offset(skip)
     .limit(limit);
 
@@ -45,6 +47,7 @@ const getBlogsByAuthorId = async (
       `authorId="${authorId}" and (Blog.title like "%${search}%" or Blog.description like "%${search}%")`
     )
     .select('*')
+    .orderBy('createdAt', 'desc')
     .offset(skip)
     .limit(limit);
 
@@ -66,8 +69,11 @@ const updateBlogById = async (
   await db<IBlog>('Blog').where('id', '=', id).update(blogUpdateDbInput);
 };
 
-const getLikesByBlogId = async (blogId: string): Promise<ILike[]> => {
-  const likes = await db<ILike>('Like').where({ blogId: blogId }).select('*');
+const getLikesByBlogId = async (blogId: string): Promise<ILikeResponse[]> => {
+  const likes = await db<ILike>('Like')
+    .where({ blogId: blogId })
+    .join<IUser>('User', 'Like.userId', 'User.id')
+    .select('Like.id', 'userId', 'blogId', 'username');
   return likes;
 };
 

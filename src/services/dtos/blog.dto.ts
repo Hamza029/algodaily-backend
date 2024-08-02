@@ -7,7 +7,7 @@ import {
   IBlogUpdateDbInput,
   IBlogUpdateInput,
   ICommentResponse,
-  ILike,
+  ILikeResponse,
   IUser,
 } from '../../interfaces';
 
@@ -31,16 +31,22 @@ export class BlogResponseDTO implements IBlogResponse {
   title: string;
   description: string;
   authorUsername: string;
-  likes: ILike[];
+  likes: ILikeResponse[];
   comments: ICommentResponse[];
+  createdAt: Date;
   _links: HATEOAS_Types;
 
-  constructor(blog: IBlog, likes: ILike[], comments: ICommentResponse[]) {
+  constructor(
+    blog: IBlog,
+    likes: ILikeResponse[],
+    comments: ICommentResponse[]
+  ) {
     this.id = blog.id;
     this.authorId = blog.authorId;
     this.title = blog.title;
     this.description = blog.description;
     this.authorUsername = blog.authorUsername;
+    this.createdAt = blog.createdAt;
     this.likes = likes;
     this.comments = comments;
     this._links = {

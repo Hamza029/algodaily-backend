@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('title').notNullable();
     table.text('description').notNullable();
     table.string('authorUsername').notNullable();
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
 
     table
       .foreign('authorId')

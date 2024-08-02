@@ -30,7 +30,7 @@ export { IBlogQueryParams, IUserQueryParams } from './queryParams';
 
 export { HATEOAS_Types } from './hateoas';
 
-export { ILike } from './like';
+export { ILike, ILikeResponse } from './like';
 
 export {
   IComment,

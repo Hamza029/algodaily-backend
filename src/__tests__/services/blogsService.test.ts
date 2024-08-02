@@ -34,6 +34,7 @@ const mockBlogs: IBlog[] = [
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
   },
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -41,6 +42,7 @@ const mockBlogs: IBlog[] = [
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
   },
 ];
 
@@ -53,6 +55,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     authorUsername: 'userA',
     likes: [],
     comments: [],
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -74,6 +77,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     title: 'B',
     description: 'B',
     authorUsername: 'userB',
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
     likes: [],
     comments: [],
     _links: {
@@ -251,6 +255,7 @@ describe('blogService.updateBlogById', () => {
     title: 'C',
     description: 'C',
     authorUsername: mockBlogs[0].authorUsername,
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
   };
 
   const mockUpdatedBlogResponse: IBlogResponse = {
