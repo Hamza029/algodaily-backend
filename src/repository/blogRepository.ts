@@ -117,6 +117,27 @@ const createComment = async (
   await db<IComment>('Comment').insert(commentDbInput);
 };
 
+const getTotalBlogsCount = async (search: string): Promise<number> => {
+  const [totalBlogs] = await db<IBlog>('Blog')
+    .count('id', { as: 'cnt' })
+    .whereRaw(
+      `Blog.title like "%${search}%" or Blog.description like "%${search}%"`
+    );
+  return Number(totalBlogs.cnt);
+};
+
+const getTotalBlogsCountByAuthorId = async (
+  authorId: string,
+  search: string
+): Promise<number> => {
+  const [totalBlogs] = await db<IBlog>('Blog')
+    .count('id', { as: 'cnt' })
+    .whereRaw(
+      `authorId="${authorId}" and (Blog.title like "%${search}%" or Blog.description like "%${search}%")`
+    );
+  return Number(totalBlogs.cnt);
+};
+
 export default {
   getAllBlogs,
   getBlogById,
@@ -129,4 +150,6 @@ export default {
   unlikeBlogByBlogId,
   createComment,
   getCommentsByBlogId,
+  getTotalBlogsCount,
+  getTotalBlogsCountByAuthorId,
 };

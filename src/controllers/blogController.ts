@@ -1,4 +1,4 @@
-import { IBlogResponse } from './../interfaces/blog';
+import { IBlogResponse, IBlogResponseList } from './../interfaces/blog';
 import { Request, Response, NextFunction } from 'express';
 import blogService from '../services/blogService';
 import sendResponse from '../utils/sendResponse';
@@ -13,9 +13,9 @@ const getAllBlogs = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const blogs: IBlogResponse[] = await blogService.getAllBlogs(req.query);
+    const blogs: IBlogResponseList = await blogService.getAllBlogs(req.query);
 
-    sendResponse<IBlogResponse[]>(
+    sendResponse<IBlogResponseList>(
       req,
       res,
       HTTPStatusCode.Ok,
@@ -143,12 +143,7 @@ const unlikeBlogByBlogId = async (
   try {
     const { id } = req.params;
     await blogService.unlikeBlogByBlogId(id, req.user!);
-    sendResponse(
-      req,
-      res,
-      HTTPStatusCode.Created,
-      'Successfully liked the blog'
-    );
+    sendResponse(req, res, HTTPStatusCode.Ok, 'Successfully unliked the blog');
   } catch (err) {
     next(err);
   }

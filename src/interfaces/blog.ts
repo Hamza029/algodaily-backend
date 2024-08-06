@@ -33,3 +33,8 @@ export interface IBlogUpdateInput
 
 export interface IBlogUpdateDbInput
   extends Pick<IBlogAttributes, 'title' | 'description'> {}
+
+export interface IBlogResponseList {
+  totalPages: number;
+  blogs: IBlogResponse[];
+}

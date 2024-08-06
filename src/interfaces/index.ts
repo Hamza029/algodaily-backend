@@ -24,6 +24,7 @@ export {
   IBlogResponse,
   IBlogUpdateInput,
   IBlogUpdateDbInput,
+  IBlogResponseList,
 } from './blog';
 
 export { IBlogQueryParams, IUserQueryParams } from './queryParams';

@@ -5,6 +5,7 @@ import {
   IBlogInput,
   IBlogQueryParams,
   IBlogResponse,
+  IBlogResponseList,
   IBlogUpdateDbInput,
   IBlogUpdateInput,
   ICommentDBInput,
@@ -24,7 +25,7 @@ import { CommentDbInputDTO } from './dtos/comment.dto';
 
 const getAllBlogs = async (
   queryParams: IBlogQueryParams
-): Promise<IBlogResponse[]> => {
+): Promise<IBlogResponseList> => {
   const { authorId } = queryParams;
 
   const page: number = Number(queryParams.page) || 1;
@@ -49,7 +50,16 @@ const getAllBlogs = async (
     return new BlogResponseDTO(blog, likes[index], comments[index]);
   });
 
-  return blogsResponseDTO;
+  const totalBlogs = await (!authorId
+    ? blogRepository.getTotalBlogsCount(search)
+    : blogRepository.getTotalBlogsCountByAuthorId(authorId, search));
+
+  const responseList: IBlogResponseList = {
+    totalPages: Math.ceil(totalBlogs / limit),
+    blogs: blogsResponseDTO,
+  };
+
+  return responseList;
 };
 
 const getBlogById = async (id: string): Promise<IBlogResponse> => {

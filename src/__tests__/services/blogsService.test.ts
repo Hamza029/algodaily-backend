@@ -4,7 +4,9 @@ import {
   IBlogDbInput,
   IBlogInput,
   IBlogResponse,
+  IBlogResponseList,
   IBlogUpdateInput,
+  ICommentInput,
   IUser,
 } from '../../interfaces';
 import blogService from '../../services/blogService';
@@ -23,6 +25,11 @@ jest.mock('./../../repository/blogRepository', () => {
       getBlogsByAuthorId: jest.fn(),
       getLikesByBlogId: jest.fn(),
       getCommentsByBlogId: jest.fn(),
+      getTotalBlogsCount: jest.fn(),
+      getTotalBlogsCountByAuthorId: jest.fn(),
+      createComment: jest.fn(),
+      likeBlogByBlogId: jest.fn(),
+      unlikeBlogByBlogId: jest.fn(),
     },
   };
 });
@@ -97,6 +104,11 @@ const mockBlogsResponse: IBlogResponse[] = [
   },
 ];
 
+const mockBlogsResponseList: IBlogResponseList = {
+  totalPages: 3,
+  blogs: mockBlogsResponse,
+};
+
 describe('blogService.getAllBlogs', () => {
   afterEach(() => {
     jest.resetAllMocks();
@@ -113,11 +125,12 @@ describe('blogService.getAllBlogs', () => {
     };
 
     (blogRepository.getAllBlogs as jest.Mock).mockResolvedValueOnce(mockBlogs);
+    (blogRepository.getTotalBlogsCount as jest.Mock).mockResolvedValueOnce(29);
 
-    const blogsResponse: IBlogResponse[] =
+    const blogsResponse: IBlogResponseList =
       await blogService.getAllBlogs(queryParams);
 
-    expect(blogsResponse).toEqual(mockBlogsResponse);
+    expect(blogsResponse).toEqual(mockBlogsResponseList);
   });
 
   it('should return list of blogs of page 1', async () => {
@@ -126,11 +139,12 @@ describe('blogService.getAllBlogs', () => {
     };
 
     (blogRepository.getAllBlogs as jest.Mock).mockResolvedValueOnce(mockBlogs);
+    (blogRepository.getTotalBlogsCount as jest.Mock).mockResolvedValueOnce(29);
 
-    const blogsResponse: IBlogResponse[] =
+    const blogsResponse: IBlogResponseList =
       await blogService.getAllBlogs(queryParams);
 
-    expect(blogsResponse).toEqual(mockBlogsResponse);
+    expect(blogsResponse).toEqual(mockBlogsResponseList);
   });
 
   it('should return list of blogs for particular author', async () => {
@@ -142,11 +156,14 @@ describe('blogService.getAllBlogs', () => {
     (blogRepository.getBlogsByAuthorId as jest.Mock).mockResolvedValueOnce(
       mockBlogs
     );
+    (
+      blogRepository.getTotalBlogsCountByAuthorId as jest.Mock
+    ).mockResolvedValueOnce(29);
 
-    const blogsResponse: IBlogResponse[] =
+    const blogsResponse: IBlogResponseList =
       await blogService.getAllBlogs(queryParams);
 
-    expect(blogsResponse).toEqual(mockBlogsResponse);
+    expect(blogsResponse).toEqual(mockBlogsResponseList);
   });
 
   it('should throw error', async () => {
@@ -323,6 +340,84 @@ describe('blogService.deleteBlogById', () => {
 
     await expect(blogService.deleteBlogById(id)).rejects.toThrow(
       new AppError("This blog doesn't exist", HTTPStatusCode.NotFound)
+    );
+  });
+});
+
+describe('blogService.createComment', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const mockUser: IUser = {
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
+  };
+
+  const commentInput: ICommentInput = {
+    content: 'This is a comment',
+  };
+
+  it('should create a comment', async () => {
+    await blogService.createComment(commentInput, mockBlogs[0].id, mockUser);
+
+    expect(blogRepository.createComment).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('blogService.likeBlogByBlogId', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const mockUser: IUser = {
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
+  };
+
+  it('should like a blog successfully', async () => {
+    await blogService.likeBlogByBlogId(mockBlogs[0].id, mockUser);
+
+    expect(blogRepository.likeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogRepository.likeBlogByBlogId).toHaveBeenCalledWith(
+      mockBlogs[0].id,
+      mockUser.id
+    );
+  });
+
+  it('should unlike a blog successfully', async () => {
+    (blogRepository.unlikeBlogByBlogId as jest.Mock).mockResolvedValueOnce(1);
+
+    await blogService.unlikeBlogByBlogId(mockBlogs[0].id, mockUser);
+
+    expect(blogRepository.unlikeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogRepository.unlikeBlogByBlogId).toHaveBeenCalledWith(
+      mockBlogs[0].id,
+      mockUser.id
+    );
+  });
+
+  it('should throw an error', async () => {
+    (blogRepository.unlikeBlogByBlogId as jest.Mock).mockResolvedValueOnce(0);
+
+    await expect(
+      blogService.unlikeBlogByBlogId(mockBlogs[0].id, mockUser)
+    ).rejects.toThrow(
+      new AppError("You haven't liked this blog", HTTPStatusCode.NotFound)
+    );
+
+    expect(blogRepository.unlikeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogRepository.unlikeBlogByBlogId).toHaveBeenCalledWith(
+      mockBlogs[0].id,
+      mockUser.id
     );
   });
 });

@@ -15,6 +15,9 @@ jest.mock('./../../services/blogService', () => {
       createBlog: jest.fn(),
       deleteBlogById: jest.fn(),
       updateBlogById: jest.fn(),
+      likeBlogByBlogId: jest.fn(),
+      unlikeBlogByBlogId: jest.fn(),
+      createComment: jest.fn(),
     },
   };
 });
@@ -444,5 +447,216 @@ describe('BlogController.deleteBlogById', () => {
 
     expect(mockNext).toHaveBeenCalledWith(mockNoBlogFoundError);
     expect(mockNext).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('BlogController.likeBlogByBlogId', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const mockRequest: Partial<IProtectedRequest> = {
+    params: {
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    },
+    user: {
+      ...mockUser,
+    },
+  };
+  const mockResponse: Partial<Response> = {};
+  const mockNext: jest.Mock = jest.fn();
+
+  it('should like a blog successfully', async () => {
+    await blogController.likeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      HTTPStatusCode.Created,
+      'Successfully liked the blog'
+    );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should send already liked blog error', async () => {
+    (blogService.likeBlogByBlogId as jest.Mock).mockRejectedValueOnce({
+      code: 'ER_DUP_ENTRY',
+    });
+
+    await blogController.likeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('You have already liked this blog', HTTPStatusCode.Conflict)
+    );
+  });
+
+  it('should send "something went wrong" error', async () => {
+    (blogService.likeBlogByBlogId as jest.Mock).mockRejectedValueOnce(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+
+    await blogController.likeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+  });
+
+  it('should unlike a blog successfully', async () => {
+    await blogController.unlikeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      HTTPStatusCode.Ok,
+      'Successfully unliked the blog'
+    );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should send "something went wrong" error', async () => {
+    (blogService.unlikeBlogByBlogId as jest.Mock).mockRejectedValueOnce(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+
+    await blogController.unlikeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+  });
+});
+
+describe('BlogController.likeBlogByBlogId', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const mockRequest: Partial<IProtectedRequest> = {
+    params: {
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    },
+    user: {
+      ...mockUser,
+    },
+    body: {
+      content: 'this is a comment',
+    },
+  };
+  const mockResponse: Partial<Response> = {};
+  const mockNext: jest.Mock = jest.fn();
+
+  it('should create a comment successfully', async () => {
+    await blogController.createComment(
+      mockRequest as IProtectedRequest,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.createComment).toHaveBeenCalledTimes(1);
+    expect(blogService.createComment).toHaveBeenCalledWith(
+      mockRequest.body,
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      HTTPStatusCode.Created,
+      'Successfylly added your comment'
+    );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should send "something went wrong" error', async () => {
+    (blogService.createComment as jest.Mock).mockRejectedValueOnce(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+
+    await blogController.createComment(
+      mockRequest as IProtectedRequest,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.createComment).toHaveBeenCalledTimes(1);
+    expect(blogService.createComment).toHaveBeenCalledWith(
+      mockRequest.body,
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
   });
 });
