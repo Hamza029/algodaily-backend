@@ -18,7 +18,7 @@ const getAllBlogs = async (
 ): Promise<IBlog[]> => {
   const blogs: IBlog[] = await db<IBlog>('Blog')
     .whereRaw(
-      `Blog.title like "%${search}%" or Blog.description like "%${search}%"`
+      `Blog.title like "%${search}%" or Blog.description like "%${search}%" or Blog.authorUsername like "%${search}%"`
     )
     .select('*')
     .orderBy('createdAt', 'desc')
@@ -44,7 +44,7 @@ const getBlogsByAuthorId = async (
 ): Promise<IBlog[]> => {
   const blogs: IBlog[] = await db<IBlog>('Blog')
     .whereRaw(
-      `authorId="${authorId}" and (Blog.title like "%${search}%" or Blog.description like "%${search}%")`
+      `authorId="${authorId}" and (Blog.title like "%${search}%" or Blog.description like "%${search}%" or Blog.authorUsername like "%${search}%")`
     )
     .select('*')
     .orderBy('createdAt', 'desc')
