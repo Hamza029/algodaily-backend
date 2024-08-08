@@ -34,7 +34,13 @@ const handleJWTError = (): AppError => {
 };
 
 const handleDuplicateFieldsDB = (err: KnexError): AppError => {
-  const message = err.sqlMessage.split(' for ')[0].trim();
+  let message;
+
+  if (err.sqlMessage.search('user.user_email_unique') !== -1) {
+    message = 'This email is already associated with an account';
+  } else {
+    message = 'Username is already taken';
+  }
 
   return new AppError(message, HTTPStatusCode.BadRequest);
 };

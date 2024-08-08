@@ -106,7 +106,7 @@ const getCommentsByBlogId = async (blogId: string) => {
       'username',
       'content'
     )
-    .orderBy('createdAt');
+    .orderBy('createdAt', 'desc');
 
   return comments;
 };
