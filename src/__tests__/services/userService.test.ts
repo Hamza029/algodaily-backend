@@ -34,33 +34,63 @@ describe('userService.getAllUsers', () => {
 
     const mockUsers: IUser[] = [
       {
-        Id: 1,
-        Username: 'a',
-        Name: 'a',
-        Email: 'a@gmail.com',
-        Role: UserRoles.USER,
-        JoinDate: new Date(),
+        id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        username: 'a',
+        name: 'a',
+        email: 'a@gmail.com',
+        role: UserRoles.USER,
+        joinDate: new Date(),
       },
       {
-        Id: 2,
-        Username: 'b',
-        Name: 'b',
-        Email: 'b@gmail.com',
-        Role: UserRoles.USER,
-        JoinDate: new Date(),
+        id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
+        username: 'b',
+        name: 'b',
+        email: 'b@gmail.com',
+        role: UserRoles.USER,
+        joinDate: new Date(),
       },
     ];
 
     const mockUsersResponseDTO: IUserResponse[] = [
       {
-        Username: 'a',
-        Name: 'a',
-        Email: 'a@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        username: 'a',
+        name: 'a',
+        email: 'a@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+            method: 'DELETE',
+          },
+        },
       },
       {
-        Username: 'b',
-        Name: 'b',
-        Email: 'b@gmail.com',
+        id: 'ab32bd7f-376b-11ef-bf41-088fc319abcd',
+        username: 'b',
+        name: 'b',
+        email: 'b@gmail.com',
+        _links: {
+          self: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'GET',
+          },
+          update: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'PATCH',
+          },
+          delete: {
+            href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc319abcd',
+            method: 'DELETE',
+          },
+        },
       },
     ];
 
@@ -87,7 +117,7 @@ describe('userService.getAllUsers', () => {
 });
 
 describe('userService.getUserById', () => {
-  const id: number = 3;
+  const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -95,18 +125,33 @@ describe('userService.getUserById', () => {
 
   it('should return a user', async () => {
     const mockUser: IUser = {
-      Id: 1,
-      Username: 'a',
-      Name: 'a',
-      Email: 'a@gmail.com',
-      Role: UserRoles.USER,
-      JoinDate: new Date(),
+      id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+      username: 'a',
+      name: 'a',
+      email: 'a@gmail.com',
+      role: UserRoles.USER,
+      joinDate: new Date(),
     };
 
     const mockUserResponseDTO: IUserResponse = {
-      Username: 'a',
-      Name: 'a',
-      Email: 'a@gmail.com',
+      id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+      username: 'a',
+      name: 'a',
+      email: 'a@gmail.com',
+      _links: {
+        self: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'GET',
+        },
+        update: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'PATCH',
+        },
+        delete: {
+          href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+          method: 'DELETE',
+        },
+      },
     };
 
     (userRepository.getUserById as jest.Mock).mockResolvedValueOnce(mockUser);
@@ -132,15 +177,15 @@ describe('userService.getUserById', () => {
 });
 
 describe('userService.deleteUserById', () => {
-  const id: number = 3;
+  const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 3,
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   afterEach(() => {
@@ -173,25 +218,40 @@ describe('userService.deleteUserById', () => {
 });
 
 describe('userService.updateUserById', () => {
-  const id: number = 3;
+  const id: string = 'ab32bd7f-376b-11ef-bf41-088fc3196e05';
 
   const mockUser: IUser = {
-    Id: 3,
-    Username: 'a',
-    Name: 'a',
-    Email: 'a@gmail.com',
-    Role: UserRoles.USER,
-    JoinDate: new Date(),
+    id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    username: 'a',
+    name: 'a',
+    email: 'a@gmail.com',
+    role: UserRoles.USER,
+    joinDate: new Date(),
   };
 
   const mockUserUpdateInput: IUserUpdateInput = {
-    Name: 'b',
+    name: 'c',
   };
 
   const mockUserResponseDTO: IUserResponse = {
-    Name: 'b',
-    Username: 'a',
-    Email: 'a@gmail.com',
+    id: 'ab32bd7f-376b-11ef-bf41-088fc3196e05',
+    name: 'c',
+    username: 'a',
+    email: 'a@gmail.com',
+    _links: {
+      self: {
+        href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/ab32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'DELETE',
+      },
+    },
   };
 
   it('should update a user', async () => {

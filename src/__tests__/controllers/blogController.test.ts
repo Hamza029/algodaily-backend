@@ -15,6 +15,9 @@ jest.mock('./../../services/blogService', () => {
       createBlog: jest.fn(),
       deleteBlogById: jest.fn(),
       updateBlogById: jest.fn(),
+      likeBlogByBlogId: jest.fn(),
+      unlikeBlogByBlogId: jest.fn(),
+      createComment: jest.fn(),
     },
   };
 });
@@ -28,28 +31,62 @@ jest.mock('./../../utils/sendResponse', () => {
 
 const mockBlogsResponse: IBlogResponse[] = [
   {
-    id: 1,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
     title: 'A',
     description: 'A',
-    authorName: 'userA',
     authorUsername: 'userA',
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
+    likes: [],
+    comments: [],
+    _links: {
+      self: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'DELETE',
+      },
+    },
   },
   {
-    id: 2,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
     title: 'B',
     description: 'B',
-    authorName: 'userB',
     authorUsername: 'userB',
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
+    likes: [],
+    comments: [],
+    _links: {
+      self: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
+        method: 'DELETE',
+      },
+    },
   },
 ];
 
 const mockUser: IUser = {
-  Id: 1,
-  Username: 'userA',
-  Name: 'userA',
-  Email: 'a@gmail.com',
-  Role: UserRoles.USER,
-  JoinDate: new Date(),
+  id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+  username: 'userA',
+  name: 'userA',
+  email: 'a@gmail.com',
+  role: UserRoles.USER,
+  joinDate: new Date(),
 };
 
 const mockError = new AppError('Test Error', HTTPStatusCode.NotImplemented);
@@ -121,7 +158,7 @@ describe('BlogController.getBlogById', () => {
 
   const mockRequest: Partial<Request> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     },
   };
   const mockResponse: Partial<Response> = {};
@@ -140,7 +177,7 @@ describe('BlogController.getBlogById', () => {
 
     expect(blogService.getBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.getBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
     expect(blogService.getBlogById).toHaveReturnedWith(
       Promise.resolve(mockBlogsResponse[0])
@@ -175,7 +212,7 @@ describe('BlogController.getBlogById', () => {
 
     expect(blogService.getBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.getBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).not.toHaveBeenCalled();
@@ -192,7 +229,7 @@ describe('BlogController.updateBlogById', () => {
 
   const mockRequest: Partial<IProtectedRequest> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
     },
     body: {
       title: 'C',
@@ -203,11 +240,28 @@ describe('BlogController.updateBlogById', () => {
   const mockNext: jest.Mock = jest.fn();
 
   const mockUpdatedBlogResponse: IBlogResponse = {
-    id: 1,
+    id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    authorId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
     title: 'C',
     description: 'C',
-    authorName: mockBlogsResponse[0].authorName,
+    likes: [],
+    comments: [],
     authorUsername: mockBlogsResponse[0].authorUsername,
+    createdAt: new Date('2024-08-02T04:55:06.000Z'),
+    _links: {
+      self: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'GET',
+      },
+      update: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'PATCH',
+      },
+      delete: {
+        href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
+        method: 'DELETE',
+      },
+    },
   };
 
   it('should send response for a successful update', async () => {
@@ -223,7 +277,7 @@ describe('BlogController.updateBlogById', () => {
 
     expect(blogService.updateBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.updateBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id),
+      mockRequest.params!.id,
       mockRequest.body
     );
     expect(blogService.updateBlogById).toHaveReturnedWith(
@@ -259,7 +313,7 @@ describe('BlogController.updateBlogById', () => {
 
     expect(blogService.updateBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.updateBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id),
+      mockRequest.params!.id,
       mockRequest.body
     );
 
@@ -339,7 +393,7 @@ describe('BlogController.deleteBlogById', () => {
 
   const mockRequest: Partial<IProtectedRequest> = {
     params: {
-      id: '1',
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
     },
   };
   const mockResponse: Partial<Response> = {};
@@ -354,7 +408,7 @@ describe('BlogController.deleteBlogById', () => {
 
     expect(blogService.deleteBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.deleteBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).toHaveBeenCalledWith(
@@ -386,12 +440,223 @@ describe('BlogController.deleteBlogById', () => {
 
     expect(blogService.deleteBlogById).toHaveBeenCalledTimes(1);
     expect(blogService.deleteBlogById).toHaveBeenCalledWith(
-      Number(mockRequest.params!.id)
+      mockRequest.params!.id
     );
 
     expect(sendResponse).not.toHaveBeenCalled();
 
     expect(mockNext).toHaveBeenCalledWith(mockNoBlogFoundError);
     expect(mockNext).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('BlogController.likeBlogByBlogId', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const mockRequest: Partial<IProtectedRequest> = {
+    params: {
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    },
+    user: {
+      ...mockUser,
+    },
+  };
+  const mockResponse: Partial<Response> = {};
+  const mockNext: jest.Mock = jest.fn();
+
+  it('should like a blog successfully', async () => {
+    await blogController.likeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      HTTPStatusCode.Created,
+      'Successfully liked the blog'
+    );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should send already liked blog error', async () => {
+    (blogService.likeBlogByBlogId as jest.Mock).mockRejectedValueOnce({
+      code: 'ER_DUP_ENTRY',
+    });
+
+    await blogController.likeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('You have already liked this blog', HTTPStatusCode.Conflict)
+    );
+  });
+
+  it('should send "something went wrong" error', async () => {
+    (blogService.likeBlogByBlogId as jest.Mock).mockRejectedValueOnce(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+
+    await blogController.likeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.likeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+  });
+
+  it('should unlike a blog successfully', async () => {
+    await blogController.unlikeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      HTTPStatusCode.Ok,
+      'Successfully unliked the blog'
+    );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should send "something went wrong" error', async () => {
+    (blogService.unlikeBlogByBlogId as jest.Mock).mockRejectedValueOnce(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+
+    await blogController.unlikeBlogByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledTimes(1);
+    expect(blogService.unlikeBlogByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+  });
+});
+
+describe('BlogController.likeBlogByBlogId', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const mockRequest: Partial<IProtectedRequest> = {
+    params: {
+      id: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    },
+    user: {
+      ...mockUser,
+    },
+    body: {
+      content: 'this is a comment',
+    },
+  };
+  const mockResponse: Partial<Response> = {};
+  const mockNext: jest.Mock = jest.fn();
+
+  it('should create a comment successfully', async () => {
+    await blogController.createComment(
+      mockRequest as IProtectedRequest,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.createComment).toHaveBeenCalledTimes(1);
+    expect(blogService.createComment).toHaveBeenCalledWith(
+      mockRequest.body,
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      mockRequest,
+      mockResponse,
+      HTTPStatusCode.Created,
+      'Successfylly added your comment'
+    );
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should send "something went wrong" error', async () => {
+    (blogService.createComment as jest.Mock).mockRejectedValueOnce(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+
+    await blogController.createComment(
+      mockRequest as IProtectedRequest,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(blogService.createComment).toHaveBeenCalledTimes(1);
+    expect(blogService.createComment).toHaveBeenCalledWith(
+      mockRequest.body,
+      mockRequest.params!.id,
+      mockRequest.user
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(
+      new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
   });
 });

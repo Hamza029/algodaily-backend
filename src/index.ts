@@ -8,17 +8,16 @@ import { conf } from './config/conf';
 import errorHandler from './utils/errorHandler';
 import AppError from './utils/appError';
 import { HTTPStatusCode } from './constants';
+import cors from 'cors';
 
 const app: Express = express();
 const port: number = Number(conf.PORT) || 3500;
 
+app.use(cors());
+
 if (conf.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
-app.get('/', (req: Request, res: Response, _next: NextFunction) => {
-  res.status(200).send('Hello');
-});
 
 app.use(express.json({ limit: '50kb' }));
 

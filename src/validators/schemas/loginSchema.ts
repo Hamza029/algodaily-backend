@@ -2,6 +2,16 @@ import Joi from 'joi';
 import { IAuthInput } from '../../interfaces';
 
 export default Joi.object<IAuthInput>({
-  Username: Joi.string().alphanum().required(),
-  Password: Joi.string().required(),
+  username: Joi.string()
+    .alphanum()
+    .required()
+    .messages({
+      'string.alphanum': 'Username must only contain alphanumeric characters',
+      'any.required': 'Username is required'
+    }),
+  password: Joi.string()
+    .required()
+    .messages({
+      'any.required': 'Password is required'
+    })
 });

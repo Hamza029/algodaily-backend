@@ -27,17 +27,17 @@ const getAllUsers = async (
   return usersResponseDTO;
 };
 
-const deleteUserById = async (id: number): Promise<void> => {
+const deleteUserById = async (id: string): Promise<void> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
     throw new AppError('User not found', HTTPStatusCode.NotFound);
   }
 
-  await userRepository.deleteUserById(id, user.Username);
+  await userRepository.deleteUserById(id, user.username);
 };
 
-const getUserById = async (id: number): Promise<IUserResponse> => {
+const getUserById = async (id: string): Promise<IUserResponse> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
 
   if (!user) {
@@ -50,7 +50,7 @@ const getUserById = async (id: number): Promise<IUserResponse> => {
 };
 
 const updateUserById = async (
-  id: number,
+  id: string,
   userUpdateInput: IUserUpdateInput
 ): Promise<IUserResponse> => {
   const user: IUser | undefined = await userRepository.getUserById(id);
@@ -75,7 +75,7 @@ const updateUserById = async (
     );
   }
 
-  user.Name = userUpdateDbInputDTO.Name;
+  user.name = userUpdateDbInputDTO.name;
 
   const userResponseDTO: IUserResponse = new UserResponseDTO(user);
 

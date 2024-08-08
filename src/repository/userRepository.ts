@@ -13,12 +13,12 @@ const getAllUsers = async (skip: number, limit: number): Promise<IUser[]> => {
   return users;
 };
 
-const deleteUserById = async (id: number, username: string): Promise<void> => {
+const deleteUserById = async (id: string, username: string): Promise<void> => {
   const trx: Knex.Transaction = await db.transaction();
 
   try {
-    await trx<IUser>('User').where({ Id: id }).del();
-    await trx<IAuth>('Auth').where({ Username: username }).del();
+    await trx<IUser>('User').where({ id: id }).del();
+    await trx<IAuth>('Auth').where({ username: username }).del();
 
     await trx.commit();
   } catch (err) {
@@ -30,7 +30,7 @@ const deleteUserById = async (id: number, username: string): Promise<void> => {
   }
 };
 
-const getUserById = async (id: number): Promise<IUser | undefined> => {
+const getUserById = async (id: string): Promise<IUser | undefined> => {
   const user: IUser | undefined = await db<IUser>('User')
     .where('Id', id)
     .select('*')
@@ -39,7 +39,7 @@ const getUserById = async (id: number): Promise<IUser | undefined> => {
 };
 
 const updateUserById = async (
-  id: number,
+  id: string,
   userUpdateDbInput: IUserUpdateInput
 ): Promise<boolean> => {
   const userUpdated = await db<IUser>('User')

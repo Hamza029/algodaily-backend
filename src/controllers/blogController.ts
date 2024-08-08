@@ -1,10 +1,11 @@
-import { IBlogResponse } from './../interfaces/blog';
+import { IBlogResponse, IBlogResponseList } from './../interfaces/blog';
 import { Request, Response, NextFunction } from 'express';
 import blogService from '../services/blogService';
 import sendResponse from '../utils/sendResponse';
-import parseIdParam from '../utils/parseIdParam';
 import { IProtectedRequest } from '../interfaces';
 import { HTTPStatusCode } from '../constants';
+import KnexError from '../utils/knexError';
+import AppError from '../utils/appError';
 
 const getAllBlogs = async (
   req: Request,
@@ -12,9 +13,9 @@ const getAllBlogs = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const blogs: IBlogResponse[] = await blogService.getAllBlogs(req.query);
+    const blogs: IBlogResponseList = await blogService.getAllBlogs(req.query);
 
-    sendResponse<IBlogResponse[]>(
+    sendResponse<IBlogResponseList>(
       req,
       res,
       HTTPStatusCode.Ok,
@@ -32,9 +33,7 @@ const getBlogById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const id: number = parseIdParam(req);
-
-    const blog = await blogService.getBlogById(id);
+    const blog = await blogService.getBlogById(req.params.id);
 
     sendResponse<IBlogResponse>(
       req,
@@ -75,9 +74,7 @@ const deleteBlogById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const id = parseIdParam(req);
-
-    await blogService.deleteBlogById(id);
+    await blogService.deleteBlogById(req.params.id);
 
     sendResponse(req, res, HTTPStatusCode.Ok, 'successfully deleted your blog');
   } catch (err) {
@@ -93,10 +90,8 @@ const updateBlogById = async (
   const requestBody = { ...req.body };
 
   try {
-    const id = parseIdParam(req);
-
     const blog: IBlogResponse = await blogService.updateBlogById(
-      id,
+      req.params.id,
       requestBody
     );
 
@@ -112,10 +107,75 @@ const updateBlogById = async (
   }
 };
 
+const likeBlogByBlogId = async (
+  req: IProtectedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    await blogService.likeBlogByBlogId(id, req.user!);
+    sendResponse(
+      req,
+      res,
+      HTTPStatusCode.Created,
+      'Successfully liked the blog'
+    );
+  } catch (err) {
+    if ((err as KnexError).code === 'ER_DUP_ENTRY') {
+      next(
+        new AppError(
+          'You have already liked this blog',
+          HTTPStatusCode.Conflict
+        )
+      );
+    } else {
+      next(err);
+    }
+  }
+};
+
+const unlikeBlogByBlogId = async (
+  req: IProtectedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    await blogService.unlikeBlogByBlogId(id, req.user!);
+    sendResponse(req, res, HTTPStatusCode.Ok, 'Successfully unliked the blog');
+  } catch (err) {
+    next(err);
+  }
+};
+
+const createComment = async (
+  req: IProtectedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const reqBody = { ...req.body };
+    await blogService.createComment(reqBody, id, req.user!);
+    sendResponse(
+      req,
+      res,
+      HTTPStatusCode.Created,
+      'Successfylly added your comment'
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   getAllBlogs,
   getBlogById,
   createBlog,
   deleteBlogById,
   updateBlogById,
+  likeBlogByBlogId,
+  unlikeBlogByBlogId,
+  createComment,
 };

@@ -5,41 +5,59 @@ import {
   IUser,
   IUserUpdateDbInput,
   IUserUpdateInput,
+  HATEOAS_Types,
 } from '../../interfaces';
 import { UserRoles } from '../../constants';
 
 export class UserDbInputDTO implements IUserDbInput {
-  Username: string;
-  Email: string;
-  Name: string;
-  JoinDate: Date;
-  Role: UserRoles;
+  username: string;
+  email: string;
+  name: string;
+  joinDate: Date;
+  role: UserRoles;
 
   constructor(user: IUserInput) {
-    this.Username = user.Username;
-    this.Email = user.Email;
-    this.Name = user.Name;
-    this.JoinDate = new Date();
-    this.Role = UserRoles.USER;
+    this.username = user.username;
+    this.email = user.email;
+    this.name = user.name;
+    this.joinDate = new Date();
+    this.role = UserRoles.USER;
   }
 }
 
 export class UserResponseDTO implements IUserResponse {
-  Username: string;
-  Name: string;
-  Email: string;
+  id: string;
+  username: string;
+  name: string;
+  email: string;
+  _links: HATEOAS_Types;
 
   constructor(user: IUser) {
-    this.Username = user.Username;
-    this.Name = user.Name;
-    this.Email = user.Email;
+    this.id = user.id;
+    this.username = user.username;
+    this.name = user.name;
+    this.email = user.email;
+    this._links = {
+      self: {
+        href: `/api/blogs/${user.id}`,
+        method: 'GET',
+      },
+      update: {
+        href: `/api/blogs/${user.id}`,
+        method: 'PATCH',
+      },
+      delete: {
+        href: `/api/blogs/${user.id}`,
+        method: 'DELETE',
+      },
+    };
   }
 }
 
 export class UserUpdateDBInputDTO implements IUserUpdateDbInput {
-  Name: string;
+  name: string;
 
   constructor(user: IUserUpdateInput) {
-    this.Name = user.Name;
+    this.name = user.name;
   }
 }

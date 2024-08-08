@@ -1,26 +1,31 @@
 import { UserRoles } from '../constants';
+import { HATEOAS_Types } from './hateoas';
 
 interface IUserAttributes {
-  Id: number;
-  Username: string;
-  Email: string;
-  Name: string;
-  JoinDate: Date;
-  Role: UserRoles;
-  Password: string;
+  id: string;
+  username: string;
+  email: string;
+  name: string;
+  joinDate: Date;
+  role: UserRoles;
+  password: string;
+  _links: HATEOAS_Types;
 }
 
-export interface IUser extends Omit<IUserAttributes, 'Password'> {}
+export interface IUser extends Omit<IUserAttributes, 'password' | '_links'> {}
 
 export interface IUserInput
-  extends Omit<IUserAttributes, 'Id' | 'JoinDate' | 'Role'> {}
+  extends Omit<IUserAttributes, 'id' | 'joinDate' | 'role' | '_links'> {}
 
 export interface IUserResponse
-  extends Pick<IUserAttributes, 'Username' | 'Name' | 'Email'> {}
+  extends Pick<
+    IUserAttributes,
+    'id' | 'username' | 'name' | 'email' | '_links'
+  > {}
 
 export interface IUserDbInput
-  extends Omit<IUserAttributes, 'Id' | 'Password'> {}
+  extends Omit<IUserAttributes, 'id' | 'password' | '_links'> {}
 
-export interface IUserUpdateInput extends Pick<IUserAttributes, 'Name'> {}
+export interface IUserUpdateInput extends Pick<IUserAttributes, 'name'> {}
 
-export interface IUserUpdateDbInput extends Pick<IUserAttributes, 'Name'> {}
+export interface IUserUpdateDbInput extends Pick<IUserAttributes, 'name'> {}

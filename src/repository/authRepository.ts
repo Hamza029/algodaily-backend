@@ -31,7 +31,7 @@ const signup = async (
 const login = async (authInput: IAuthInput): Promise<IAuth | undefined> => {
   const auth: IAuth | undefined = await db<IAuth>('Auth')
     .select('*')
-    .where('Username', '=', authInput.Username)
+    .where('Username', '=', authInput.username)
     .first();
 
   return auth;
@@ -43,7 +43,7 @@ const updateMyPassword = async (
 ): Promise<void> => {
   await db<IAuth>('Auth')
     .update(updatePasswordDbInput)
-    .where({ Username: username });
+    .where({ username: username });
 };
 
 const getAuthByUsername = async (
@@ -51,7 +51,7 @@ const getAuthByUsername = async (
 ): Promise<IAuth | undefined> => {
   const auth: IAuth | undefined = await db<IAuth>('Auth')
     .select('*')
-    .where({ Username: useranme })
+    .where({ username: useranme })
     .first();
   return auth;
 };

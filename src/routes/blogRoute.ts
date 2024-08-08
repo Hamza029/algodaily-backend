@@ -31,4 +31,17 @@ router
     blogController.updateBlogById
   );
 
+router
+  .route('/:id/like')
+  .post(authProtection.authenticate, blogController.likeBlogByBlogId)
+  .delete(authProtection.authenticate, blogController.unlikeBlogByBlogId);
+
+router
+  .route('/:id/comment')
+  .post(
+    authProtection.authenticate,
+    validator('create_comment'),
+    blogController.createComment
+  );
+
 export default router;

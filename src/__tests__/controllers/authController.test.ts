@@ -43,7 +43,7 @@ describe('AuthController.signup', () => {
   const mockNext: jest.Mock = jest.fn();
 
   const mockLoginResponse: IAuthLoginResponse = {
-    Token: 'Bearer jwt_token_demo',
+    token: 'Bearer jwt_token_demo',
   };
 
   it('should send response for successful signup with status 201', async () => {
@@ -105,7 +105,7 @@ describe('AuthController.login', () => {
   const mockNext: jest.Mock = jest.fn();
 
   const mockLoginResponse: IAuthLoginResponse = {
-    Token: 'Bearer jwt_token_demo',
+    token: 'Bearer jwt_token_demo',
   };
 
   it('should send response for successful login with status 200', async () => {
@@ -170,12 +170,12 @@ describe('AuthController.updateMyPassword', () => {
       newPassword: '5678',
     },
     user: {
-      Id: 1,
-      Username: 'a',
-      Name: 'a',
-      Email: 'a@gmail.com',
-      Role: UserRoles.USER,
-      JoinDate: new Date(),
+      id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+      username: 'a',
+      name: 'a',
+      email: 'a@gmail.com',
+      role: UserRoles.USER,
+      joinDate: new Date(),
     },
   };
   const mockResponse: Partial<Response> = {};

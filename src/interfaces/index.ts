@@ -24,6 +24,18 @@ export {
   IBlogResponse,
   IBlogUpdateInput,
   IBlogUpdateDbInput,
+  IBlogResponseList,
 } from './blog';
 
 export { IBlogQueryParams, IUserQueryParams } from './queryParams';
+
+export { HATEOAS_Types } from './hateoas';
+
+export { ILike, ILikeResponse } from './like';
+
+export {
+  IComment,
+  ICommentResponse,
+  ICommentDBInput,
+  ICommentInput,
+} from './comment';

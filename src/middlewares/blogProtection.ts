@@ -42,8 +42,8 @@ const authorize = async (
     }
 
     if (
-      blog.authorUsername !== req.user.Username &&
-      req.user.Role !== UserRoles.ADMIN
+      blog.authorUsername !== req.user.username &&
+      req.user.role !== UserRoles.ADMIN
     ) {
       return next(
         new AppError(
