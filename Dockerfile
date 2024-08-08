@@ -9,6 +9,8 @@ COPY tsconfig.json /app/
 
 RUN npm ci
 
+RUN npm run build
+
 EXPOSE 3000
 
-CMD npm run build && npm run start
+CMD ["npm", "start"]
