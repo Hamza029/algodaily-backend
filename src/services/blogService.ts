@@ -31,7 +31,7 @@ const getAllBlogs = async (
   const page: number = Number(queryParams.page) || 1;
   const search: string = queryParams.search || '';
 
-  const limit: number = 10;
+  const limit: number = 6;
   const skip: number = (page - 1) * limit;
 
   const blogs: IBlog[] = await (!authorId

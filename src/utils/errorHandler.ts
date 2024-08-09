@@ -36,7 +36,7 @@ const handleJWTError = (): AppError => {
 const handleDuplicateFieldsDB = (err: KnexError): AppError => {
   let message;
 
-  if (err.sqlMessage.search('user.user_email_unique') !== -1) {
+  if (err.sqlMessage.search('User.user_email_unique') !== -1) {
     message = 'This email is already associated with an account';
   } else {
     message = 'Username is already taken';
