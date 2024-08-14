@@ -125,7 +125,7 @@ describe('blogService.getAllBlogs', () => {
     };
 
     (blogRepository.getAllBlogs as jest.Mock).mockResolvedValueOnce(mockBlogs);
-    (blogRepository.getTotalBlogsCount as jest.Mock).mockResolvedValueOnce(29);
+    (blogRepository.getTotalBlogsCount as jest.Mock).mockResolvedValueOnce(17);
 
     const blogsResponse: IBlogResponseList =
       await blogService.getAllBlogs(queryParams);
@@ -139,7 +139,7 @@ describe('blogService.getAllBlogs', () => {
     };
 
     (blogRepository.getAllBlogs as jest.Mock).mockResolvedValueOnce(mockBlogs);
-    (blogRepository.getTotalBlogsCount as jest.Mock).mockResolvedValueOnce(29);
+    (blogRepository.getTotalBlogsCount as jest.Mock).mockResolvedValueOnce(17);
 
     const blogsResponse: IBlogResponseList =
       await blogService.getAllBlogs(queryParams);
@@ -158,7 +158,7 @@ describe('blogService.getAllBlogs', () => {
     );
     (
       blogRepository.getTotalBlogsCountByAuthorId as jest.Mock
-    ).mockResolvedValueOnce(29);
+    ).mockResolvedValueOnce(17);
 
     const blogsResponse: IBlogResponseList =
       await blogService.getAllBlogs(queryParams);

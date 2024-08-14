@@ -13,6 +13,8 @@ services:
       - 3307:$DATA_API_DB_PORT
     volumes:
       - ./data:/var/lib/mysql
+    networks:
+      - algodaily-network
   app:
     depends_on:
       - mysqldb
@@ -32,6 +34,13 @@ services:
       - NODE_ENV=$NODE_ENV
       - JWT_ACCESS_TOKEN_SECRET=$JWT_ACCESS_TOKEN_SECRET
       - JWT_EXPIRES_AFTER=$JWT_EXPIRES_AFTER
+    networks:
+      - algodaily-network
 
 volumes:
   data:
+
+networks:
+  algodaily-network:
+    name: algodaily-network
+    driver: bridge
