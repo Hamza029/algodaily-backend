@@ -1,4 +1,8 @@
-import { ICommentDBInput } from '../../interfaces';
+import {
+  ICommentDBInput,
+  ICommentResponse,
+  ICommentResponseList,
+} from '../../interfaces';
 
 export class CommentDbInputDTO implements ICommentDBInput {
   blogId: string;
@@ -11,5 +15,15 @@ export class CommentDbInputDTO implements ICommentDBInput {
     this.blogId = blogId;
     this.userId = userId;
     this.createdAt = new Date();
+  }
+}
+
+export class CommentResponseListDTO implements ICommentResponseList {
+  comments: ICommentResponse[];
+  totalComments: number;
+
+  constructor(comments: ICommentResponse[], totalPages: number) {
+    this.comments = comments;
+    this.totalComments = totalPages;
   }
 }

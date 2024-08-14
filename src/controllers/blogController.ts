@@ -2,7 +2,7 @@ import { IBlogResponse, IBlogResponseList } from './../interfaces/blog';
 import { Request, Response, NextFunction } from 'express';
 import blogService from '../services/blogService';
 import sendResponse from '../utils/sendResponse';
-import { IProtectedRequest } from '../interfaces';
+import { ICommentResponseList, IProtectedRequest } from '../interfaces';
 import { HTTPStatusCode } from '../constants';
 import KnexError from '../utils/knexError';
 import AppError from '../utils/appError';
@@ -149,6 +149,28 @@ const unlikeBlogByBlogId = async (
   }
 };
 
+const getCommentsByBlogId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const queryParams = { ...req.query };
+    const comments: ICommentResponseList =
+      await blogService.getCommentsByBlogId(id, queryParams);
+    sendResponse<ICommentResponseList>(
+      req,
+      res,
+      HTTPStatusCode.Ok,
+      'Successfully fetched comments',
+      comments
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
 const createComment = async (
   req: IProtectedRequest,
   res: Response,
@@ -178,4 +200,5 @@ export default {
   likeBlogByBlogId,
   unlikeBlogByBlogId,
   createComment,
+  getCommentsByBlogId,
 };

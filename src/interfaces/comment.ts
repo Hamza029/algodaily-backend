@@ -13,3 +13,8 @@ export interface ICommentResponse extends IComment {
 export interface ICommentDBInput extends Omit<IComment, 'id'> {}
 
 export interface ICommentInput extends Pick<IComment, 'content'> {}
+
+export interface ICommentResponseList {
+  comments: ICommentResponse[];
+  totalComments: number;
+}

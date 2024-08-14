@@ -24,7 +24,7 @@ jest.mock('./../../repository/blogRepository', () => {
       deleteBlogById: jest.fn(),
       getBlogsByAuthorId: jest.fn(),
       getLikesByBlogId: jest.fn(),
-      getCommentsByBlogId: jest.fn(),
+      getCommentsCountByBlogId: jest.fn(),
       getTotalBlogsCount: jest.fn(),
       getTotalBlogsCountByAuthorId: jest.fn(),
       createComment: jest.fn(),
@@ -61,7 +61,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     description: 'A',
     authorUsername: 'userA',
     likes: [],
-    comments: [],
+    commentsCount: 3,
     createdAt: new Date('2024-08-02T04:55:06.000Z'),
     _links: {
       self: {
@@ -86,7 +86,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     authorUsername: 'userB',
     createdAt: new Date('2024-08-02T04:55:06.000Z'),
     likes: [],
-    comments: [],
+    commentsCount: 3,
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -116,7 +116,7 @@ describe('blogService.getAllBlogs', () => {
 
   beforeEach(() => {
     (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
-    (blogRepository.getCommentsByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getCommentsCountByBlogId as jest.Mock).mockResolvedValue(3);
   });
 
   it('should return list of blogs', async () => {
@@ -188,7 +188,7 @@ describe('blogService.getBlogById', () => {
 
   beforeEach(() => {
     (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
-    (blogRepository.getCommentsByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getCommentsCountByBlogId as jest.Mock).mockResolvedValue(3);
   });
 
   it('should return a blog', async () => {
@@ -256,7 +256,7 @@ describe('blogService.updateBlogById', () => {
 
   beforeEach(() => {
     (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
-    (blogRepository.getCommentsByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getCommentsCountByBlogId as jest.Mock).mockResolvedValue(3);
   });
 
   const id = mockBlogs[0].id;
@@ -278,7 +278,7 @@ describe('blogService.updateBlogById', () => {
   const mockUpdatedBlogResponse: IBlogResponse = {
     ...mockUpdatedBlog,
     likes: [],
-    comments: [],
+    commentsCount: 3,
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',

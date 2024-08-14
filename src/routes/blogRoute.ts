@@ -37,7 +37,8 @@ router
   .delete(authProtection.authenticate, blogController.unlikeBlogByBlogId);
 
 router
-  .route('/:id/comment')
+  .route('/:id/comments')
+  .get(blogController.getCommentsByBlogId)
   .post(
     authProtection.authenticate,
     validator('create_comment'),

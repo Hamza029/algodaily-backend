@@ -10,7 +10,9 @@ import {
   IBlogUpdateInput,
   ICommentDBInput,
   ICommentInput,
+  ICommentQueryParams,
   ICommentResponse,
+  ICommentResponseList,
   ILikeResponse,
   IUser,
 } from '../interfaces';
@@ -21,7 +23,7 @@ import {
   BlogResponseDTO,
   BlogUpdateDbInput,
 } from './dtos/blog.dto';
-import { CommentDbInputDTO } from './dtos/comment.dto';
+import { CommentDbInputDTO, CommentResponseListDTO } from './dtos/comment.dto';
 
 const getAllBlogs = async (
   queryParams: IBlogQueryParams
@@ -39,15 +41,17 @@ const getAllBlogs = async (
     : blogRepository.getBlogsByAuthorId(authorId, skip, limit, search));
 
   const likes: Array<ILikeResponse[]> = [];
-  const comments: Array<ICommentResponse[]> = [];
+  const commentCounts: Array<number> = [];
 
   for (let i = 0; i < blogs.length; i++) {
     likes.push(await blogRepository.getLikesByBlogId(blogs[i].id));
-    comments.push(await blogRepository.getCommentsByBlogId(blogs[i].id));
+    commentCounts.push(
+      await blogRepository.getCommentsCountByBlogId(blogs[i].id)
+    );
   }
 
   const blogsResponseDTO: IBlogResponse[] = blogs.map((blog, index) => {
-    return new BlogResponseDTO(blog, likes[index], comments[index]);
+    return new BlogResponseDTO(blog, likes[index], commentCounts[index]);
   });
 
   const totalBlogs = await (!authorId
@@ -70,12 +74,12 @@ const getBlogById = async (id: string): Promise<IBlogResponse> => {
   }
 
   const likes = await blogRepository.getLikesByBlogId(blog.id);
-  const comments = await blogRepository.getCommentsByBlogId(blog.id);
+  const commentCount = await blogRepository.getCommentsCountByBlogId(blog.id);
 
   const blogResponseDTO: IBlogResponse = new BlogResponseDTO(
     blog,
     likes,
-    comments
+    commentCount
   );
 
   return blogResponseDTO;
@@ -121,7 +125,7 @@ const updateBlogById = async (
   const blogResponseDTO = new BlogResponseDTO(
     updatedBlog!,
     await blogRepository.getLikesByBlogId(updatedBlog!.id),
-    await blogRepository.getCommentsByBlogId(updatedBlog!.id)
+    await blogRepository.getCommentsCountByBlogId(updatedBlog!.id)
   );
 
   return blogResponseDTO;
@@ -151,6 +155,32 @@ const createComment = async (
   await blogRepository.createComment(commentDbInputDTO);
 };
 
+const getCommentsByBlogId = async (
+  blogId: string,
+  queryParams: ICommentQueryParams
+): Promise<ICommentResponseList> => {
+  const skip: number = Number(queryParams.skip) || 0;
+  let limit: number = Number(queryParams.limit) || 5;
+  limit = Math.min(limit, 20);
+  limit = Math.max(limit, 3);
+
+  const comments: ICommentResponse[] = await blogRepository.getCommentsByBlogId(
+    blogId,
+    skip,
+    limit
+  );
+
+  const totalComments: number =
+    await blogRepository.getCommentsCountByBlogId(blogId);
+
+  const commentResponseList: ICommentResponseList = new CommentResponseListDTO(
+    comments,
+    totalComments
+  );
+
+  return commentResponseList;
+};
+
 export default {
   getAllBlogs,
   getBlogById,
@@ -160,4 +190,5 @@ export default {
   likeBlogByBlogId,
   unlikeBlogByBlogId,
   createComment,
+  getCommentsByBlogId,
 };

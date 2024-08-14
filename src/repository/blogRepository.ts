@@ -94,7 +94,11 @@ const unlikeBlogByBlogId = async (
   return unreacted;
 };
 
-const getCommentsByBlogId = async (blogId: string) => {
+const getCommentsByBlogId = async (
+  blogId: string,
+  skip: number,
+  limit: number
+) => {
   const comments: ICommentResponse[] = await db<IComment>('Comment')
     .where({ blogId: blogId })
     .join<IUser>('User', 'Comment.userId', 'User.id')
@@ -106,7 +110,9 @@ const getCommentsByBlogId = async (blogId: string) => {
       'username',
       'content'
     )
-    .orderBy('createdAt', 'desc');
+    .orderBy('createdAt', 'desc')
+    .offset(skip)
+    .limit(limit);
 
   return comments;
 };
@@ -138,6 +144,13 @@ const getTotalBlogsCountByAuthorId = async (
   return Number(totalBlogs.cnt);
 };
 
+const getCommentsCountByBlogId = async (blogId: string): Promise<number> => {
+  const [totalComments] = await db<IComment>('Comment')
+    .count('id', { as: 'cnt' })
+    .where({ blogId: blogId });
+  return Number(totalComments.cnt);
+};
+
 export default {
   getAllBlogs,
   getBlogById,
@@ -152,4 +165,5 @@ export default {
   getCommentsByBlogId,
   getTotalBlogsCount,
   getTotalBlogsCountByAuthorId,
+  getCommentsCountByBlogId,
 };

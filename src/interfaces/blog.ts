@@ -1,4 +1,3 @@
-import { ICommentResponse } from './comment';
 import { HATEOAS_Types } from './hateoas';
 import { ILikeResponse } from './like';
 
@@ -10,12 +9,12 @@ interface IBlogAttributes {
   authorUsername: string;
   createdAt: Date;
   likes: ILikeResponse[];
-  comments: ICommentResponse[];
+  commentsCount: number;
   _links: HATEOAS_Types;
 }
 
 export interface IBlog
-  extends Omit<IBlogAttributes, '_links' | 'likes' | 'comments'> {}
+  extends Omit<IBlogAttributes, '_links' | 'likes' | 'commentsCount'> {}
 
 export interface IBlogInput
   extends Pick<IBlogAttributes, 'title' | 'description'> {}
@@ -23,7 +22,7 @@ export interface IBlogInput
 export interface IBlogDbInput
   extends Omit<
     IBlogAttributes,
-    'id' | '_links' | 'likes' | 'comments' | 'createdAt'
+    'id' | '_links' | 'likes' | 'commentsCount' | 'createdAt'
   > {}
 
 export interface IBlogResponse extends IBlogAttributes {}

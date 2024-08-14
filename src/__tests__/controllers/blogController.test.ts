@@ -38,7 +38,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     authorUsername: 'userA',
     createdAt: new Date('2024-08-02T04:55:06.000Z'),
     likes: [],
-    comments: [],
+    commentsCount: 3,
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -62,7 +62,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     authorUsername: 'userB',
     createdAt: new Date('2024-08-02T04:55:06.000Z'),
     likes: [],
-    comments: [],
+    commentsCount: 3,
     _links: {
       self: {
         href: '/api/blogs/fe32bd7f-376b-11ef-bf41-088fc319abcd',
@@ -245,7 +245,7 @@ describe('BlogController.updateBlogById', () => {
     title: 'C',
     description: 'C',
     likes: [],
-    comments: [],
+    commentsCount: 3,
     authorUsername: mockBlogsResponse[0].authorUsername,
     createdAt: new Date('2024-08-02T04:55:06.000Z'),
     _links: {

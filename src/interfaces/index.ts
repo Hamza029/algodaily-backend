@@ -27,7 +27,11 @@ export {
   IBlogResponseList,
 } from './blog';
 
-export { IBlogQueryParams, IUserQueryParams } from './queryParams';
+export {
+  IBlogQueryParams,
+  IUserQueryParams,
+  ICommentQueryParams,
+} from './queryParams';
 
 export { HATEOAS_Types } from './hateoas';
 
@@ -38,4 +42,5 @@ export {
   ICommentResponse,
   ICommentDBInput,
   ICommentInput,
+  ICommentResponseList,
 } from './comment';
