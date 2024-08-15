@@ -43,4 +43,5 @@ export {
   ICommentDBInput,
   ICommentInput,
   ICommentResponseList,
+  ICommentCount,
 } from './comment';

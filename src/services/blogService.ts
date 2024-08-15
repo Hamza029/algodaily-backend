@@ -8,6 +8,7 @@ import {
   IBlogResponseList,
   IBlogUpdateDbInput,
   IBlogUpdateInput,
+  ICommentCount,
   ICommentDBInput,
   ICommentInput,
   ICommentQueryParams,
@@ -40,18 +41,26 @@ const getAllBlogs = async (
     ? blogRepository.getAllBlogs(skip, limit, search)
     : blogRepository.getBlogsByAuthorId(authorId, skip, limit, search));
 
-  const likes: Array<ILikeResponse[]> = [];
-  const commentCounts: Array<number> = [];
+  const blogIds: string[] = blogs.map((blog) => blog.id);
+  const allLikes: ILikeResponse[] =
+    await blogRepository.getLikesByBlogIds(blogIds);
+  const commentCounts: ICommentCount[] =
+    await blogRepository.getCommentCountsByBlogIds(blogIds);
 
-  for (let i = 0; i < blogs.length; i++) {
-    likes.push(await blogRepository.getLikesByBlogId(blogs[i].id));
-    commentCounts.push(
-      await blogRepository.getCommentsCountByBlogId(blogs[i].id)
+  const blogsResponseDTO: IBlogResponse[] = [];
+
+  blogs.forEach((blog) => {
+    const likes = allLikes.filter((like) => like.blogId === blog.id);
+    const [commentCount] = commentCounts.filter(
+      (item) => item.blogId === blog.id
     );
-  }
-
-  const blogsResponseDTO: IBlogResponse[] = blogs.map((blog, index) => {
-    return new BlogResponseDTO(blog, likes[index], commentCounts[index]);
+    blogsResponseDTO.push(
+      new BlogResponseDTO(
+        blog,
+        likes,
+        commentCount ? commentCount.numberOfComments : 0
+      )
+    );
   });
 
   const totalBlogs = await (!authorId

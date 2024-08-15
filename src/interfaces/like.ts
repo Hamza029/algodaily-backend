@@ -4,6 +4,6 @@ export interface ILike {
   userId: string;
 }
 
-export interface ILikeResponse {
+export interface ILikeResponse extends ILike {
   username: string;
 }

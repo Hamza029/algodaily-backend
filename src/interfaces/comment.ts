@@ -18,3 +18,8 @@ export interface ICommentResponseList {
   comments: ICommentResponse[];
   totalComments: number;
 }
+
+export interface ICommentCount {
+  blogId: string;
+  numberOfComments: number;
+}

@@ -4,6 +4,7 @@ import {
   IBlogDbInput,
   IBlogUpdateDbInput,
   IComment,
+  ICommentCount,
   ICommentDBInput,
   ICommentResponse,
   ILike,
@@ -70,8 +71,18 @@ const updateBlogById = async (
 };
 
 const getLikesByBlogId = async (blogId: string): Promise<ILikeResponse[]> => {
-  const likes = await db<ILike>('Like')
+  const likes: ILikeResponse[] = await db<ILike>('Like')
     .where({ blogId: blogId })
+    .join<IUser>('User', 'Like.userId', 'User.id')
+    .select('Like.id', 'userId', 'blogId', 'username');
+  return likes;
+};
+
+const getLikesByBlogIds = async (
+  blogIds: string[]
+): Promise<ILikeResponse[]> => {
+  const likes: ILikeResponse[] = await db<ILike>('Like')
+    .whereIn('blogId', blogIds)
     .join<IUser>('User', 'Like.userId', 'User.id')
     .select('Like.id', 'userId', 'blogId', 'username');
   return likes;
@@ -151,6 +162,17 @@ const getCommentsCountByBlogId = async (blogId: string): Promise<number> => {
   return Number(totalComments.cnt);
 };
 
+const getCommentCountsByBlogIds = async (
+  blogIds: string[]
+): Promise<ICommentCount[]> => {
+  const commentCounts: ICommentCount[] = await db<IComment>('Comment')
+    .whereIn('blogId', blogIds)
+    .count('blogId', { as: 'numberOfComments' })
+    .groupBy('blogId')
+    .select('blogId');
+  return commentCounts;
+};
+
 export default {
   getAllBlogs,
   getBlogById,
@@ -159,6 +181,7 @@ export default {
   deleteBlogById,
   updateBlogById,
   getLikesByBlogId,
+  getLikesByBlogIds,
   likeBlogByBlogId,
   unlikeBlogByBlogId,
   createComment,
@@ -166,4 +189,5 @@ export default {
   getTotalBlogsCount,
   getTotalBlogsCountByAuthorId,
   getCommentsCountByBlogId,
+  getCommentCountsByBlogIds,
 };
