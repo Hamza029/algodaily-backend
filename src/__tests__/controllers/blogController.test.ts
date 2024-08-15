@@ -1,6 +1,12 @@
 import { Request, Response } from 'express';
 import blogController from '../../controllers/blogController';
-import { IBlogResponse, IProtectedRequest, IUser } from '../../interfaces';
+import {
+  IBlogResponse,
+  ICommentResponse,
+  ICommentResponseList,
+  IProtectedRequest,
+  IUser,
+} from '../../interfaces';
 import blogService from '../../services/blogService';
 import sendResponse from '../../utils/sendResponse';
 import { HTTPStatusCode, UserRoles } from '../../constants';
@@ -18,6 +24,7 @@ jest.mock('./../../services/blogService', () => {
       likeBlogByBlogId: jest.fn(),
       unlikeBlogByBlogId: jest.fn(),
       createComment: jest.fn(),
+      getCommentsByBlogId: jest.fn(),
     },
   };
 });
@@ -87,6 +94,38 @@ const mockUser: IUser = {
   email: 'a@gmail.com',
   role: UserRoles.USER,
   joinDate: new Date(),
+};
+
+const mockCommnetsResponse: ICommentResponse[] = [
+  {
+    id: '264610d1-5a2f-11ef-b143-088fc3196e05',
+    userId: '485944e0-508b-11ef-a18f-088fc3196e05',
+    blogId: 'f9c28d64-5499-11ef-8246-088fc3196e05',
+    createdAt: new Date('2024-08-14T11:20:02.000Z'),
+    username: 'hamza1',
+    content: 'asdfasf',
+  },
+  {
+    id: '24c5a0e5-5a2f-11ef-b143-088fc3196e05',
+    userId: '485944e0-508b-11ef-a18f-088fc3196e05',
+    blogId: 'f9c28d64-5499-11ef-8246-088fc3196e05',
+    createdAt: new Date('2024-08-14T11:20:00.000Z'),
+    username: 'hamza1',
+    content: 'asdfasf',
+  },
+  {
+    id: 'c5fa988d-5a2e-11ef-b143-088fc3196e05',
+    userId: '485944e0-508b-11ef-a18f-088fc3196e05',
+    blogId: 'f9c28d64-5499-11ef-8246-088fc3196e05',
+    createdAt: new Date('2024-08-14T11:17:21.000Z'),
+    username: 'hamza1',
+    content: 'lskadjflkasdjf',
+  },
+];
+
+const mockCommnetsResponseList: ICommentResponseList = {
+  totalComments: 3,
+  comments: mockCommnetsResponse,
 };
 
 const mockError = new AppError('Test Error', HTTPStatusCode.NotImplemented);
@@ -657,6 +696,63 @@ describe('BlogController.likeBlogByBlogId', () => {
     expect(mockNext).toHaveBeenCalledTimes(1);
     expect(mockNext).toHaveBeenCalledWith(
       new AppError('Something went wrong', HTTPStatusCode.InternalServerError)
+    );
+  });
+});
+
+describe('blogController.getCommentsByBlogId', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const mockRequest: Partial<Request> = {
+    query: {
+      skip: '0',
+      limit: '5',
+    },
+    params: {
+      id: 'f9c28d64-5499-11ef-8246-088fc3196e05',
+    },
+  };
+  const mockResponse: Partial<Response> = {};
+  const mockNext: jest.Mock = jest.fn();
+
+  it('should send response with comments of blog', async () => {
+    (blogService.getCommentsByBlogId as jest.Mock).mockResolvedValueOnce(
+      mockCommnetsResponseList
+    );
+
+    await blogController.getCommentsByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(sendResponse).toHaveBeenCalledTimes(1);
+    expect(mockNext).not.toHaveBeenCalled();
+    expect(blogService.getCommentsByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.query
+    );
+  });
+
+  it('should send response with comments of blog', async () => {
+    (blogService.getCommentsByBlogId as jest.Mock).mockRejectedValueOnce(
+      mockError
+    );
+
+    await blogController.getCommentsByBlogId(
+      mockRequest as Request,
+      mockResponse as Response,
+      mockNext
+    );
+
+    expect(sendResponse).not.toHaveBeenCalled();
+    expect(mockNext).toHaveBeenCalledTimes(1);
+    expect(mockNext).toHaveBeenCalledWith(mockError);
+    expect(blogService.getCommentsByBlogId).toHaveBeenCalledWith(
+      mockRequest.params!.id,
+      mockRequest.query
     );
   });
 });

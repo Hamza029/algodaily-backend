@@ -6,7 +6,12 @@ import {
   IBlogResponse,
   IBlogResponseList,
   IBlogUpdateInput,
+  ICommentCount,
   ICommentInput,
+  ICommentQueryParams,
+  ICommentResponse,
+  ICommentResponseList,
+  ILikeResponse,
   IUser,
 } from '../../interfaces';
 import blogService from '../../services/blogService';
@@ -30,6 +35,9 @@ jest.mock('./../../repository/blogRepository', () => {
       createComment: jest.fn(),
       likeBlogByBlogId: jest.fn(),
       unlikeBlogByBlogId: jest.fn(),
+      getLikesByBlogIds: jest.fn(),
+      getCommentCountsByBlogIds: jest.fn(),
+      getCommentsByBlogId: jest.fn(),
     },
   };
 });
@@ -53,6 +61,32 @@ const mockBlogs: IBlog[] = [
   },
 ];
 
+const mockLikesResponse: ILikeResponse[] = [
+  {
+    blogId: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    id: '26afb5ef-54a3-11ef-8246-088fc3196e05',
+    userId: 'fe32bd7f-376b-11ef-bf41-088fc319usr1',
+    username: 'userA',
+  },
+  {
+    blogId: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    id: '26afb5ef-54a3-11ef-8246-088fc3196e06',
+    userId: 'fe32bd7f-376b-11ef-bf41-088fc319usr2',
+    username: 'userB',
+  },
+];
+
+const mockCommentCountsResponse: ICommentCount[] = [
+  {
+    blogId: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
+    numberOfComments: 3,
+  },
+  {
+    blogId: 'fe32bd7f-376b-11ef-bf41-088fc319abcd',
+    numberOfComments: 3,
+  },
+];
+
 const mockBlogsResponse: IBlogResponse[] = [
   {
     id: 'fe32bd7f-376b-11ef-bf41-088fc3196e05',
@@ -60,7 +94,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     title: 'A',
     description: 'A',
     authorUsername: 'userA',
-    likes: [],
+    likes: [mockLikesResponse[0]],
     commentsCount: 3,
     createdAt: new Date('2024-08-02T04:55:06.000Z'),
     _links: {
@@ -85,7 +119,7 @@ const mockBlogsResponse: IBlogResponse[] = [
     description: 'B',
     authorUsername: 'userB',
     createdAt: new Date('2024-08-02T04:55:06.000Z'),
-    likes: [],
+    likes: [mockLikesResponse[1]],
     commentsCount: 3,
     _links: {
       self: {
@@ -109,6 +143,38 @@ const mockBlogsResponseList: IBlogResponseList = {
   blogs: mockBlogsResponse,
 };
 
+const mockCommnetsResponse: ICommentResponse[] = [
+  {
+    id: '264610d1-5a2f-11ef-b143-088fc3196e05',
+    userId: '485944e0-508b-11ef-a18f-088fc3196e05',
+    blogId: 'f9c28d64-5499-11ef-8246-088fc3196e05',
+    createdAt: new Date('2024-08-14T11:20:02.000Z'),
+    username: 'hamza1',
+    content: 'asdfasf',
+  },
+  {
+    id: '24c5a0e5-5a2f-11ef-b143-088fc3196e05',
+    userId: '485944e0-508b-11ef-a18f-088fc3196e05',
+    blogId: 'f9c28d64-5499-11ef-8246-088fc3196e05',
+    createdAt: new Date('2024-08-14T11:20:00.000Z'),
+    username: 'hamza1',
+    content: 'asdfasf',
+  },
+  {
+    id: 'c5fa988d-5a2e-11ef-b143-088fc3196e05',
+    userId: '485944e0-508b-11ef-a18f-088fc3196e05',
+    blogId: 'f9c28d64-5499-11ef-8246-088fc3196e05',
+    createdAt: new Date('2024-08-14T11:17:21.000Z'),
+    username: 'hamza1',
+    content: 'lskadjflkasdjf',
+  },
+];
+
+const mockCommnetsResponseList: ICommentResponseList = {
+  totalComments: 3,
+  comments: mockCommnetsResponse,
+};
+
 describe('blogService.getAllBlogs', () => {
   afterEach(() => {
     jest.resetAllMocks();
@@ -116,7 +182,13 @@ describe('blogService.getAllBlogs', () => {
 
   beforeEach(() => {
     (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getLikesByBlogIds as jest.Mock).mockResolvedValue(
+      mockLikesResponse
+    );
     (blogRepository.getCommentsCountByBlogId as jest.Mock).mockResolvedValue(3);
+    (blogRepository.getCommentCountsByBlogIds as jest.Mock).mockResolvedValue(
+      mockCommentCountsResponse
+    );
   });
 
   it('should return list of blogs', async () => {
@@ -187,7 +259,9 @@ describe('blogService.getBlogById', () => {
   });
 
   beforeEach(() => {
-    (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue([]);
+    (blogRepository.getLikesByBlogId as jest.Mock).mockResolvedValue(
+      mockBlogsResponse[0].likes
+    );
     (blogRepository.getCommentsCountByBlogId as jest.Mock).mockResolvedValue(3);
   });
 
@@ -204,7 +278,7 @@ describe('blogService.getBlogById', () => {
     expect(blogResponse).toEqual(mockBlogsResponse[0]);
   });
 
-  it('should return a blog', async () => {
+  it('should return a blog too', async () => {
     const id: string = mockBlogs[0].id;
 
     (blogRepository.getBlogById as jest.Mock).mockResolvedValueOnce(undefined);
@@ -419,5 +493,34 @@ describe('blogService.likeBlogByBlogId', () => {
       mockBlogs[0].id,
       mockUser.id
     );
+  });
+});
+
+describe('blogService.getCommentsByBlogId', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const queryParams: ICommentQueryParams = {
+    skip: '0',
+    limit: '5',
+  };
+
+  it('should return list of comments for given blogId', async () => {
+    (blogRepository.getCommentsByBlogId as jest.Mock).mockResolvedValueOnce(
+      mockCommnetsResponse
+    );
+
+    (
+      blogRepository.getCommentsCountByBlogId as jest.Mock
+    ).mockResolvedValueOnce(3);
+
+    const commentsResponse: ICommentResponseList =
+      await blogService.getCommentsByBlogId(
+        'f9c28d64-5499-11ef-8246-088fc3196e05',
+        queryParams
+      );
+
+    expect(commentsResponse).toEqual(mockCommnetsResponseList);
   });
 });
